@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<Informe>
+	<Titulo Texto="Informe de Descuadres" />
+	<Datos>
+		<Consulta>
+			select A.id as id,A.Descripcion as articulo,A.Marca as marca,A.Modelo as modelo,
+			A.cantidad as cantidadi,sum(E.cantidad) as cantidadu 
+			from Articulos as A join Elementos E on E.id_Articulo=A.id group by A.id 
+			having sum(E.cantidad) != A.cantidad union select A.id as id,A.Descripcion as articulo,A.Marca as marca,A.Modelo as modelo,
+			A.cantidad as cantidadi,0 from Articulos as A where A.id not in (select id_Articulo from Elementos E)
+			order by articulo;
+		</Consulta>
+	</Datos>
+	<Pagina Orientacion="P" Formato="A4">
+		<Cabecera>Relación de Descuadres</Cabecera>
+		<Cuerpo>
+			<Col Nombre="id" Ancho="15" Ajuste="D" Titulo="id"/>
+			<Col Nombre="articulo" Ancho="70" Ajuste="L" Titulo="Artículo"/>
+			<Col Nombre="marca" Ancho="30" Ajuste="L" Titulo="Marca"/>
+			<Col Nombre="modelo" Ancho="30" Ajuste="L" Titulo="Modelo"/>
+			<Col Nombre="cantidadi" Ancho="20" Ajuste="D" Titulo="Inventario" Total="S"/>
+			<Col Nombre="cantidadu" Ancho="20" Ajuste="D" Titulo="Ubicada" Total="S"/>
+		</Cuerpo>
+	</Pagina>
+</Informe>

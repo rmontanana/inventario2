@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<Informe>
+	<Titulo Texto="Informe de Artículos" />
+	<Datos>
+		<Consulta>select * from Articulos order by descripcion;</Consulta>
+	</Datos>
+	<Pagina Orientacion="P" Formato="A4">
+		<Cabecera>Relación alfabética</Cabecera>
+		<Cuerpo>
+			<Col Nombre="id" Ancho="10" Ajuste="D" Titulo="id"/>
+			<Col Nombre="descripcion" Ancho="70" Ajuste="I" Titulo="Descripción"/>
+			<Col Nombre="marca" Ancho="40" Ajuste="I" Titulo="Marca"/>
+			<Col Nombre="modelo" Ancho="50" Ajuste="I" Titulo="Modelo"/>
+			<Col Nombre="cantidad" Ancho="20" Ajuste="D" Titulo="cantidad"/>
+		</Cuerpo>
+	</Pagina>
+</Informe>

@@ -1,0 +1,12 @@
+1|Maestros|
+2|Ubicaciones|index.php?ubicaciones&opc=inicial
+2|Art&iacute;culos|index.php?articulos&opc=inicial
+2|Elementos|index.php?elementos&opc=inicial&orden=ubicacion&sentido=asc
+2|Usuarios|index.php?usuarios&opc=inicial
+1|Inventario|
+2|Ubicaci&oacute;n|index.php?informeInventario&opc=Ubicacion
+2|Art&iacute;culo|index.php?informeInventario&opc=Articulo
+2|Total|index.php?informeInventario&opc=Total
+2|Descuadres|index.php?descuadres
+1|Varios|
+2|Configuraci&oacute;n|index.php?configuracion

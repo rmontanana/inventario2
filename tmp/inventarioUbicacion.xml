@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<Informe>
+	<Titulo Texto="Aula de Plástica" />
+	<Datos>
+		<Consulta>
+			select A.id as id,A.Marca as marca,A.Modelo as modelo,E.fechaCompra as fechaCompra,
+				E.numSerie as numserie,A.Descripcion as descripcion,E.Cantidad as cantidad
+				from Elementos E, Articulos A, Ubicaciones U where A.id=E.id_Articulo and U.id=E.id_Ubicacion
+				and U.id='144' order by A.descripcion;
+		</Consulta>
+	</Datos>
+	<Pagina Orientacion="L" Formato="A4">
+		<Cabecera>Inventario de Ubicación</Cabecera>
+		<Cuerpo>
+			<Col Nombre="descripcion" Ancho="70" Ajuste="L" Titulo="Artículo"/>
+			<Col Nombre="marca" Ancho="50" Ajuste="L" Titulo="Marca"/>
+			<Col Nombre="modelo" Ancho="50" Ajuste="L" Titulo="Modelo"/>
+			<Col Nombre="numserie" Ancho="40" Ajuste="L" Titulo="N Serie"/>
+			<Col Nombre="fechaCompra" Ancho="35" Ajuste="L" Titulo="Fecha C." />
+			<Col Nombre="cantidad" Ancho="20" Ajuste="D" Titulo="Cantidad" Total="S"/>
+		</Cuerpo>
+	</Pagina>
+</Informe>
