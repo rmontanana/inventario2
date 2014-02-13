@@ -82,6 +82,20 @@
         {
             return $this->docu;
         }
+        public function getCabecera()
+        {
+            $cabecera = "Content-type: application/pdf";
+            $cabecera = $cabecera . "Content-length: " . strlen($this->docu);
+            $cabecera = $cabecera . "Content-Disposition: inline; filename=Informe.pdf";
+            return $cabecera;
+        }
+        public function guardaArchivo($nombre = "Informe.pdf")
+        {
+            $fichero = fopen($nombre, "w");
+            fwrite($fichero,$this->getCabecera());
+            fwrite($fichero,$this->getContenido(), strlen($this->getContenido()));
+            fclose($fichero);
+        }
         public function enviaCabecera()
         {
             header("Content-type: application/pdf");

@@ -29,10 +29,10 @@ class Menu {
         // Obtenemos la lista de pares Opción|Enlace
         $elementos=explode("\n", $contenido);
         foreach($elementos as $elemento) {
-            list($tipo, $opcion, $enlace)=explode('|', $elemento);
+            list($tipo, $opcion, $enlace, $destino)=explode('|', $elemento);
             // Los guardamos en la matriz de opciones
             if ($tipo)
-                $this->opciones[]=$tipo.",".$opcion.",".$enlace;
+                $this->opciones[]=$tipo.",".$opcion.",".$enlace.",".$destino;
         }
     }
     public function insertaMenu()
@@ -40,9 +40,9 @@ class Menu {
         $salida="";
         reset($this->opciones);
         foreach($this->opciones as $opcion) {
-            list($tipo,$opcion,$enlace)=explode(",",$opcion);
+            list($tipo,$opcion,$enlace,$destino)=explode(",",$opcion);
             if ($tipo==2)
-                $salida.='<a href="'.$enlace.'">'.$opcion.'</a><br />';
+                $salida.='<a href="'.$enlace.'" target="'.$destino.'">'.$opcion.'</a><br />';
             else
                 $salida.='<label class="key">'.$opcion.'</label><br/>';
         }

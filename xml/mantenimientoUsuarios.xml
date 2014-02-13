@@ -1,20 +1,21 @@
 <?xml version="1.0"?>
 <Mantenimiento>
-    <Titulo>Mantenimiento de Elementos</Titulo>
+    <Titulo>Mantenimiento de Usuarios</Titulo>
     <Consulta>
-            SELECT E.id as id,U.Descripcion as ubicacion,A.Descripcion as articulo,A.Marca as marca,A.Modelo as modelo,E.numserie as numserie,
-            DATE_FORMAT(E.fechacompra, '%d/%m/%Y') as fechaCompra,E.cantidad as cantidad
-            FROM Elementos E inner join Articulos A on E.id_articulo=A.id inner join 
-            Ubicaciones U on E.id_ubicacion=U.id  {buscar} {orden} limit {inferior},{superior};
+            SELECT id, nombre, clave, idSesion, alta, modificacion, borrado, consulta, informe, usuarios, config
+            FROM Usuarios {buscar} {orden} limit {inferior}, {superior};
     </Consulta>
     <Campos>
-        <Col Campo="id" Nombre="id" Ancho="5" Ajuste="D" Titulo="id" Tipo="smallint(6)"/>
-        <Col Campo="id_Ubicacion" Nombre="ubicacion" Ancho="40" Ajuste="L" Titulo="Ubicación" Varios="ordenable,foreign(Ubicaciones->id;{Descripcion})" Editable="si"/>
-        <Col Campo="id_Articulo" Nombre="articulo" Ancho="40" Ajuste="L" Titulo="Artículo" Varios="ordenable,foreign(Articulos->id;{Descripcion/Marca/Modelo})" Editable="si"/>
-        <Col Nombre="marca" Ancho="40" Ajuste="L" Titulo="Marca" Varios="ordenable" Editable="no"/>
-        <Col Nombre="modelo" Ancho="40" Ajuste="L" Titulo="Modelo" Varios="ordenable" Editable="no"/>
-        <Col Campo="numserie" Nombre="numserie" Ancho="30" Ajuste="L" Titulo="Nº Serie" Varios="ordenable" Editable="si"/>
-        <Col Campo="fechaCompra" Nombre="fechaCompra" Ancho="25" Ajuste="L" Titulo="Compra" Varios="ordenable" Tipo="fecha" Editable="si"/>
-        <Col Campo="cantidad" Nombre="cantidad" Ancho="15" Ajuste="D" Titulo="Cant."  Tipo="Int(11)" Editable="si"/>
+        <Col Campo="id" Nombre="id" Ancho="5" Ajuste="D" Titulo="id" Tipo="int(6)"/>
+        <Col Campo="nombre" Nombre="nombre" Ancho="16" Ajuste="L" Titulo="Nombre" Varios="ordenable" Editable="si"/>
+        <Col Campo="clave" Nombre="clave" Ancho="40" Ajuste="L" Titulo="Clave" Tipo="Password" Editable="si"/>
+        <Col Nombre="idSesion" Ancho="40" Ajuste="L" Titulo="id Sesión" Editable="si"/>
+        <Col Campo="alta" Nombre="Alta" Ancho="1" Ajuste="R" Titulo="Altas" Editable="si"/>
+        <Col Campo="modificacion" Nombre="modificacion" Ancho="1" Ajuste="R" Titulo="Modificaciones" Editable="si"/>
+        <Col Campo="borrado" Nombre="borrado" Ancho="1" Ajuste="R" Titulo="Borrados" Editable="si"/>
+        <Col Campo="consulta" Nombre="consulta" Ancho="1" Ajuste="R" Titulo="Consultas" Editable="si"/>
+        <Col Campo="informe" Nombre="informe" Ancho="1" Ajuste="R" Titulo="Informes" Editable="si"/>
+        <Col Campo="usuarios" Nombre="usuarios" Ancho="1" Ajuste="R" Titulo="Usuarios" Editable="si"/>
+        <Col Campo="config" Nombre="config" Ancho="1" Ajuste="R" Titulo="Configuración" Editable="si"/>
     </Campos>
 </Mantenimiento>
