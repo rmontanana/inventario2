@@ -94,6 +94,8 @@ class Mantenimiento {
         $pagAnt = $pagSigte - 2;
         $pagFwd = $pagSigte + 3;
         $pagRew = $pagAnt - 3 < 0 ? $pagAnt : $pagAnt - 3;
+        //Tengo que procesar la cabecera antes de lo de la cadena de búsqueda por el tema de las búsquedas
+        $cabecera = $this->cabeceraTabla();
         //Trata con la cadena de búsqueda
         $this->cadenaBusqueda = isset($_POST['buscar']) ? $_POST['buscar'] : $this->cadenaBusqueda;
         if (isset($this->cadenaBusqueda) && strlen($this->cadenaBusqueda)) {
@@ -114,7 +116,7 @@ class Mantenimiento {
         $salida = $this->enlaceBusqueda();
         //Esta orden de centrado se cierra en el pie de la tabla
         $salida.='<center><h4>P&aacute;gina ' . $pagSigte . '</h4>';
-        $salida.=$this->cabeceraTabla();
+        $salida.= $cabecera;
         //Consulta paginada de todas las tuplas
         $comando = str_replace('{inferior}', ($pagAnt + 1) * NUMFILAS, $comando);
         $comando = str_replace('{superior}', NUMFILAS, $comando);
@@ -131,6 +133,7 @@ class Mantenimiento {
             }
         }
         //$salida.=print_r($this->perfil);
+        //$salida.=$comando;
         while ($fila = $this->bdd->procesaResultado()) {
             $salida.='<tr align="center" bottom="middle">';
             foreach ($fila as $clave => $valor) {
@@ -374,7 +377,10 @@ class Mantenimiento {
             foreach ($comen as $co) {
                 if (strstr($co, "ordenable")) {
                     $ordenable = true;
-                    break;
+                }
+                if (strstr($co, "buscable")) {
+                    $dato = split("/", $co);
+                    $this->campoBusca = $dato[1];
                 }
             }
             if ($ordenable) {
