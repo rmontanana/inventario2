@@ -133,19 +133,23 @@ class InformeInventario {
         if (!$resultado) {
             return $this->bdd->mensajeError($comando);
         }
-        $salidaTotal = '';
+        //Utiliza un nuevo manejador de base de datos para poder hacer una consulta en los informes
+        $bdatos = new Sql(SERVIDOR, USUARIO, CLAVE, BASEDATOS);
+        $mezcla = new FPDF_Merge();
+        $i = 0;
         while ($fila = $this->bdd->procesaResultado()) {
             //$fila=$this->bdd->procesaResultado();
             $plantilla = file_get_contents($fichero) or die('Fallo en la apertura de la plantilla ' . $fichero);
             $plantilla = str_replace("{id}", $fila['id'], $plantilla);
             $plantilla = str_replace("{Descripcion}", utf8_encode($fila['Descripcion']), $plantilla);
             file_put_contents($salida, $plantilla) or die('Fallo en la escritura de la plantilla ' . $salida);
-            $informe = new InformePDF($this->bdd, $salida, true);
-            $salidaTotal.=$informe->getContenido();
+            $informe = new InformePDF($bdatos, $salida, true);
+            $nombre = "tmp/sal" . $i++ . ".pdf";
+            $informe->guardaArchivo($nombre);
+            $mezcla->add($nombre);
         }
-        file_put_contents("tmp/prueba.pdf", $salidaTotal);
-        $informe->enviaCabecera();
-        echo $salidaTotal;
+        $nombre = "tmp/total.pdf";
+        $mezcla->output($nombre);
     }
 
 }
