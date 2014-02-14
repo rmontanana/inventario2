@@ -89,7 +89,7 @@
             $cabecera = $cabecera . "Content-Disposition: inline; filename=Informe.pdf";
             return $cabecera;
         }
-        public function guardaArchivo($nombre = "Informe.pdf")
+        public function guardaArchivo($nombre = "tmp/Informe.pdf")
         {
             $fichero = fopen($nombre, "w");
             fwrite($fichero,$this->getCabecera());

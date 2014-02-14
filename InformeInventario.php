@@ -52,7 +52,7 @@ class InformeInventario {
         $plantilla = str_replace("{Descripcion}", utf8_encode($fila['Descripcion']), $plantilla);
         file_put_contents($salida, $plantilla) or die('Fallo en la escritura de la plantilla ' . $salida);
         $informe = new InformePDF($this->bdd, $salida, true);
-        $informe->guardaArchivo("Informe.pdf");
+        $informe->guardaArchivo("tmp/Informe.pdf");
         echo '<script type="text/javascript"> window.open( "Informe.pdf" ) </script>';
     }
 
@@ -72,7 +72,7 @@ class InformeInventario {
         $plantilla = str_replace("{Modelo}", utf8_encode($fila['modelo']), $plantilla);
         file_put_contents($salida, $plantilla) or die('Fallo en la escritura de la plantilla ' . $salida);
         $informe = new InformePDF($this->bdd, $salida, true);
-        $informe->guardaArchivo("Informe.pdf");
+        $informe->guardaArchivo("tmp/Informe.pdf");
         echo '<script type="text/javascript"> window.open( "Informe.pdf" ) </script>';
     }
 

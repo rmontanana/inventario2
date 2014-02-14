@@ -117,7 +117,7 @@
             $personal=$this->estilo=="personal"?'selected':' ';
             $bluecurve=$this->estilo=="bluecurve"?'selected':' ';
             $cristal=$this->estilo=="cristal"?'selected':' ';
-            $salida='<form name="configura" method="post">';
+            $salida='<center><form name="configura" method="post">';
             $salida.='<p align="center"><table border=1 class="tablaDatos"><tbody>';
             $salida.='<th colspan=2><b>Preferencias</b></th>';
             $salida.='<tr><td>Nombre del Centro</td><td><input type="text" name="centro" value="'.$this->nombreCentro.'" size="30" /></td></tr>';
@@ -132,7 +132,7 @@
             $salida.='<tr><td>Usuario</td><td><input type="text" name="usuario" value="'.$this->usuario.'" size="30" /></td></tr>';
             $salida.='<tr><td>Clave</td><td><input type="text" name="clave" value="'.$this->clave.'" size="30" /></td></tr>';
             $salida.='<tr align=center><td colspan=2><input type="submit" align="center" value="Aceptar" name="aceptar" /></td></tr></p>';
-            $salida.='</form>';
+            $salida.='</form></center>';
             return $salida;
         }
     }

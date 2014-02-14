@@ -25,11 +25,11 @@ define('SERVIDOR','localhost'); //Ubicación del servidor MySQL
 define('BASEDATOS','Inventario2'); //Nombre de la base de datos.
 define('USUARIO','test'); //Usuario con permisos de lectura/escritura en la base de datos
 define('CLAVE','tset'); //contraseña del usuario.
-define('VERSION','0.9 Beta');
+define('VERSION','0.92 Beta');
 define('PROGRAMA','Gesti&oacute;n de Inventario.');
-define('CENTRO','I.E.S.O. Pascual Serrano.');
+define('CENTRO','I.E.S.O. Pascual Serrano..');
 define('APLICACION',CENTRO.' '.PROGRAMA.VERSION);
-define('NUMFILAS',15); // Número de registros a mostrar en las pantallas de consulta iniciales
+define('NUMFILAS',16); // Número de registros a mostrar en las pantallas de consulta iniciales
 define('PAUSA',2);//Nº segundos de pausa para mostrar mensaje id insertado
 define('ESTILO','bluecurve'); //Estilo de los iconos de edición (bluecurve, bluecurve, bluecurve)
 ?>
