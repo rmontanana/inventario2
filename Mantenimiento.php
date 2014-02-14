@@ -379,7 +379,7 @@ class Mantenimiento {
                     $ordenable = true;
                 }
                 if (strstr($co, "buscable")) {
-                    $dato = split("/", $co);
+                    $dato = explode("/", $co);
                     $this->campoBusca = $dato[1];
                 }
             }
