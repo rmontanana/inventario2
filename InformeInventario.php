@@ -52,8 +52,10 @@ class InformeInventario {
         $plantilla = str_replace("{Descripcion}", utf8_encode($fila['Descripcion']), $plantilla);
         file_put_contents($salida, $plantilla) or die('Fallo en la escritura de la plantilla ' . $salida);
         $informe = new InformePDF($this->bdd, $salida, true);
+        $informe->crea($salida);
+        $informe->cierraPDF();
         $informe->guardaArchivo("tmp/Informe.pdf");
-        echo '<script type="text/javascript"> window.open( "Informe.pdf" ) </script>';
+        echo '<script type="text/javascript"> window.open( "tmp/Informe.pdf" ) </script>';
     }
 
     private function listarArticulo() {
@@ -72,8 +74,10 @@ class InformeInventario {
         $plantilla = str_replace("{Modelo}", utf8_encode($fila['modelo']), $plantilla);
         file_put_contents($salida, $plantilla) or die('Fallo en la escritura de la plantilla ' . $salida);
         $informe = new InformePDF($this->bdd, $salida, true);
+        $informe->crea($salida);
+        $informe->cierraPDF();
         $informe->guardaArchivo("tmp/Informe.pdf");
-        echo '<script type="text/javascript"> window.open( "Informe.pdf" ) </script>';
+        echo '<script type="text/javascript"> window.open( "tmp/Informe.pdf" ) </script>';
     }
 
     private function listaUbicaciones() {
@@ -135,21 +139,22 @@ class InformeInventario {
         }
         //Utiliza un nuevo manejador de base de datos para poder hacer una consulta en los informes
         $bdatos = new Sql(SERVIDOR, USUARIO, CLAVE, BASEDATOS);
-        $mezcla = new FPDF_Merge();
-        $i = 0;
+        $primero = true;
         while ($fila = $this->bdd->procesaResultado()) {
             //$fila=$this->bdd->procesaResultado();
             $plantilla = file_get_contents($fichero) or die('Fallo en la apertura de la plantilla ' . $fichero);
             $plantilla = str_replace("{id}", $fila['id'], $plantilla);
             $plantilla = str_replace("{Descripcion}", utf8_encode($fila['Descripcion']), $plantilla);
             file_put_contents($salida, $plantilla) or die('Fallo en la escritura de la plantilla ' . $salida);
-            $informe = new InformePDF($bdatos, $salida, true);
-            $nombre = "tmp/sal" . $i++ . ".pdf";
-            $informe->guardaArchivo($nombre);
-            $mezcla->add($nombre);
+            if ($primero) {
+                $primero = false;
+                $informe = new InformePDF($bdatos, $salida, true);
+            }
+            $informe->crea($salida);
         }
         $nombre = "tmp/total.pdf";
-        $mezcla->output($nombre);
+        $informe->cierraPDF();
+        $informe->imprimeInforme();
     }
 
 }

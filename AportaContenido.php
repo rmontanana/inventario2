@@ -214,6 +214,8 @@ class AportaContenido {
                         if ($this->perfil['Informe']) {
                             $enlace = 'xml/informe' . ucfirst($opcion) . '.xml';
                             $informe = new InformePDF($this->bdd, $enlace, $this->registrado);
+                            $informe->crea($enlace);
+                            $informe->cierraPDF();
                             $informe->imprimeInforme();
                             return;
                         } else {

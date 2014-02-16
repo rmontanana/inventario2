@@ -51,7 +51,10 @@ class Pdf_mysql_table extends Fpdf
     {
       $this->titulo=$titulo;
     }
-
+    public function iniciaTotales()
+    {
+        $this->totales = array();
+    }
     function Header()
     {
       //Modficada por Ricardo Montañana
