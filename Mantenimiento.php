@@ -140,7 +140,17 @@ class Mantenimiento {
                 if ($clave == "id") {
                     $id = $valor;
                 }
-
+                // Comprueba si tiene que añadir el enlace de inventario
+                if (strstr($this->campos[$clave]['Comment'], "link")) {
+                   $comen = explode(",", $this->campos[$clave]['Comment']);
+                   foreach ($comen as $co) {
+                       if (strstr($co, "link")) {
+                           $datoEnlace = explode("/", $co)[1];
+                       }
+                   }
+                   $this->campoBusca = $dato[1];
+                   $valor = '<a target="_blank" href="index.php?informeInventario&opc=listar' . $datoEnlace . '&id=' . $id . '">' . $valor;
+                }
                 $salida.="<td>$valor</td>\n";
             }
             //Añade el icono de editar

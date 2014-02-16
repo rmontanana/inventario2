@@ -42,13 +42,14 @@ class InformeInventario {
         $fichero = "xml/inventarioUbicacion.xml";
         $salida = "tmp/inventarioUbicacion.xml";
         $plantilla = file_get_contents($fichero) or die('Fallo en la apertura de la plantilla ' . $fichero);
-        $comando = "select * from Ubicaciones where id='" . $_POST['id'] . "';";
+        $id = $_POST['id'] == NULL ? $_GET['id'] : $_POST['id'];
+        $comando = "select * from Ubicaciones where id='" . $id . "';";
         $resultado = $this->bdd->ejecuta($comando);
         if (!$resultado) {
             return $this->bdd->mensajeError($comando);
         }
         $fila = $this->bdd->procesaResultado();
-        $plantilla = str_replace("{id}", $_POST['id'], $plantilla);
+        $plantilla = str_replace("{id}", $id, $plantilla);
         $plantilla = str_replace("{Descripcion}", utf8_encode($fila['Descripcion']), $plantilla);
         file_put_contents($salida, $plantilla) or die('Fallo en la escritura de la plantilla ' . $salida);
         $informe = new InformePDF($this->bdd, $salida, true);
@@ -62,13 +63,14 @@ class InformeInventario {
         $fichero = "xml/inventarioArticulo.xml";
         $salida = "tmp/inventarioArticulo.xml";
         $plantilla = file_get_contents($fichero) or die('Fallo en la apertura de la plantilla ' . $fichero);
-        $comando = "select * from Articulos where id='" . $_POST['id'] . "';";
+        $id = $_POST['id'] == NULL ? $_GET['id'] : $_POST['id'];
+        $comando = "select * from Articulos where id='" . $id . "';";
         $resultado = $this->bdd->ejecuta($comando);
         if (!$resultado) {
             return $this->bdd->mensajeError($comando);
         }
         $fila = $this->bdd->procesaResultado();
-        $plantilla = str_replace("{id}", $_POST['id'], $plantilla);
+        $plantilla = str_replace("{id}", $id, $plantilla);
         $plantilla = str_replace("{Descripcion}", utf8_encode($fila['descripcion']), $plantilla);
         $plantilla = str_replace("{Marca}", utf8_encode($fila['marca']), $plantilla);
         $plantilla = str_replace("{Modelo}", utf8_encode($fila['modelo']), $plantilla);
