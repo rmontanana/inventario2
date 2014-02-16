@@ -145,7 +145,8 @@ class Mantenimiento {
                    $comen = explode(",", $this->campos[$clave]['Comment']);
                    foreach ($comen as $co) {
                        if (strstr($co, "link")) {
-                           $datoEnlace = explode("/", $co)[1];
+                           $tmpco = explode("/", $co);
+                           $datoEnlace = $tmpco[1];
                        }
                    }
                    $this->campoBusca = $dato[1];
