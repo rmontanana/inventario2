@@ -159,7 +159,7 @@ class Inventario {
         // los datos de las columnas
         $fila = $this->bdd->procesaResultado();
         // Para comprobar si la clave coincide
-        if ($fila['clave'] == $this->clave) {
+        if (trim($fila['clave']) == trim($this->clave)) {
             $this->perfil = $this->creaPerfil($fila);
             // caso en el que devolveremos un Id de sesión
             // único para este usuario
