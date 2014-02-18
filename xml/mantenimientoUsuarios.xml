@@ -9,7 +9,7 @@
         <Col Campo="id" Nombre="id" Ancho="5" Ajuste="D" Titulo="id" Tipo="int(6)"/>
         <Col Campo="nombre" Nombre="nombre" Ancho="8" Ajuste="L" Titulo="Nombre" Varios="ordenable" Editable="si"/>
         <Col Campo="clave" Nombre="clave" Ancho="16" Ajuste="L" Titulo="Clave" Tipo="Password" Editable="si"/>
-        <Col Nombre="idSesion" Ancho="32" Ajuste="L" Titulo="id Sesión" Editable="si"/>
+        <Col Campo="idSesion" Nombre="idSesion" Ancho="32" Ajuste="L" Titulo="id Sesión" Editable="si"/>
         <Col Campo="alta" Nombre="Alta" Ancho="1" Ajuste="R" Titulo="Altas" Editable="si"/>
         <Col Campo="modificacion" Nombre="modificacion" Ancho="1" Ajuste="R" Titulo="Modificaciones" Editable="si"/>
         <Col Campo="borrado" Nombre="borrado" Ancho="1" Ajuste="R" Titulo="Borrados" Editable="si"/>

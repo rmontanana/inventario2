@@ -243,7 +243,8 @@ class Mantenimiento {
             } else {
                 $coma = ",";
             }
-            $comando.="$coma \"$_POST[$campo]\"";
+            $valor = $_POST[$campo] == "" ? "null" : '"'.$_POST[$campo].'"';
+            $comando.="$coma " . $valor;
         }
         $comando.=")";
         if (!$this->bdd->ejecuta($comando)) {
@@ -422,6 +423,9 @@ class Mantenimiento {
             //Se asegura que el id no se pueda modificar.
             $modoEfectivo = $clave == 'id' ? "readonly" : $modo;
             $valorDato = $datos == null ? "" : $datos[$campo];
+            if ($clave == 'id' && $tipo == ANADIR) {
+                $valorDato = null;
+            }
             if (!isset($this->foraneas[$valor['Campo']])) {
                 $tipoCampo = $valor['Type'];
                 //Si es un campo fecha u hora y está insertando pone la fecha actual o la hora actual
