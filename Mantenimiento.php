@@ -409,7 +409,7 @@ class Mantenimiento {
      * @return array lista de campos y formulario de entrada
      */
     private function formularioCampos($accion, $tipo, $datos) {
-        $modo = $tipo == BORRAR ? "readonly" : "";
+        $modo = $tipo == BORRADO ? "readonly" : "";
         $salida.='<form name="mantenimiento.form" method="post" action="' . $accion . '">' . "\n";
         $salida.="<fieldset style=\"width: 96%;\"><p><legend style=\"color: red;\"><b>$tipo</b></legend>\n";
         foreach ($this->campos as $clave => $valor) {
