@@ -1,17 +1,19 @@
 <?xml version="1.0"?>
 <Informe>
-	<Titulo Texto="{Descripcion}" />
+	<Titulo Texto="{Descripcion}" id="{id}"/>
 	<Datos>
 		<Consulta>
-			select A.id as id,U.Descripcion as ubicacion,E.numserie as numserie, 
+			select A.id as id,E.id as idEl, U.id as idUb,U.Descripcion as ubicacion,E.numserie as numserie, 
                                 E.fechaCompra as fechaCompra,E.Cantidad as cantidad
 				from Elementos E, Articulos A, Ubicaciones U where A.id=E.id_Articulo and U.id=E.id_Ubicacion
 				and A.id='{id}' order by U.Descripcion,numserie;
 		</Consulta>
 	</Datos>
 	<Pagina Orientacion="P" Formato="A4">
-		<Cabecera>{Marca} - {Modelo}</Cabecera>
+		<Cabecera>Inventario de Articulo</Cabecera>
 		<Cuerpo>
+                        <Col Nombre="idEl" Ancho="10" Ajuste="R" Titulo="idElem"/>
+                        <Col Nombre="idUb" Ancho="10" Ajuste="R" Titulo="idUbic"/>
 			<Col Nombre="ubicacion" Ancho="80" Ajuste="L" Titulo="Ubicación"/>
 			<Col Nombre="numserie" Ancho="40" Ajuste="L" Titulo="N Serie"/>
 			<Col Nombre="fechaCompra" Ancho="40" Ajuste="L" Titulo="Fecha C." />

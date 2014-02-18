@@ -150,7 +150,7 @@ class Mantenimiento {
                        }
                    }
                    $this->campoBusca = $dato[1];
-                   $valor = '<a target="_blank" href="index.php?informeInventario&opc=listar' . $datoEnlace . '&id=' . $id . '">' . $valor;
+                   $valor = '<a title="Inventario de '.$valor.'" $target="_blank" href="index.php?informeInventario&opc=listar' . $datoEnlace . '&id=' . $id . '">' . $valor;
                 }
                 $salida.="<td>$valor</td>\n";
             }

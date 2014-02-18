@@ -134,7 +134,7 @@ class AportaContenido {
                     if ($this->usuario_inc) {
                         $salida.=USUARIO_INCORRECTO;
                     }
-                    $salida.=MENSAJE_DEMO;
+                    //$salida.=MENSAJE_DEMO;
                     return $salida;
                 }
             case 'opcion':
@@ -154,6 +154,7 @@ class AportaContenido {
                         return 'Configuraci&oacute;n y Preferencias.';
                     case 'informeInventario':return "Informe de Inventario";
                     case 'descuadres':return 'Informe de descuadres';
+                    case 'importacion': return 'Importaci&oacute;n de datos';
                 }
                 return '';
             case 'control':
@@ -201,7 +202,7 @@ class AportaContenido {
                             $conf = new Configuracion();
                             return $conf->ejecuta();
                         } else {
-                            return $this->mensajePermisos('Configuracion');
+                            return $this->mensajePermisos('Configuraci&oacute;n');
                         }
                     case 'informeInventario':
                         if ($this->perfil['Informe']) {
@@ -220,6 +221,13 @@ class AportaContenido {
                             return;
                         } else {
                             return $this->mensajePermisos('Informes');
+                        }
+                    case 'importacion':
+                        if ($this->perfil['Modificacion'] && $this->perfil['Borrado']) {
+                            $import = new Importacion($this->bdd, $this->registrado);
+                            return $import->ejecuta();
+                        } else {
+                            return $this->mensajePermisos("Actualizaci&oacute;n, creaci&oacute;n y borrado de elementos");
                         }
                 } // Fin del contenido
             case 'usuario_incorrecto':
