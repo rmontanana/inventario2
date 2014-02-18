@@ -24,7 +24,7 @@ SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `Articulos` (
   `id` smallint(6) NOT NULL auto_increment,
-  `descripcion` varchar(60) NOT NULL COMMENT 'ordenable',
+  `descripcion` varchar(60) NOT NULL COMMENT 'ordenable,link/Articulo',
   `marca` varchar(20) default NULL COMMENT 'ordenable',
   `modelo` varchar(20) default NULL COMMENT 'ordenable',
   `cantidad` int(11) default NULL COMMENT 'ordenable',
@@ -84,7 +84,7 @@ SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `Ubicaciones` (
   `id` smallint(5) unsigned NOT NULL auto_increment,
-  `Descripcion` varchar(30) NOT NULL COMMENT 'ordenable',
+  `Descripcion` varchar(30) NOT NULL COMMENT 'ordenable,link/Ubicacion',
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=184 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;

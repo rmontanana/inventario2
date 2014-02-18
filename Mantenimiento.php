@@ -142,15 +142,15 @@ class Mantenimiento {
                 }
                 // Comprueba si tiene que añadir el enlace de inventario
                 if (strstr($this->campos[$clave]['Comment'], "link")) {
-                   $comen = explode(",", $this->campos[$clave]['Comment']);
-                   foreach ($comen as $co) {
-                       if (strstr($co, "link")) {
-                           $tmpco = explode("/", $co);
-                           $datoEnlace = $tmpco[1];
-                       }
-                   }
-                   $this->campoBusca = $dato[1];
-                   $valor = '<a title="Inventario de '.$valor.'" $target="_blank" href="index.php?informeInventario&opc=listar' . $datoEnlace . '&id=' . $id . '">' . $valor;
+                    $comen = explode(",", $this->campos[$clave]['Comment']);
+                    foreach ($comen as $co) {
+                        if (strstr($co, "link")) {
+                            $tmpco = explode("/", $co);
+                            $datoEnlace = $tmpco[1];
+                        }
+                    }
+                    $this->campoBusca = $dato[1];
+                    $valor = '<a title="Inventario de ' . $valor . '" $target="_blank" href="index.php?informeInventario&opc=listar' . $datoEnlace . '&id=' . $id . '">' . $valor;
                 }
                 $salida.="<td>$valor</td>\n";
             }
@@ -243,7 +243,8 @@ class Mantenimiento {
             } else {
                 $coma = ",";
             }
-            $comando.="$coma \"$_POST[$campo]\"";
+            $valor = $_POST[$campo] == "" ? "null" : '"' . $_POST[$campo] . '"';
+            $comando.="$coma " . $valor;
         }
         $comando.=")";
         if (!$this->bdd->ejecuta($comando)) {
@@ -360,7 +361,7 @@ class Mantenimiento {
             $def = simplexml_load_file($nombre);
             foreach ($def->Campos->Col as $columna) {
                 $this->campos[(string) $columna['Nombre']] = array("Field" => (string) $columna['Titulo'], "Comment" => (string) $columna['Varios'],
-                    "Type" => (string) $columna['Tipo']."(".$columna['Ancho'].")", "Editable" => (string) $columna['Editable'], "Campo" => (string) $columna['Campo']);
+                    "Type" => (string) $columna['Tipo'] . "(" . $columna['Ancho'] . ")", "Editable" => (string) $columna['Editable'], "Campo" => (string) $columna['Campo']);
             }
             $this->comandoConsulta = $def->Consulta;
         } else {
@@ -409,7 +410,7 @@ class Mantenimiento {
      * @return array lista de campos y formulario de entrada
      */
     private function formularioCampos($accion, $tipo, $datos) {
-        $modo = $tipo == BORRAR ? "readonly" : "";
+        $modo = $tipo == BORRADO ? "readonly" : "";
         $salida.='<form name="mantenimiento.form" method="post" action="' . $accion . '">' . "\n";
         $salida.="<fieldset style=\"width: 96%;\"><p><legend style=\"color: red;\"><b>$tipo</b></legend>\n";
         foreach ($this->campos as $clave => $valor) {
@@ -422,6 +423,9 @@ class Mantenimiento {
             //Se asegura que el id no se pueda modificar.
             $modoEfectivo = $clave == 'id' ? "readonly" : $modo;
             $valorDato = $datos == null ? "" : $datos[$campo];
+            if ($clave == 'id' && $tipo == ANADIR) {
+                $valorDato = null;
+            }
             if (!isset($this->foraneas[$valor['Campo']])) {
                 $tipoCampo = $valor['Type'];
                 //Si es un campo fecha u hora y está insertando pone la fecha actual o la hora actual
@@ -443,7 +447,7 @@ class Mantenimiento {
                     $tipo_campo = "text";
                 //Si no es una clave foránea añade un campo de texto normal
                 $salida.='<input type="' . $tipo_campo . '" name="' . $campo . '" value="' . $valorDato .
-                        '" maxlength="' . $tamano . '" size="' . (string) (intval($tamano)+5) . '" ' . $modoEfectivo . " ><br><br>\n";
+                        '" maxlength="' . $tamano . '" size="' . (string) (intval($tamano) + 5) . '" ' . $modoEfectivo . " ><br><br>\n";
             } else {
                 $salida.=$this->generaLista($this->foraneas[$campo], $campo, $valorDato, $modoEfectivo);
             }
