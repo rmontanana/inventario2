@@ -353,10 +353,6 @@ class Mantenimiento {
         return $salida;
     }
 
-    /**
-     * @todo Hay que hacer lo de las búsquedas automatizadas. Buscar el comment de buscar.
-     * @todo Hay que hacer lo de las ordenaciones automatizadas. Buscar el comment de ordenable.
-     */
     private function obtenerCampos() {
         //Si hay un fichero de descripción xml lo utiliza.
         $nombre = "xml/mantenimiento" . $this->tabla . ".xml";
@@ -364,7 +360,7 @@ class Mantenimiento {
             $def = simplexml_load_file($nombre);
             foreach ($def->Campos->Col as $columna) {
                 $this->campos[(string) $columna['Nombre']] = array("Field" => (string) $columna['Titulo'], "Comment" => (string) $columna['Varios'],
-                    "Type" => (string) $columna['Tipo'], "Editable" => (string) $columna['Editable'], "Campo" => (string) $columna['Campo']);
+                    "Type" => (string) $columna['Tipo']."(".$columna['Ancho'].")", "Editable" => (string) $columna['Editable'], "Campo" => (string) $columna['Campo']);
             }
             $this->comandoConsulta = $def->Consulta;
         } else {
@@ -447,7 +443,7 @@ class Mantenimiento {
                     $tipo_campo = "text";
                 //Si no es una clave foránea añade un campo de texto normal
                 $salida.='<input type="' . $tipo_campo . '" name="' . $campo . '" value="' . $valorDato .
-                        '" maxlength="' . $tamano . '" size="' . $tamano . '" ' . $modoEfectivo . " ><br><br>\n";
+                        '" maxlength="' . $tamano . '" size="' . (string) (intval($tamano)+5) . '" ' . $modoEfectivo . " ><br><br>\n";
             } else {
                 $salida.=$this->generaLista($this->foraneas[$campo], $campo, $valorDato, $modoEfectivo);
             }
