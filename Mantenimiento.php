@@ -243,8 +243,7 @@ class Mantenimiento {
             } else {
                 $coma = ",";
             }
-            $valor = $_POST[$campo] == "" ? "null" : '"'.$_POST[$campo].'"';
-            $comando.="$coma " . $valor;
+            $comando.="$coma \"$_POST[$campo]\"";
         }
         $comando.=")";
         if (!$this->bdd->ejecuta($comando)) {
@@ -410,7 +409,7 @@ class Mantenimiento {
      * @return array lista de campos y formulario de entrada
      */
     private function formularioCampos($accion, $tipo, $datos) {
-        $modo = $tipo == BORRADO ? "readonly" : "";
+        $modo = $tipo == BORRAR ? "readonly" : "";
         $salida.='<form name="mantenimiento.form" method="post" action="' . $accion . '">' . "\n";
         $salida.="<fieldset style=\"width: 96%;\"><p><legend style=\"color: red;\"><b>$tipo</b></legend>\n";
         foreach ($this->campos as $clave => $valor) {
@@ -423,9 +422,6 @@ class Mantenimiento {
             //Se asegura que el id no se pueda modificar.
             $modoEfectivo = $clave == 'id' ? "readonly" : $modo;
             $valorDato = $datos == null ? "" : $datos[$campo];
-            if ($clave == 'id' && $tipo == ANADIR) {
-                $valorDato = null;
-            }
             if (!isset($this->foraneas[$valor['Campo']])) {
                 $tipoCampo = $valor['Type'];
                 //Si es un campo fecha u hora y está insertando pone la fecha actual o la hora actual
