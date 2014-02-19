@@ -35,6 +35,7 @@ class Importacion {
         switch ($opc) {
             case 'form':return $this->formulario();
             case 'importar':return $this->importarFichero();
+            case 'ejecutar':return "Ok";
         }
     }
 
