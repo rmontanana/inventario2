@@ -112,10 +112,18 @@ class Mantenimiento {
         } else {
             $comando = str_replace('{orden}', ' ', $comando);
         }
-        //Introduce un botón para hacer búsquedas
-        $salida = $this->enlaceBusqueda();
+        //Introduce un botón para hacer búsquedas y el número de la página
+        $salida = $this->enlaceBusqueda($pagSigte);
         //Esta orden de centrado se cierra en el pie de la tabla
-        $salida.='<center><h4>P&aacute;gina ' . $pagSigte . '</h4>';
+        //$salida.='<center><h4>P&aacute;gina ' . $pagSigte . '</h4>';
+//        $salida .='<div class="nav-bar navbar-fixed"><ul class="nav nav-pills nav-stacked">
+//                  <li class="active">
+//                    <a href="#">
+//                      <span class="badge pull-right">' . $pagSigte . '</span>
+//                      P&aacute;gina
+//                    </a>
+//                  </li>
+//                </ul></div>';
         $salida.= $cabecera;
         //Consulta paginada de todas las tuplas
         $comando = str_replace('{inferior}', ($pagAnt + 1) * NUMFILAS, $comando);
@@ -196,7 +204,7 @@ class Mantenimiento {
         return $salida;
     }
 
-    private function enlaceBusqueda() {
+    private function enlaceBusqueda($pagina) {
         //$salida = '<p align="center">';
         //$salida .='<center><form name="busqueda" method="POST"><input type="text" class="form-control" name="buscar"';
         //$salida .='value="' . $this->cadenaBusqueda . '" size="40" /><input type="submit" class="btn btn-primary" value="Buscar" name=';
@@ -207,6 +215,13 @@ class Mantenimiento {
                 <input type="text" name="buscar" placeholder="Descripci&oacute;n" class="form-control">
                 <span class="input-group-btn"><button class="btn btn-primary" type="button">Buscar</button>
                 </span></div></div></form>';
+        $salida .= '<div class="col-lg-1 pull-right"><ul class="nav nav-pills nav-stacked "><li class="active">
+                   <a href="#"><span class="badge pull-right">'.$pagina.'</span>P&aacute;gina</a></li></ul></div>';
+//        $salida .= '<div class="progress progress-striped">
+//  <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+//    P&aacute;gina 5 de 6<span class="sr-only">20% Complete</span>
+//  </div>
+//</div>';
         return $salida;
     }
 
@@ -426,7 +441,7 @@ class Mantenimiento {
             }
             $salida .='<div class="form-group">';
             $campo = $valor['Campo'];
-            $salida.='<label class="col-sm-2 control-label" for="'.$campo.'">' . ucfirst($clave) . "</label> ";
+            $salida.='<label class="col-sm-2 control-label" for="' . $campo . '">' . ucfirst($clave) . "</label> ";
             $salida.='<div class="col-sm-7">';
             //Se asegura que el id no se pueda modificar.
             $modoEfectivo = $clave == 'id' ? "readonly" : $modo;
