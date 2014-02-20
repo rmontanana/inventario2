@@ -197,11 +197,16 @@ class Mantenimiento {
     }
 
     private function enlaceBusqueda() {
-        $salida = '<p align="center">';
-        $salida.='<center><form name="busqueda" method="POST"><input type="text" name="buscar"';
-        $salida.='value="' . $this->cadenaBusqueda . '" size="40" /><input type="submit" value="Buscar" name=';
-        $salida.='"Buscar" /></form></center>';
-        $salida.='</p>';
+        //$salida = '<p align="center">';
+        //$salida .='<center><form name="busqueda" method="POST"><input type="text" class="form-control" name="buscar"';
+        //$salida .='value="' . $this->cadenaBusqueda . '" size="40" /><input type="submit" class="btn btn-primary" value="Buscar" name=';
+        //$salida .='"Buscar" />';
+        //$salida .= '</form></center>';
+        //$salida.='</p>';
+        $salida = '<form name="busqueda" method="POST"><div class="col-lg-6"><div class="input-group">
+                <input type="text" name="buscar" placeholder="Descripci&oacute;n" class="form-control">
+                <span class="input-group-btn"><button class="btn btn-primary" type="button">Buscar</button>
+                </span></div></div></form>';
         return $salida;
     }
 
@@ -378,7 +383,8 @@ class Mantenimiento {
     }
 
     private function cabeceraTabla() {
-        $salida = '<p align="center"><table border=1 class="tablaDatos"><tbody>';
+        //$salida = '<p align="center"><table border=1 class="tablaDatos"><tbody>';
+        $salida = '<p align="center"><table border=1 class="table table-striped table-bordered table-condensed table-hover"><tbody>';
         foreach ($this->campos as $clave => $datos) {
             $comen = explode(",", $datos["Comment"]);
             $ordenable = false;
@@ -405,7 +411,7 @@ class Mantenimiento {
     /**
      * 
      * @param string $accion URL de la acción del POST
-     * @param string $tipo ANADIR,EDITAR,BORRAR
+     * @param string $tipo ANADIR,EDITAR,BORRADO
      * @param array $datos Vector con los datos del registro
      * @return array lista de campos y formulario de entrada
      */
