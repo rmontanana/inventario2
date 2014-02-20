@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<Informe>
+	<Titulo Texto="Informe de Usuarios" />
+	<Datos>
+		<Consulta>select * from Usuarios order by Nombre;</Consulta>
+	</Datos>
+	<Pagina Orientacion="P" Formato="A4">
+		<Cabecera>Relación alfabética</Cabecera>
+		<Cuerpo>
+			<Col Nombre="id" Ancho="10" Ajuste="D" Titulo="id"/>
+			<Col Nombre="nombre" Ancho="32" Ajuste="I" Titulo="Nombre"/>
+                        <Col Nombre="idSesion" Ancho="30" Ajuste="I" Titulo="id Sesion" />
+                        <Col Nombre="alta" Ancho="15" Ajuste="C" Titulo="Alta"/>
+                        <Col Nombre="modificacion" Ancho="15" Ajuste="C" Titulo="Modif" />
+                        <Col Nombre="borrado" Ancho="15" Ajuste="C" Titulo="Bajas" />
+                        <Col Nombre="consulta" Ancho="15" Ajuste="C" Titulo="Cons." />
+                        <Col Nombre="informe" Ancho="15" Ajuste="C" Titulo="informe" />
+                        <Col Nombre="usuarios" Ancho="15" Ajuste="C" Titulo="Usuar" />
+                        <Col Nombre="config" Ancho="15" Ajuste="C" Titulo="Conf." />
+		</Cuerpo>
+	</Pagina>
+</Informe>
