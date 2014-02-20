@@ -215,8 +215,10 @@ class Mantenimiento {
                 <input type="text" name="buscar" placeholder="Descripci&oacute;n" class="form-control">
                 <span class="input-group-btn"><button class="btn btn-primary" type="button">Buscar</button>
                 </span></div></div></form>';
-        $salida .= '<div class="col-lg-1 pull-right"><ul class="nav nav-pills nav-stacked "><li class="active">
-                   <a href="#"><span class="badge pull-right">'.$pagina.'</span>P&aacute;gina</a></li></ul></div>';
+        //$salida .= '<div class="col-lg-1 pull-right"><ul class="nav nav-pills nav-stacked "><li class="active">
+        //           <a href="#"><span class="badge pull-right">'.$pagina.'</span>P&aacute;gina</a></li></ul></div>';
+        $salida .= '<button class="btn btn-info pull-right" type="button">P&aacute;gina <span class="badge">'
+                . $pagina . '</span></button>';
 //        $salida .= '<div class="progress progress-striped">
 //  <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
 //    P&aacute;gina 5 de 6<span class="sr-only">20% Complete</span>
