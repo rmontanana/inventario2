@@ -171,8 +171,8 @@ class Mantenimiento {
         if ($this->bdd->numeroTuplas()) {
             $anterior = $enlace . $pagAnt . $sufijoEnlace . "\"><img title=\"Pag. Anterior\" alt=\"anterior\" src=\"img/" . ESTILO . "/anterior.png\"></a>\n";
             $siguiente = $enlace . $pagSigte . $sufijoEnlace . "\"><img title=\"Pag. Siguiente\" alt=\"siguiente\" src=\"img/" . ESTILO . "/siguiente.png\"></a>\n";
-            $fwd = $enlace . $pagFwd . $sufijoEnlace . "\"><img title=\"Pag. Siguiente\" alt=\"siguiente\" src=\"img/" . ESTILO . "/fwd.png\"></a>\n";
-            $rew = $enlace . $pagRew . $sufijoEnlace . "\"><img title=\"Pag. Siguiente\" alt=\"siguiente\" src=\"img/" . ESTILO . "/rew.png\"></a>\n";
+            $fwd = $enlace . $pagFwd . $sufijoEnlace . "\"><img title=\"+5 Pags.\" alt=\"mas5p\" src=\"img/" . ESTILO . "/fwd.png\"></a>\n";
+            $rew = $enlace . $pagRew . $sufijoEnlace . "\"><img title=\"-5 Pags.\" alt=\"menos5p\" src=\"img/" . ESTILO . "/rew.png\"></a>\n";
             if (strlen($orden) > 0) {
                 $az = '<a href="' . $this->url . '&orden=' . $orden . '&sentido=asc"><img alt="asc" title="Orden ascendente" src="img/' . ESTILO . '/ascendente.png"></a>';
                 $za = '<a href="' . $this->url . '&orden=' . $orden . '&sentido=desc"><img alt="desc" title="Orden descendente" src="img/' . ESTILO . '/descendente.png"></a>';
@@ -327,7 +327,7 @@ class Mantenimiento {
     //Función que genera un campo de lista con los valores de descripción de la
     //tabla a la cual pertenece la clave foránea.
     protected function generaLista($datos, $campo, $valorInicial, $modo) {
-        $salida = "<select name=\"$campo\">\n";
+        $salida = "<select class=\"form-control\" name=\"$campo\">\n";
         list($tabla, $atributos) = explode(",", $datos);
         $atributos = str_replace("/", ",", $atributos);
         // Elimina las llaves
@@ -417,15 +417,17 @@ class Mantenimiento {
      */
     private function formularioCampos($accion, $tipo, $datos) {
         $modo = $tipo == BORRADO ? "readonly" : "";
-        $salida.='<form name="mantenimiento.form" method="post" action="' . $accion . '">' . "\n";
+        $salida.='<form name="mantenimiento.form" class="form-horizontal" role="form" method="post" action="' . $accion . '">' . "\n";
         $salida.="<fieldset style=\"width: 96%;\"><p><legend style=\"color: red;\"><b>$tipo</b></legend>\n";
         foreach ($this->campos as $clave => $valor) {
             if ($valor["Editable"] == "no") {
                 //Se salta los campos que no deben aparecer
                 continue;
             }
+            $salida .='<div class="form-group">';
             $campo = $valor['Campo'];
-            $salida.="<label>" . ucfirst($clave) . "</label> ";
+            $salida.='<label class="col-sm-2 control-label" for="'.$campo.'">' . ucfirst($clave) . "</label> ";
+            $salida.='<div class="col-sm-7">';
             //Se asegura que el id no se pueda modificar.
             $modoEfectivo = $clave == 'id' ? "readonly" : $modo;
             $valorDato = $datos == null ? "" : $datos[$campo];
@@ -440,20 +442,22 @@ class Mantenimiento {
                         $valorDato = strftime("%Y/%m/%d");
                     }
                 }
-                // Calcula el tamaño
+                // Calcula el tamaño y el tipo
+                $tipo_campo = "text";
                 if (stripos($tipoCampo, "echa") || stripos($tipoCampo, "ate")) {
                     $tamano = "19";
+                    $tipo_campo = "datetime";
                 } else {
                     list($resto, $tamano) = explode("(", $tipoCampo);
                     $tamano = substr($tamano, 0, -1);
                 }
-                if ($tipoCampo == "Password")
+                if ($tipoCampo == "Password") {
                     $tipo_campo = "password";
-                else
-                    $tipo_campo = "text";
+                }
                 //Si no es una clave foránea añade un campo de texto normal
-                $salida.='<input type="' . $tipo_campo . '" name="' . $campo . '" value="' . $valorDato .
+                $salida.='<input class="form-control" type="' . $tipo_campo . '" name="' . $campo . '" value="' . $valorDato .
                         '" maxlength="' . $tamano . '" size="' . (string) (intval($tamano) + 5) . '" ' . $modoEfectivo . " ><br><br>\n";
+                $salida.='</div></div>';
             } else {
                 $salida.=$this->generaLista($this->foraneas[$campo], $campo, $valorDato, $modoEfectivo);
             }
@@ -463,7 +467,7 @@ class Mantenimiento {
         //genera un campo oculto con la lista de campos a modificar.
         $salida.='<input name="listacampos" type="hidden" value="' . $campos . "\">\n";
         $salida.="</fieldset><p>";
-        $salida.="<button type=reset>Cancelar</button>&nbsp;&nbsp;<button type=submit>Aceptar</button><br>\n";
+        $salida.='<center><button type="reset" class="btn btn-danger">Cancelar</button>&nbsp;&nbsp;<button type=submit class="btn btn-primary">Aceptar</button><br></center>';
         return $salida;
     }
 

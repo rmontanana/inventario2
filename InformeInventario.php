@@ -115,7 +115,7 @@ class InformeInventario {
     }
 
     private function listaUbicaciones() {
-        $salida = "<select name=\"id\">\n";
+        $salida = "<select class=\"form-control\" name=\"id\">\n";
         $comando = "select * from Ubicaciones order by Descripcion";
         $resultado = $this->bdd->ejecuta($comando);
         if (!$resultado) {
@@ -129,7 +129,7 @@ class InformeInventario {
     }
 
     private function listaArticulos() {
-        $salida = "<select name=\"id\">\n";
+        $salida = "<select class=\"form-control\" name=\"id\">\n";
         $comando = "select * from Articulos order by descripcion, marca, modelo";
         $resultado = $this->bdd->ejecuta($comando);
         if (!$resultado) {
@@ -147,11 +147,11 @@ class InformeInventario {
         $salida.="<fieldset style=\"width: 96%;\"><p><legend style=\"color: red;\"><b>Elige $etiqueta</b></legend>\n";
         $salida.="<br><br><label>$etiqueta</label>";
         $salida.=$lista;
-        $salida.="<br><br>Salida del informe por: Pantalla ";
-        $salida.='<input type="radio" name="salida" value="pantalla" checked>';
-        $salida.='    Hoja de c&aacute;lculo <input type="radio" name="salida" value="Hoja de cálculo">';
+        $salida.="<br><br>Salida del informe por:";
+        $salida.='<div class="radio"><label><input type="radio" name="salida" value="pantalla" checked>Pantalla</label></div>';
+        $salida.='<div class="radio"><label><input type="radio" name="salida" value="Hoja de cálculo">Hoja de c&aacute;lculo</label></div>';
         $salida.="<br><br></fieldset><p>";
-        $salida.='<p align="center"><button type=submit>Aceptar</button></p><br>' . "\n";
+        $salida.='<p align="center"><button type=submit class="btn btn-primary">Aceptar</button></p><br>' . "\n";
         return $salida;
     }
 
