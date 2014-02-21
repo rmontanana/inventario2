@@ -143,7 +143,7 @@ class InformeInventario {
     }
 
     private function formulario($accion, $etiqueta, $lista) {
-        $salida = '<form name="informeInventario.form" method="post" action="' . $accion . '">' . "\n";
+        $salida = '<div class="col-sm-2 col-md-6"><form name="informeInventario.form" method="post" action="' . $accion . '">' . "\n";
         $salida.="<fieldset style=\"width: 96%;\"><p><legend style=\"color: red;\"><b>Elige $etiqueta</b></legend>\n";
         $salida.="<br><br><label>$etiqueta</label>";
         $salida.=$lista;
@@ -151,7 +151,7 @@ class InformeInventario {
         $salida.='<div class="radio"><label><input type="radio" name="salida" value="pantalla" checked>Pantalla</label></div>';
         $salida.='<div class="radio"><label><input type="radio" name="salida" value="Hoja de cálculo">Hoja de c&aacute;lculo</label></div>';
         $salida.="<br><br></fieldset><p>";
-        $salida.='<p align="center"><button type=submit class="btn btn-primary">Aceptar</button></p><br>' . "\n";
+        $salida.='<p align="center"><button type=submit class="btn btn-primary">Aceptar</button></p><br></div>' . "\n";
         return $salida;
     }
 
