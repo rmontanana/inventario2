@@ -415,8 +415,10 @@ class Mantenimiento {
                 }
             }
             $clave = str_ireplace("descripcion", "Descripci&oacute;n", $clave);
+            $clave = str_ireplace("ubicacion", "Ubicaci&oacute;n", $clave);
+            $clave = str_ireplace("articulo", "Art&iacute;culo", $clave);
             if ($ordenable) {
-                $salida.="<th><b><a title=\"Establece orden por $clave \" href=\"$this->url&orden=" . strtolower($clave) . "\"> ".ucfirst($clave)." </a></b></th>\n";
+                $salida.="<th><b><a title=\"Establece orden por $clave \" href=\"$this->url&orden=" . strtolower($clave) . "\"> " . ucfirst($clave) . " </a></b></th>\n";
             } else {
                 $salida.='<th><b>' . ucfirst($clave) . '</b></th>' . "\n";
             }
@@ -435,7 +437,8 @@ class Mantenimiento {
      */
     private function formularioCampos($accion, $tipo, $datos) {
         $modo = $tipo == BORRADO ? "readonly" : "";
-        $salida.='<form name="mantenimiento.form" class="form-horizontal" role="form" method="post" action="' . $accion . '">' . "\n";
+        $nfechas = 0;
+        $salida.='<div class="col-sm-8"><form name="mantenimiento.form" class="form-horizontal" role="form" method="post" action="' . $accion . '">' . "\n";
         $salida.="<fieldset style=\"width: 96%;\"><p><legend style=\"color: red;\"><b>$tipo</b></legend>\n";
         foreach ($this->campos as $clave => $valor) {
             if ($valor["Editable"] == "no") {
@@ -445,7 +448,7 @@ class Mantenimiento {
             $salida .='<div class="form-group">';
             $campo = $valor['Campo'];
             $salida.='<label class="col-sm-2 control-label" for="' . $campo . '">' . ucfirst($clave) . "</label> ";
-            $salida.='<div class="col-sm-7">';
+            $salida.='<div class="col-sm-5">';
             //Se asegura que el id no se pueda modificar.
             $modoEfectivo = $clave == 'id' ? "readonly" : $modo;
             $valorDato = $datos == null ? "" : $datos[$campo];
@@ -457,7 +460,7 @@ class Mantenimiento {
                 //Si es un campo fecha u hora y está insertando pone la fecha actual o la hora actual
                 if ($tipo == ANADIR) {
                     if (stripos($tipoCampo, "echa") || stripos($tipoCampo, "ate")) {
-                        $valorDato = strftime("%Y/%m/%d");
+                        $valorDato = strftime("%d/%m/%Y");
                     }
                 }
                 // Calcula el tamaño y el tipo
@@ -465,6 +468,25 @@ class Mantenimiento {
                 if (stripos($tipoCampo, "echa") || stripos($tipoCampo, "ate")) {
                     $tamano = "19";
                     $tipo_campo = "datetime";
+                    $nfechas++;
+                    //
+                    //Prueba
+                    //
+                    $salida .= '<div class="input-group date" id="datetimepicker'.$nfechas.'">
+                    <input type="text" $name ="'.$campo.'" data-format="YYYY/MM/DD" value="'.$valorDato.'" '. $modoEfectivo. ' class="form-control" />
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                    </div>';
+                    $salida .= '<script type="text/javascript">
+                            $(function () {
+                                $('."'#datetimepicker".$nfechas."').datetimepicker({
+                                    pick12HourFormat: false,
+                                    language: 'es',
+                                    pickTime: false
+                                    });
+                            });
+                            </script>";
+                    $salida .= "</div></div>";
+                    continue;
                 } else {
                     list($resto, $tamano) = explode("(", $tipoCampo);
                     $tamano = substr($tamano, 0, -1);
@@ -478,14 +500,19 @@ class Mantenimiento {
                 $salida.='</div></div>';
             } else {
                 $salida.=$this->generaLista($this->foraneas[$campo], $campo, $valorDato, $modoEfectivo);
+                $salida.="</div></div>";
             }
             //Genera una lista con los campos que intervienen en el formulario.
             $campos.="$campo&";
         }
         //genera un campo oculto con la lista de campos a modificar.
-        $salida.='<input name="listacampos" type="hidden" value="' . $campos . "\">\n";
-        $salida.="</fieldset><p>";
-        $salida.='<center><button type="reset" class="btn btn-danger">Cancelar</button>&nbsp;&nbsp;<button type=submit class="btn btn-primary">Aceptar</button><br></center>';
+        $salida .= '<input name="listacampos" type="hidden" value="' . $campos . "\">\n";
+        $salida .= "</fieldset><p>";
+        $salida .= '<center>';
+        $salida .= '<button type="button" onClick="location.href=' . "'$this->url'" . '" class="btn btn-info">Volver</button>';
+        $salida .= '&nbsp;&nbsp;<button type="reset" class="btn btn-danger">Cancelar</button>';
+        $salida .= '&nbsp;&nbsp;<button type=submit class="btn btn-primary">Aceptar</button>';
+        $salida .= '<br></center></div>';
         return $salida;
     }
 
