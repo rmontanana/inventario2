@@ -55,7 +55,7 @@ CREATE TABLE `Elementos` (
   `id_Ubicacion` smallint(5) unsigned NOT NULL COMMENT 'foreign(Ubicaciones;id),ordenable',
   `numserie` varchar(30) default NULL COMMENT 'ordenable',
   `cantidad` int(10) unsigned default NULL COMMENT 'ordenable',
-  `fechaCompra` datetime NOT NULL COMMENT 'ordenable',
+  `fechaCompra` date NOT NULL COMMENT 'ordenable',
   PRIMARY KEY  (`id`),
   KEY `id` (`id`),
   KEY `id_Articulo` (`id_Articulo`),
@@ -108,7 +108,7 @@ SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `Usuarios` (
   `id` int(10) unsigned NOT NULL auto_increment,
-  `nombre` varchar(8) NOT NULL default '',
+  `nombre` varchar(16) NOT NULL default '',
   `clave` varchar(32) NOT NULL default '',
   `idSesion` varchar(20) NOT NULL default '',
   `alta` tinyint(1) NOT NULL default '0',
