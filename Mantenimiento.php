@@ -414,11 +414,12 @@ class Mantenimiento {
                     $this->campoBusca = $dato[1];
                 }
             }
+            $clave2 = $clave;
             $clave = str_ireplace("descripcion", "Descripci&oacute;n", $clave);
             $clave = str_ireplace("ubicacion", "Ubicaci&oacute;n", $clave);
             $clave = str_ireplace("articulo", "Art&iacute;culo", $clave);
             if ($ordenable) {
-                $salida.="<th><b><a title=\"Establece orden por $clave \" href=\"$this->url&orden=" . strtolower($clave) . "\"> " . ucfirst($clave) . " </a></b></th>\n";
+                $salida.="<th><b><a title=\"Establece orden por $clave \" href=\"$this->url&orden=" . strtolower($clave2) . "\"> " . ucfirst($clave) . " </a></b></th>\n";
             } else {
                 $salida.='<th><b>' . ucfirst($clave) . '</b></th>' . "\n";
             }
