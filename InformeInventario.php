@@ -147,7 +147,7 @@ class InformeInventario {
         $salida.="<fieldset style=\"width: 96%;\"><p><legend style=\"color: red;\"><b>Elige $etiqueta</b></legend>\n";
         $salida.="<br><br><label>$etiqueta</label>";
         $salida.=$lista;
-        $salida.="<br><br>Salida del informe por:";
+        $salida.="<br><br><label for='salida'>Salida del informe por:</label>";
         $salida.='<div class="radio"><label><input type="radio" name="salida" value="pantalla" checked>Pantalla</label></div>';
         $salida.='<div class="radio"><label><input type="radio" name="salida" value="Hoja de cálculo">Hoja de c&aacute;lculo</label></div>';
         $salida.="<br><br></fieldset><p>";
