@@ -51,9 +51,18 @@ class Importacion {
     private function formulario() {
         $accion = "index.php?importacion&opc=importar";
         $salida = '<form  enctype="multipart/form-data" name="importacion.form" method="post" action="' . $accion . '">' . "\n";
-        $salida.="<fieldset style=\"width: 96%;\"><p><legend style=\"color: red;\"><b>Elige Archivo</b></legend>\n";
-        $salida.= '<input type="file" name="fichero" id="fichero">';
-        $salida.='<p align="center"><button type=submit>Aceptar</button></p><br>' . "\n";
+        $salida .="<fieldset style=\"width: 96%;\"><p><legend style=\"color: red;\"><b>Elige Archivo</b></legend>\n";
+        $salida .= '<input type="file" name="fichero" id="fichero" onClick="seleccionFichero(this);">';
+        $salida .='<p align="center"><button class="btn btn-primary" type=submit>Aceptar</button></p><br>' . "\n";
+        $salida .="<script type='text/javascript'>
+                function seleccionFichero(obj) {
+                var filePath = obj.value;
+
+                var ext = filePath.substring(filePath.lastIndexOf('.') + 1).toLowerCase();
+                if(ext != 'csv') {
+                    alert('S&oacute;lo se permiten archivos con extensi&oacute;n CSV');
+                }
+           </script>";
         return $salida;
     }
 }
