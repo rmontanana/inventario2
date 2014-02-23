@@ -69,22 +69,10 @@ class Csv {
 
     /**
      * 
-     * @param String $linea escribe la línea en el archivo, la línea debe estar formateada
+     * @param array $datos escribe la línea en el archivo
      */
-    public function escribeLinea($linea) {
-        fwrite($this->fichero, $linea . "\n") or die("No puedo escribir en el fichero xml");
-    }
-
-    /**
-     * 
-     * @param array $campos array de campos a escribir en el fichero
-     */
-    public function escribeCampos($campos) {
-        $linea = "";
-        foreach ($campos as $campo) {
-            $linea .= '"' . $campo . '",';
-        }
-        $this->escribeLinea($linea);
+    public function escribeLinea($datos) {
+        fputcsv($this->fichero, $datos, ',', '"') or die("No puedo escribir en el fichero csv");
     }
 
     public function cierra() {
@@ -98,29 +86,21 @@ class Csv {
     public function ejecutaConsulta($fichero) {
         $consulta = simplexml_load_file($fichero) or die("No puedo cargar el fichero xml " . $fichero . " al csv");
         // Escribe la cabecera del fichero
-        $this->escribeLinea('"' . utf8_decode($consulta->Titulo['Texto']) . '","' . $consulta->Titulo['id'] . '"');
-        $this->escribeLinea("");
-        $this->escribeLinea('"' . $consulta->Pagina->Cabecera . '"');
-        $this->escribeLinea("");
-        $campos = array("Baja");
+        $this->escribeLinea(array($consulta->Pagina->Cabecera,$consulta->Titulo['id'],$consulta->Titulo['Texto']));
         foreach ($consulta->Pagina->Cuerpo->Col as $campo) {
             $campos[] = utf8_decode($campo['Titulo']);
         }
-        $campos[] = "Cantidad Real";
-        $this->escribeCampos($campos);
+        $this->escribeLinea($campos);
         // Escribe los datos de los campos
         $this->bdd->ejecuta($consulta->Datos->Consulta);
         while ($fila = $this->bdd->procesaResultado()) {
-            $campos = array("");
+            $campos = array();
             foreach ($consulta->Pagina->Cuerpo->Col as $campo) {
                 $campos[] = $fila[(string) $campo['Nombre']];
             }
-            //$campos = $fila;
-            //array_unshift($campos, "");
-            $this->escribeCampos($campos);
+            $this->escribeLinea($campos);
         }
     }
-
     private function quitaComillas($dato) {
         //return substr($dato, 1, -1);
         return str_replace("\"", "", $dato);
@@ -129,9 +109,8 @@ class Csv {
     /**
      * 
      * @param String $ficheroCSV Nombre del archivo csv
-     * @param String $ficheroXML Nombre del archivo que contiene la consulta xml
      */
-    public function cargaCSV($ficheroCSV) {
+    public function cargaCSV2($ficheroCSV) {
         $this->nombre = $ficheroCSV;
         $this->fichero = fopen($this->nombre, "r") or die('No puedo abrir el archivo ' . $this->nombre . " para lectura.");
         $linea = fgets($this->fichero);
@@ -164,39 +143,42 @@ class Csv {
         $this->numRegistros = $lineas;
         return $this->Resumen($cabecera, $idCabecera, $archivo, $datosFichero, $consulta);
     }
+    /**
+     * 
+     * @param String $ficheroCSV Nombre del archivo csv
+     */
+    public function cargaCSV($ficheroCSV) {
+        $this->nombre = $ficheroCSV;
+        $this->fichero = fopen($this->nombre, "r") or die('No puedo abrir el archivo ' . $this->nombre . " para lectura.");
+        list($archivo, $idCabecera, $cabecera) = fgetcsv($this->fichero);
+        while ($linea = fgetcsv($this->fichero)) {
+            $datosFichero[] = $linea;
+        }
+        return $this->Resumen($cabecera, $idCabecera, $archivo, $datosFichero);
+    }
 
-    public function Resumen($cabecera, $idCabecera, $archivo, $datosFichero, $consulta) {
+    public function Resumen($cabecera, $idCabecera, $archivo, $datosFichero) {
+        //$mensaje .=
         $mensaje = "<center><h1>Archivo [inventario".utf8_decode($archivo)."]</h1>";
-        $mensaje .= "<h2>id=[$idCabecera] Descripci&oacute;n=[".$cabecera."]</h2><br>";
-        $mensaje .= '<p align="center"><table border=1 class="tablaDatos"><tbody>';
-        $mensaje .= "<th><b>Baja</b></th>";
-        $campos = array("Baja");
-        foreach ($consulta->Pagina->Cuerpo->Col as $campo) {
-            $dato = utf8_decode($campo["Titulo"]);
+        $mensaje .= "<h2>id=[$idCabecera] Descripci&oacute;n=[".utf8_decode($cabecera)."]</h2><br>";
+        $mensaje .= '<table border=1 class="table table-striped table-bordered table-condensed table-hover"><theader>';
+        foreach ($datosFichero[0] as $campo) {
+            $dato = $campo;
             $mensaje .= "<th><b>$dato</b></th>";
-            $campos[] = $dato;
         }
-        $campos[] = "Cant Real";
-        $mensaje .= "<th><b>Cant. Real</b></th>";
-        $mensaje .= '<tr align="center" bottom="middle">';
-        for ($i=0; $i < count($datosFichero['Baja']); $i++) {
+        $mensaje .="</theader><tbody>";
+        //echo "$mensaje contar Datosfichero=[".count($datosFichero)."]";
+        for ($i=1; $i < count($datosFichero); $i++) {
             $mensaje .= "<tr>";
-            foreach($campos as $campo) {
-                $mensaje .= "<td>".$datosFichero[$campo][$i]."</td>";
+            foreach($datosFichero[$i] as $dato) {
+                $mensaje .= "<td>".$dato."</td>";
             }
-            $mensaje .= "</tr>";
+            $mensaje .= "</tr>"; 
         }
-        foreach ($datosFichero as $clave => $dato) {
-            $mensaje .= "<td>$dato[$i]</td>";
-        }
-        $mensaje .= "</tr>";
         $mensaje .= "</tbody></table></p><br>";
         $mensaje .= '<form method="post" name="Aceptar" action="index.php?Importacion&opc=Ejecutar">
-                <input type="button" name="Cancelar" value="Cancelar" onClick="location.href=' .  "'index.php'" .'">
-                <input type="submit" name="Aceptar" value="Aceptar"></form></center>';
-        ob_start();
-        var_dump($datosFichero);
-        $mensaje .= ob_get_clean();
+                <input type="button" name="Cancelar" value="Cancelar" onClick="location.href=' .  "'index.php'" .'" class="btn btn-danger">
+                <input type="submit" name="Aceptar" value="Aceptar" class="btn btn-primary"></form></center>';
         return $mensaje;
     }
 

@@ -120,8 +120,10 @@ class Inventario {
                 // Creamos un objeto Distribución facilitándole el
                 // nombre del archivo plantilla y el objeto que aportará
                 // el contenido
-                $opc = $_GET['opc'];
-                list($opcion, $parametro) = explode("&", $this->opcActual);
+                $opc = '';
+                if (isset($_GET['opc'])) {
+                    list($opcion, $parametro) = explode("&", $this->opcActual);
+                }
                 switch ($opc) {
                     case 'informe':
                         $enlace = 'xml/informe' . ucfirst($opcion) . '.xml';

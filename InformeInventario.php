@@ -112,6 +112,7 @@ class InformeInventario {
             $hoja->cierra();
             echo '<script type="text/javascript"> window.open( "' . $nombre . '" ) </script>';
         }
+        //header('Location: index.php');
     }
 
     private function listaUbicaciones() {

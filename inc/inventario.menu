@@ -1,13 +1,13 @@
-1|Maestros|
+1|Maestros|||
 2|Ubicaciones|index.php?ubicaciones&opc=inicial|_self|Ubicaciones del centro
 2|Art&iacute;culos|index.php?articulos&opc=inicial|_self|Art&iacute;culos inventariados
 2|Elementos|index.php?elementos&opc=inicial&orden=ubicacion&sentido=asc|_self|Art&iacute;culos distribuidos en las ubicaciones
 2|Usuarios|index.php?usuarios&opc=inicial|_self|Usuarios autorizados a utilizar la aplicaci&oacute;n
-1|Inventario|
+1|Inventario|||
 2|Ubicaci&oacute;n|index.php?informeInventario&opc=Ubicacion|_self|Inventario de una ubicaci&oacute;n
 2|Art&iacute;culo|index.php?informeInventario&opc=Articulo|_self|Inventario de un Art&iacute;culo
 2|Total|index.php?informeInventario&opc=Total|_blank|Inventario de todas las ubicaciones
 2|Descuadres|index.php?descuadres|_blank|Diferencias entre art&iacute;culos y elementos
-1|Varios|
+1|Varios|||
 2|Configuraci&oacute;n|index.php?configuracion|_self|Opciones configurables de la aplicaci&oacute;n
 2|Importaci&oacute;n|index.php?importacion&opc=form|_self|Importa datos de una hoja de c&aacute;lculo
