@@ -150,7 +150,7 @@ class InformeInventario {
         $salida.=$lista;
         $salida.="<br><br><label for='salida'>Salida del informe por:</label>";
         $salida.='<div class="radio"><label><input type="radio" name="salida" value="pantalla" checked>Pantalla</label></div>';
-        $salida.='<div class="radio"><label><input type="radio" name="salida" value="Hoja de cálculo">Hoja de c&aacute;lculo</label></div>';
+        $salida.='<div class="radio"><label><input type="radio" name="salida" value="csv">Archivo CSV</label></div>';
         $salida.="<br><br></fieldset><p>";
         $salida.='<p align="center"><button type=submit class="btn btn-primary">Aceptar</button></p><br></div>' . "\n";
         return $salida;
