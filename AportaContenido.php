@@ -155,6 +155,7 @@ class AportaContenido {
                     case 'informeInventario':return "Informe de Inventario";
                     case 'descuadres':return 'Informe de descuadres';
                     case 'importacion': return 'Importaci&oacute;n de datos';
+                    case 'copiaseg': return 'Copia de seguridad de datos';
                 }
                 return '';
             case 'control':
@@ -228,6 +229,23 @@ class AportaContenido {
                             return $import->ejecuta();
                         } else {
                             return $this->mensajePermisos("Actualizaci&oacute;n, creaci&oacute;n y borrado de elementos");
+                        }
+                    case 'copiaseg':
+                        if ($this->perfil['Informe']) {
+                            $mensaje = '<div class="panel panel-success"><div class="panel-heading">';
+                            $mensaje .= '<h3 class="panel-title">Informaci&oacute;n</h3></div>';
+                            $mensaje .= '<div class="panel-body">';
+                            $mensaje .= 'Copia de seguridad realizada con &eacute;xito.<br><br>Pulse sobre el siguiente enlace para descargar:<br><br>';
+                            $mensaje .= '<a href="tmp/copiaseg.sql.gz">Descargar Copia de Seguridad de Datos</a><br>';
+                            $mensaje .= $comando;
+                            $mensaje .= '</div>';
+                            $mensaje .= '</div>';
+                            $archivo = 'tmp/copiaseg.sql.gz';
+                            $comando = 'mysqldump -u '.USUARIO.'--password='.CLAVE.' '.BASEDATOS.'|gzip -9c>'.$archivo;
+                            system($comando);
+                            return $mensaje;
+                        } else {
+                            return $this->mensajePermisos("Informes");
                         }
                 } // Fin del contenido
             case 'usuario_incorrecto':

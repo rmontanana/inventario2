@@ -11,3 +11,4 @@
 1|Varios|||
 2|Configuraci&oacute;n|index.php?configuracion|_self|Opciones configurables de la aplicaci&oacute;n
 2|Importaci&oacute;n|index.php?importacion&opc=form|_self|Importa datos de una hoja de c&aacute;lculo
+2|Copia Datos|index.php?copiaseg|_self|Realiza una copia de seguridad de los datos de la aplicaci&oacute;n
