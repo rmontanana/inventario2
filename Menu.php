@@ -42,7 +42,7 @@ class Menu {
         foreach($this->opciones as $opcion) {
             list($tipo,$opcion,$enlace,$destino,$titulo)=explode(",",$opcion);
             if ($tipo==2)
-                $salida.='<a href="'.$enlace.'" target="'.$destino.'" title="'.$titulo.'">'.$opcion.'</a><br />';
+                $salida.='<li class="active"><a href="'.$enlace.'" target="'.$destino.'" title="'.$titulo.'">'.$opcion.'</a><br /></li>';
             else
                 $salida.='<label class="key">'.$opcion.'</label><br/>';
         }

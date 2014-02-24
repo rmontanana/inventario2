@@ -195,7 +195,7 @@ class AportaContenido {
                         }
 
                     case 'bienvenido': // El usuario quiere iniciar sesión
-                        return 'Bienvenido ' . $this->usuario . '<br><br><center><img src="img/codigoBarras.png" alt="' . PROGRAMA . '">' .
+                        return 'Bienvenid@ ' . $this->usuario . '<br><br><center><img src="img/codigoBarras.png" alt="' . PROGRAMA . '">' .
                                 '<br><label>' . PROGRAMA . '</label></center><br><br>' . PIE;
                     case 'configuracion':
                         if ($this->perfil['Config']) {
@@ -236,7 +236,7 @@ class AportaContenido {
             case 'registro': // Si está registrado mostrar bienvenida
                 // si no, un enlace
                 if ($this->bEstaRegistrado) {
-                    return "Bienvenido <b>$this->sUsuario</b><hr />" .
+                    return "Bienvenid@ <b>$this->sUsuario</b><hr />" .
                             '<a href="index.php?cerrarSesion">Cerrar sesi&oacute;n</a>';
                 } else {
                     return '';

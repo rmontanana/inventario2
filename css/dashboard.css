@@ -5,6 +5,7 @@
 /* Move down content because we have a fixed navbar that is 50px tall */
 body {
   padding-top: 50px;
+  background-color: #F3FEC8;
 }
 
 
@@ -34,7 +35,7 @@ body {
     left: 0;
     z-index: 1000;
     display: block;
-    padding: 10px;
+    padding: 5px;
     overflow-x: hidden;
     overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
     background-color: #C4FAEC;/*#f5f5f5;*/
@@ -44,13 +45,13 @@ body {
 
 /* Sidebar navigation */
 .nav-sidebar {
-  margin-right: -11px; /* 20px padding + 1px border */
-  margin-bottom: 10px;
-  margin-left: -10px;
+  margin-right: -6px; /* 20px padding + 1px border */
+  margin-bottom: 1px;
+  margin-left: -1px;
 }
 .nav-sidebar > li > a {
-  padding-right: 10px;
-  padding-left: 10px;
+  padding-right: 5px;
+  padding-left: 5px;
 }
 .nav-sidebar > .active > a {
   color: #fff;
@@ -85,14 +86,14 @@ body {
  */
 
 .placeholders {
-  margin-bottom: 15px;
+  margin-bottom: 5px;
   text-align: center;
 }
 .placeholders h4 {
   margin-bottom: 0;
 }
 .placeholder {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 .placeholder img {
   display: inline-block;
