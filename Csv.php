@@ -226,22 +226,29 @@ class Csv {
         return $mensaje;
     }
 
-    private function escribeFic($comando) {
-        $fp = fopen("tmp/comandos", "a");
-        fputs($fp, $comando . "\n");
+    private function escribeLog($comando) {
+        $fp = fopen($this->nombre.".log", "a");
+        $linea = strftime("%Y/%m/%d")."|".$this->nombre."|".$comando;
+        fputs($fp, $linea . "\n");
         fclose($fp);
     }
 
     private function bajaElemento($i) {
         $id = $this->datosFichero[$i][$this->idElemento];
         $comando = 'delete from Elementos where id="' . $id . '";';
-        $this->escribeFic($comando);
+        $this->escribeLog($comando);
+        if (!$this->bdd->ejecuta($comando)) {
+            throw new Exception("Baja-".$this->bdd->mensajeError, $this->bdd->error);
+        }
     }
 
     private function modificaElemento($i) {
         $id = $this->datosFichero[$i][$this->idElemento];
         $comando = 'update Elementos set Cantidad=' . $this->datosFichero[$i][$this->cantidadReal] . ' where id="' . $id . '";';
-        $this->escribeFic($comando);
+        $this->escribeLog($comando);
+                if (!$this->bdd->ejecuta($comando)) {
+            throw new Exception("Modifica-".$this->bdd->mensajeError, $this->bdd->error);
+        }
     }
 
     private function altaElemento($i) {
@@ -256,7 +263,10 @@ class Csv {
         $idArt = $datosFichero[$i];
         $comando = 'insert into Elementos () values (null,' . $idArticulo . ',' . $idUbicacion . ',"' . $this->datosFichero[$i][$this->nSerie];
         $comando .= '",' . $this->datosFichero[$i][$this->cantidadReal] . ',"' . $this->datosFichero[$i][$this->fechaCompra] . '");';
-        $this->escribeFic($comando);
+        $this->escribeLog($comando);
+        if (!$this->bdd->ejecuta($comando)) {
+            throw new Exception("Alta-".$this->bdd->mensajeError, $this->bdd->error);
+        }
     }
 
     private function cargaIndices($campos) {
@@ -278,8 +288,8 @@ class Csv {
                     break;
             }
         }
-        $this->EscribeFic("Cantreal=[$this->cantidadReal] fechacompra=[$this->fechaCompra] ubicacion=[$this->idUbicacion] articulo=[$this->idArticulo]");
-        $this->EscribeFic("idElemento=[$this->idElemento] Cantidad=[$this->cantidad] nserie=[$this->nserie]");
+        //$this->EscribeFic("Cantreal=[$this->cantidadReal] fechacompra=[$this->fechaCompra] ubicacion=[$this->idUbicacion] articulo=[$this->idArticulo]");
+        //$this->EscribeFic("idElemento=[$this->idElemento] Cantidad=[$this->cantidad] nserie=[$this->nserie]");
     }
 
     /**
@@ -311,6 +321,7 @@ class Csv {
                 }
             }
             $mensaje = "Se han procesado correctamente $acciones acciones en la Base de Datos.";
+            $this->bdd->confirmaTransaccion();
             return $this->panelMensaje($mensaje,"success", "Informaci&oacute;n");
         } catch (Exception $e) {
             $this->bdd->abortaTransaccion();
