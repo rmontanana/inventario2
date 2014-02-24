@@ -199,7 +199,9 @@ class Sql {
     }
     public function abortaTransaccion()
     {
-        return $this->bdd->rollback();
+        $codigo = $this->bdd->rollback();
+        $this->bdd->autocommit(true);
+        return $codigo;     
     }
     public function finalizaTransaccion()
     {

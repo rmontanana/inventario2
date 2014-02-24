@@ -70,7 +70,6 @@ class InformeInventario {
             $hoja = new Csv($this->bdd);
             $hoja->crea($nombre);
             $hoja->ejecutaConsulta($salida);
-            $hoja->cierra();
             echo '<script type="text/javascript"> window.open( "' . $nombre . '" ) </script>';
         }
     }
@@ -109,7 +108,6 @@ class InformeInventario {
             $hoja = new Csv($this->bdd);
             $hoja->crea($nombre);
             $hoja->ejecutaConsulta($salida);
-            $hoja->cierra();
             echo '<script type="text/javascript"> window.open( "' . $nombre . '" ) </script>';
         }
         //header('Location: index.php');

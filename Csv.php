@@ -59,6 +59,18 @@ class Csv {
     private $datosFichero;
 
     /**
+     * Indices a los campos correspondientes
+     * 
+     */
+    private $idElemento;
+    private $idArticulo;
+    private $idUbicacion;
+    private $fechaCompra;
+    private $cantidad;
+    private $cantidadReal;
+    private $nSerie;
+
+    /**
       // El constructor necesita saber cuál es la opción actual
       /**
      * Constructor de la clase. 
@@ -148,47 +160,43 @@ class Csv {
         }
         $mensaje .= "<th><b>Acci&oacute;n</b></th>";
         $mensaje .="</theader><tbody>";
+        $this->cargaIndices($this->datosFichero[0]);
         //echo "$mensaje contar Datosfichero=[".count($datosFichero)."]";
-        try {
-            for ($i = 1; $i < count($this->datosFichero); $i++) {
-                $mensaje .= "<tr>";
-                $primero = true;
-                foreach ($this->datosFichero[$i] as $dato) {
-                    if ($primero) {
-                        $primero = false;
-                        switch ($dato) {
-                            case 'S': $estado = "-Baja-";
-                                $color = "danger";
-                                break;
-                            case 'Alta': $estado = "-Alta-";
-                                $color = "primary";
-                                break;
-                            case "N" : $estado = $this->compruebaCantidades($this->datosFichero[$i]);
-                                if ($estado != 0) {
-                                    $color = "warning";
-                                    if ($estado > 0) {
-                                        $estado = "+".$estado;
-                                    }
-                                } else {
-                                    $estado = "igual";
-                                    $color = "info";
+        for ($i = 1; $i < count($this->datosFichero); $i++) {
+            $mensaje .= "<tr>";
+            $primero = true;
+            foreach ($this->datosFichero[$i] as $dato) {
+                if ($primero) {
+                    $primero = false;
+                    switch ($dato) {
+                        case 'S': $estado = "-Baja-";
+                            $color = "danger";
+                            break;
+                        case 'Alta': $estado = "-Alta-";
+                            $color = "primary";
+                            break;
+                        case "N" : $estado = $this->compruebaCantidades($i);
+                            if ($estado != 0) {
+                                $color = "warning";
+                                if ($estado > 0) {
+                                    $estado = "+" . $estado;
                                 }
-                                break;
-                            default: throw new Exception("El archivo csv tiene un formato incorrecto.<br>Bajas=[$dato]");
-                        }
+                            } else {
+                                $estado = "igual";
+                                $color = "info";
+                            }
+                            break;
+                        default: throw new Exception("El archivo csv tiene un formato incorrecto.<br>Bajas=[$dato]");
                     }
-                    $mensaje .= "<td>" . $dato . "</td>";
                 }
-                $mensaje .= '<td align="center"><label class="label label-' . $color . '">' . $estado . '</label></td>';
-                $mensaje .= "</tr>";
+                $mensaje .= "<td>" . $dato . "</td>";
             }
-        } catch (Exception $e) {
-            $mensaje = "Se ha producido el error [" . $e->getMessage() . "]<br>NO se ha realizado ning&uacute;n cambio en la Base de Datos.";
-            return $mensaje;
+            $mensaje .= '<td align="center"><label class="label label-' . $color . '">' . $estado . '</label></td>';
+            $mensaje .= "</tr>";
         }
         $mensaje .= "</tbody></table></p><br>";
         $mensaje .= $this->panelMensaje('Si se produce cualquier error en el procesamiento del fichero, no se aplicar&aacute; ning&uacute;n cambio en la base de datos.');
-        
+
         $mensaje .= '<form method="post" name="Aceptar" action="index.php?importacion&opc=ejecutar">
                 <input type="button" name="Cancelar" value="Cancelar" onClick="location.href=' . "'index.php'" . '" class="btn btn-danger">
                 <input type="submit" name="Aceptar" value="Aceptar" class="btn btn-primary">
@@ -203,81 +211,107 @@ class Csv {
      * @param $array línea de datos del fichero csv para comprobar las cantidades si se han modificado o no 
      * @return string
      */
-    private function compruebaCantidades($datos) {
+    private function compruebaCantidades($i) {
         $ultimo = count($datos);
-        return $datos[$ultimo - 2] - $datos[$ultimo - 1];
+        return $this->datosFichero[$i][$this->cantidadReal] - $this->datosFichero[$i][$this->cantidad];
     }
 
-    private function panelMensaje($info) {
-        $mensaje = '<div class="panel panel-danger"><div class="panel-heading">';
-        $mensaje .= '<h3 class="panel-title">ATENCI&Oacute;N</h3></div>';
+    private function panelMensaje($info, $tipo = "danger", $cabecera = "&iexcl;Atenci&oacute;n!") {
+        $mensaje = '<div class="panel panel-' . $tipo . '"><div class="panel-heading">';
+        $mensaje .= '<h3 class="panel-title">' . $cabecera . '</h3></div>';
         $mensaje .= '<div class="panel-body">';
         $mensaje .= $info;
         $mensaje .= '</div>';
         $mensaje .= '</div>';
         return $mensaje;
     }
-    
-    private function escribeFic($comando) 
-    {
-        $fp = fopen("tmp/comandos","a");
-        fputs($fp,$comando);
+
+    private function escribeFic($comando) {
+        $fp = fopen("tmp/comandos", "a");
+        fputs($fp, $comando . "\n");
         fclose($fp);
     }
-    
-    private function bajaElemento($i)
-    {
-        $id = $this->datosFichero['idElem'][$i];
-        $comando = 'delete from Elementos where id="'.$id.'";';
+
+    private function bajaElemento($i) {
+        $id = $this->datosFichero[$i][$this->idElemento];
+        $comando = 'delete from Elementos where id="' . $id . '";';
         $this->escribeFic($comando);
     }
-    
-    private function modificaElemento($i) 
-    {
-        $id = $this->datosFichero['idElem'][$i];
-        $comando = 'update Elementos set Cantidad="'.$datosFichero['cantidadReal'][$i].'" where id="'.$id.'";';
+
+    private function modificaElemento($i) {
+        $id = $this->datosFichero[$i][$this->idElemento];
+        $comando = 'update Elementos set Cantidad=' . $this->datosFichero[$i][$this->cantidadReal] . ' where id="' . $id . '";';
         $this->escribeFic($comando);
     }
-    
-    private function altaElemento($i)
-    {
+
+    private function altaElemento($i) {
         if ($this->cabecera[0] == "Articulo") {
-            $idUbicacion = $this->datosFichero['idUbic'][$i];
+            $idUbicacion = $this->datosFichero[$i][$this->idUbicacion];
             $idArticulo = $this->cabecera[1];
+            $comando = 'select id from Ubicaciones where Descripcion="'.$this->datosFichero[$i][$this->desUbicacion].'";';
         } else {
             $idUbicacion = $this->cabecera[1];
-            $idArticulo = $this->datosFichero['idArt'][$i];
-        }    
-        $idArt = $datosFichero['idArt'][$i];
-        $comando = 'insert into Elementos () values (null,"'.$idArticulo.'","'.$idUbicacion.'","'.$this->datosFichero['N Serie'][$i]
-                .'",'.$this->datosFichero['Cant. Real'][$i].',"'.$this->datosFichero['Fecha C.'].'");';
+            $idArticulo = $this->datosFichero[$i][$this->idArticulo];
+        }
+        $idArt = $datosFichero[$i];
+        $comando = 'insert into Elementos () values (null,' . $idArticulo . ',' . $idUbicacion . ',"' . $this->datosFichero[$i][$this->nSerie];
+        $comando .= '",' . $this->datosFichero[$i][$this->cantidadReal] . ',"' . $this->datosFichero[$i][$this->fechaCompra] . '");';
         $this->escribeFic($comando);
+    }
+
+    private function cargaIndices($campos) {
+        for ($i = 0; $i < count($campos); $i++) {
+            switch ($campos[$i]) {
+                case "Cant. Real": $this->cantidadReal = $i;
+                    break;
+                case "Fecha C.": $this->fechaCompra = $i;
+                    break;
+                case "idUbic": $this->idUbicacion = $i;
+                    break;
+                case "idArt": $this->idArticulo = $i;
+                    break;
+                case "idElem": $this->idElemento = $i;
+                    break;
+                case "Cantidad": $this->cantidad = $i;
+                    break;
+                case "N Serie": $this->nSerie = $i;
+                    break;
+            }
+        }
+        $this->EscribeFic("Cantreal=[$this->cantidadReal] fechacompra=[$this->fechaCompra] ubicacion=[$this->idUbicacion] articulo=[$this->idArticulo]");
+        $this->EscribeFic("idElemento=[$this->idElemento] Cantidad=[$this->cantidad] nserie=[$this->nserie]");
     }
 
     /**
      * Procesa contra la base de datos todas las acciones del archivo
      */
     public function ejecutaFichero() {
+        $this->cargaIndices($this->datosFichero[0]);
         //Realiza una transacción para que no se ejecute parcialmente una actualización
         try {
             $this->bdd->comienzaTransaccion();
-            $campos = $this->datosFichero[0];
+            $acciones = 0;
             for ($i = 1; $i < count($this->datosFichero); $i++) {
                 switch ($this->datosFichero[$i][0]) {
                     case 'S':
                         $this->bajaElemento($i);
+                        $acciones++;
                         break;
                     case 'Alta':
-                        $this->altaElemento($this->datosFichero[$i]);
+                        $this->altaElemento($i);
+                        $acciones++;
                         break;
                     case 'N':
-                        if ($this->compruebaCantidades($this->datosFichero[$i]) != 0) {
-                            $this->modificaElemento($this->datosFichero[$i]);
+                        if ($this->compruebaCantidades($i) != 0) {
+                            $this->modificaElemento($i);
+                            $acciones++;
                         }
                         break;
                     default: throw new Exception("Acci&oacute;n no reconocida en la importacion [" . $this->datosFichero[0] . "]");
                 }
             }
+            $mensaje = "Se han procesado correctamente $acciones acciones en la Base de Datos.";
+            return $this->panelMensaje($mensaje,"success", "Informaci&oacute;n");
         } catch (Exception $e) {
             $this->bdd->abortaTransaccion();
             $mensaje = "Se ha producido el error [" . $e->getMessage() . "]<br>NO se ha realizado ning&uacute;n cambio en la Base de Datos.";
@@ -285,17 +319,18 @@ class Csv {
         }
     }
 
-    public function ejecutaFichero2() {
+    private function ejecutaFichero2() {
         echo '<script>visualizaProgreso();</script>';
         for ($i = 1; $i < 80; $i++) {
             //sleep(1);
             $progreso = $i;
-            echo '<script>actProgreso('.$progreso.');</script>';
+            echo '<script>actProgreso(' . $progreso . ');</script>';
             //echo str_repeat(' ',1024*64);
             flush();
             //echo '$(".bar").css("width", "'.$progreso.'");';
         }
     }
+
 }
 
 ?>
