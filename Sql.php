@@ -203,10 +203,11 @@ class Sql {
         $this->bdd->autocommit(true);
         return $codigo;     
     }
-    public function finalizaTransaccion()
+    public function confirmaTransaccion()
     {
         $codigo = $this->bdd->commit();
         $this->bdd->autocommit(true);
+        $this->peticion = null;
         return $codigo;
     }
 }
