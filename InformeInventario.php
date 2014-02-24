@@ -70,7 +70,6 @@ class InformeInventario {
             $hoja = new Csv($this->bdd);
             $hoja->crea($nombre);
             $hoja->ejecutaConsulta($salida);
-            $hoja->cierra();
             echo '<script type="text/javascript"> window.open( "' . $nombre . '" ) </script>';
         }
     }
@@ -109,13 +108,13 @@ class InformeInventario {
             $hoja = new Csv($this->bdd);
             $hoja->crea($nombre);
             $hoja->ejecutaConsulta($salida);
-            $hoja->cierra();
             echo '<script type="text/javascript"> window.open( "' . $nombre . '" ) </script>';
         }
+        //header('Location: index.php');
     }
 
     private function listaUbicaciones() {
-        $salida = "<select name=\"id\">\n";
+        $salida = "<select class=\"form-control\" name=\"id\">\n";
         $comando = "select * from Ubicaciones order by Descripcion";
         $resultado = $this->bdd->ejecuta($comando);
         if (!$resultado) {
@@ -129,7 +128,7 @@ class InformeInventario {
     }
 
     private function listaArticulos() {
-        $salida = "<select name=\"id\">\n";
+        $salida = "<select class=\"form-control\" name=\"id\">\n";
         $comando = "select * from Articulos order by descripcion, marca, modelo";
         $resultado = $this->bdd->ejecuta($comando);
         if (!$resultado) {
@@ -143,15 +142,15 @@ class InformeInventario {
     }
 
     private function formulario($accion, $etiqueta, $lista) {
-        $salida = '<form name="informeInventario.form" method="post" action="' . $accion . '">' . "\n";
+        $salida = '<div class="col-sm-2 col-md-6"><form name="informeInventario.form" method="post" action="' . $accion . '">' . "\n";
         $salida.="<fieldset style=\"width: 96%;\"><p><legend style=\"color: red;\"><b>Elige $etiqueta</b></legend>\n";
         $salida.="<br><br><label>$etiqueta</label>";
         $salida.=$lista;
-        $salida.="<br><br>Salida del informe por: Pantalla ";
-        $salida.='<input type="radio" name="salida" value="pantalla" checked>';
-        $salida.='    Hoja de c&aacute;lculo <input type="radio" name="salida" value="Hoja de cálculo">';
+        $salida.="<br><br><label for='salida'>Salida del informe por:</label>";
+        $salida.='<div class="radio"><label><input type="radio" name="salida" value="pantalla" checked>Pantalla</label></div>';
+        $salida.='<div class="radio"><label><input type="radio" name="salida" value="csv">Archivo CSV</label></div>';
         $salida.="<br><br></fieldset><p>";
-        $salida.='<p align="center"><button type=submit>Aceptar</button></p><br>' . "\n";
+        $salida.='<p align="center"><button type=submit class="btn btn-primary">Aceptar</button></p><br></div>' . "\n";
         return $salida;
     }
 

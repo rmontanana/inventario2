@@ -112,10 +112,18 @@ class Mantenimiento {
         } else {
             $comando = str_replace('{orden}', ' ', $comando);
         }
-        //Introduce un botón para hacer búsquedas
-        $salida = $this->enlaceBusqueda();
+        //Introduce un botón para hacer búsquedas y el número de la página
+        $salida = $this->enlaceBusqueda($pagSigte);
         //Esta orden de centrado se cierra en el pie de la tabla
-        $salida.='<center><h4>P&aacute;gina ' . $pagSigte . '</h4>';
+        //$salida.='<center><h4>P&aacute;gina ' . $pagSigte . '</h4>';
+//        $salida .='<div class="nav-bar navbar-fixed"><ul class="nav nav-pills nav-stacked">
+//                  <li class="active">
+//                    <a href="#">
+//                      <span class="badge pull-right">' . $pagSigte . '</span>
+//                      P&aacute;gina
+//                    </a>
+//                  </li>
+//                </ul></div>';
         $salida.= $cabecera;
         //Consulta paginada de todas las tuplas
         $comando = str_replace('{inferior}', ($pagAnt + 1) * NUMFILAS, $comando);
@@ -171,8 +179,8 @@ class Mantenimiento {
         if ($this->bdd->numeroTuplas()) {
             $anterior = $enlace . $pagAnt . $sufijoEnlace . "\"><img title=\"Pag. Anterior\" alt=\"anterior\" src=\"img/" . ESTILO . "/anterior.png\"></a>\n";
             $siguiente = $enlace . $pagSigte . $sufijoEnlace . "\"><img title=\"Pag. Siguiente\" alt=\"siguiente\" src=\"img/" . ESTILO . "/siguiente.png\"></a>\n";
-            $fwd = $enlace . $pagFwd . $sufijoEnlace . "\"><img title=\"Pag. Siguiente\" alt=\"siguiente\" src=\"img/" . ESTILO . "/fwd.png\"></a>\n";
-            $rew = $enlace . $pagRew . $sufijoEnlace . "\"><img title=\"Pag. Siguiente\" alt=\"siguiente\" src=\"img/" . ESTILO . "/rew.png\"></a>\n";
+            $fwd = $enlace . $pagFwd . $sufijoEnlace . "\"><img title=\"+5 Pags.\" alt=\"mas5p\" src=\"img/" . ESTILO . "/fwd.png\"></a>\n";
+            $rew = $enlace . $pagRew . $sufijoEnlace . "\"><img title=\"-5 Pags.\" alt=\"menos5p\" src=\"img/" . ESTILO . "/rew.png\"></a>\n";
             if (strlen($orden) > 0) {
                 $az = '<a href="' . $this->url . '&orden=' . $orden . '&sentido=asc"><img alt="asc" title="Orden ascendente" src="img/' . ESTILO . '/ascendente.png"></a>';
                 $za = '<a href="' . $this->url . '&orden=' . $orden . '&sentido=desc"><img alt="desc" title="Orden descendente" src="img/' . ESTILO . '/descendente.png"></a>';
@@ -196,12 +204,26 @@ class Mantenimiento {
         return $salida;
     }
 
-    private function enlaceBusqueda() {
-        $salida = '<p align="center">';
-        $salida.='<center><form name="busqueda" method="POST"><input type="text" name="buscar"';
-        $salida.='value="' . $this->cadenaBusqueda . '" size="40" /><input type="submit" value="Buscar" name=';
-        $salida.='"Buscar" /></form></center>';
-        $salida.='</p>';
+    private function enlaceBusqueda($pagina) {
+        //$salida = '<p align="center">';
+        //$salida .='<center><form name="busqueda" method="POST"><input type="text" class="form-control" name="buscar"';
+        //$salida .='value="' . $this->cadenaBusqueda . '" size="40" /><input type="submit" class="btn btn-primary" value="Buscar" name=';
+        //$salida .='"Buscar" />';
+        //$salida .= '</form></center>';
+        //$salida.='</p>';
+        $salida = '<form name="busqueda" method="POST"><div class="col-lg-6"><div class="input-group">
+                <input type="text" name="buscar" placeholder="Descripci&oacute;n" class="form-control">
+                <span class="input-group-btn"><button class="btn btn-primary" type="button">Buscar</button>
+                </span></div></div></form>';
+        //$salida .= '<div class="col-lg-1 pull-right"><ul class="nav nav-pills nav-stacked "><li class="active">
+        //           <a href="#"><span class="badge pull-right">'.$pagina.'</span>P&aacute;gina</a></li></ul></div>';
+        $salida .= '<button class="btn btn-info pull-right" type="button">P&aacute;gina <span class="badge">'
+                . $pagina . '</span></button>';
+//        $salida .= '<div class="progress progress-striped">
+//  <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+//    P&aacute;gina 5 de 6<span class="sr-only">20% Complete</span>
+//  </div>
+//</div>';
         return $salida;
     }
 
@@ -322,7 +344,7 @@ class Mantenimiento {
     //Función que genera un campo de lista con los valores de descripción de la
     //tabla a la cual pertenece la clave foránea.
     protected function generaLista($datos, $campo, $valorInicial, $modo) {
-        $salida = "<select name=\"$campo\">\n";
+        $salida = "<select class=\"form-control\" name=\"$campo\">\n";
         list($tabla, $atributos) = explode(",", $datos);
         $atributos = str_replace("/", ",", $atributos);
         // Elimina las llaves
@@ -378,7 +400,8 @@ class Mantenimiento {
     }
 
     private function cabeceraTabla() {
-        $salida = '<p align="center"><table border=1 class="tablaDatos"><tbody>';
+        //$salida = '<p align="center"><table border=1 class="tablaDatos"><tbody>';
+        $salida = '<p align="center"><table border=1 class="table table-striped table-bordered table-condensed table-hover"><tbody>';
         foreach ($this->campos as $clave => $datos) {
             $comen = explode(",", $datos["Comment"]);
             $ordenable = false;
@@ -391,10 +414,14 @@ class Mantenimiento {
                     $this->campoBusca = $dato[1];
                 }
             }
+            $clave2 = $clave;
+            $clave = str_ireplace("descripcion", "Descripci&oacute;n", $clave);
+            $clave = str_ireplace("ubicacion", "Ubicaci&oacute;n", $clave);
+            $clave = str_ireplace("articulo", "Art&iacute;culo", $clave);
             if ($ordenable) {
-                $salida.="<th><b><a title=\"Establece orden por $clave \" href=\"$this->url&orden=" . strtolower($clave) . "\"> $clave </a></b></th>\n";
+                $salida.="<th><b><a title=\"Establece orden por $clave \" href=\"$this->url&orden=" . strtolower($clave2) . "\"> " . ucfirst($clave) . " </a></b></th>\n";
             } else {
-                $salida.='<th><b>' . $clave . '</b></th>' . "\n";
+                $salida.='<th><b>' . ucfirst($clave) . '</b></th>' . "\n";
             }
         }
 
@@ -405,21 +432,24 @@ class Mantenimiento {
     /**
      * 
      * @param string $accion URL de la acción del POST
-     * @param string $tipo ANADIR,EDITAR,BORRAR
+     * @param string $tipo ANADIR,EDITAR,BORRADO
      * @param array $datos Vector con los datos del registro
      * @return array lista de campos y formulario de entrada
      */
     private function formularioCampos($accion, $tipo, $datos) {
         $modo = $tipo == BORRADO ? "readonly" : "";
-        $salida.='<form name="mantenimiento.form" method="post" action="' . $accion . '">' . "\n";
+        $nfechas = 0;
+        $salida.='<div class="col-sm-8"><form name="mantenimiento.form" class="form-horizontal" role="form" method="post" action="' . $accion . '">' . "\n";
         $salida.="<fieldset style=\"width: 96%;\"><p><legend style=\"color: red;\"><b>$tipo</b></legend>\n";
         foreach ($this->campos as $clave => $valor) {
             if ($valor["Editable"] == "no") {
                 //Se salta los campos que no deben aparecer
                 continue;
             }
+            $salida .='<div class="form-group">';
             $campo = $valor['Campo'];
-            $salida.="<label>" . ucfirst($clave) . "</label> ";
+            $salida.='<label class="col-sm-2 control-label" for="' . $campo . '">' . ucfirst($clave) . "</label> ";
+            $salida.='<div class="col-sm-5">';
             //Se asegura que el id no se pueda modificar.
             $modoEfectivo = $clave == 'id' ? "readonly" : $modo;
             $valorDato = $datos == null ? "" : $datos[$campo];
@@ -431,33 +461,59 @@ class Mantenimiento {
                 //Si es un campo fecha u hora y está insertando pone la fecha actual o la hora actual
                 if ($tipo == ANADIR) {
                     if (stripos($tipoCampo, "echa") || stripos($tipoCampo, "ate")) {
-                        $valorDato = strftime("%Y/%m/%d");
+                        $valorDato = strftime("%d/%m/%Y");
                     }
                 }
-                // Calcula el tamaño
+                // Calcula el tamaño y el tipo
+                $tipo_campo = "text";
                 if (stripos($tipoCampo, "echa") || stripos($tipoCampo, "ate")) {
                     $tamano = "19";
+                    $tipo_campo = "datetime";
+                    $nfechas++;
+                    //
+                    //Prueba
+                    //
+                    $salida .= '<div class="input-group date" id="datetimepicker'.$nfechas.'">
+                    <input type="text" $name ="'.$campo.'" data-format="YYYY/MM/DD" value="'.$valorDato.'" '. $modoEfectivo. ' class="form-control" />
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                    </div>';
+                    $salida .= '<script type="text/javascript">
+                            $(function () {
+                                $('."'#datetimepicker".$nfechas."').datetimepicker({
+                                    pick12HourFormat: false,
+                                    language: 'es',
+                                    pickTime: false
+                                    });
+                            });
+                            </script>";
+                    $salida .= "</div></div>";
+                    continue;
                 } else {
                     list($resto, $tamano) = explode("(", $tipoCampo);
                     $tamano = substr($tamano, 0, -1);
                 }
-                if ($tipoCampo == "Password")
+                if ($tipoCampo == "Password") {
                     $tipo_campo = "password";
-                else
-                    $tipo_campo = "text";
+                }
                 //Si no es una clave foránea añade un campo de texto normal
-                $salida.='<input type="' . $tipo_campo . '" name="' . $campo . '" value="' . $valorDato .
+                $salida.='<input class="form-control" type="' . $tipo_campo . '" name="' . $campo . '" value="' . $valorDato .
                         '" maxlength="' . $tamano . '" size="' . (string) (intval($tamano) + 5) . '" ' . $modoEfectivo . " ><br><br>\n";
+                $salida.='</div></div>';
             } else {
                 $salida.=$this->generaLista($this->foraneas[$campo], $campo, $valorDato, $modoEfectivo);
+                $salida.="</div></div>";
             }
             //Genera una lista con los campos que intervienen en el formulario.
             $campos.="$campo&";
         }
         //genera un campo oculto con la lista de campos a modificar.
-        $salida.='<input name="listacampos" type="hidden" value="' . $campos . "\">\n";
-        $salida.="</fieldset><p>";
-        $salida.="<button type=reset>Cancelar</button>&nbsp;&nbsp;<button type=submit>Aceptar</button><br>\n";
+        $salida .= '<input name="listacampos" type="hidden" value="' . $campos . "\">\n";
+        $salida .= "</fieldset><p>";
+        $salida .= '<center>';
+        $salida .= '<button type="button" onClick="location.href=' . "'$this->url'" . '" class="btn btn-info">Volver</button>';
+        $salida .= '&nbsp;&nbsp;<button type="reset" class="btn btn-danger">Cancelar</button>';
+        $salida .= '&nbsp;&nbsp;<button type=submit class="btn btn-primary">Aceptar</button>';
+        $salida .= '<br></center></div>';
         return $salida;
     }
 

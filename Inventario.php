@@ -33,7 +33,7 @@ class Inventario {
     private $opcActual; // Opción elegida por el usuario
     private $perfil; //Permisos del usuario.
     private $estado; //BD conectada o no
-    private $plant = 'plant/principal.html';
+    private $plant = 'plant/bootstrap.html';
 
     // Constructor
     public function __construct() {

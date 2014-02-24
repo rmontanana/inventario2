@@ -193,6 +193,23 @@ class Sql {
     {
         return $this->bdd;
     }
+    public function comienzaTransaccion()
+    {
+        return $this->bdd->autocommit(false);
+    }
+    public function abortaTransaccion()
+    {
+        $codigo = $this->bdd->rollback();
+        $this->bdd->autocommit(true);
+        return $codigo;     
+    }
+    public function confirmaTransaccion()
+    {
+        $codigo = $this->bdd->commit();
+        $this->bdd->autocommit(true);
+        $this->peticion = null;
+        return $codigo;
+    }
 }
   
 ?>

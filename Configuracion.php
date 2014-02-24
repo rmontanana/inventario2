@@ -104,7 +104,8 @@
             }
             $salida.=$this->formulario();
             if ($grabar) {
-                $salida.='<label class="warn">Configuraci&oacute;n guardada correctamente</label>';
+                //$salida.='<label class="warn">Configuraci&oacute;n guardada correctamente</label>';
+                $salida.='<p class="bg-primary">Configuraci&oacute;n guardada correctamente</p>';
                 fclose($fsalida);
                 unlink($this->confAnterior);
                 rename($this->configuracion,$this->confAnterior);
@@ -117,22 +118,23 @@
             $personal=$this->estilo=="personal"?'selected':' ';
             $bluecurve=$this->estilo=="bluecurve"?'selected':' ';
             $cristal=$this->estilo=="cristal"?'selected':' ';
-            $salida='<center><form name="configura" method="post">';
-            $salida.='<p align="center"><table border=1 class="tablaDatos"><tbody>';
-            $salida.='<th colspan=2><b>Preferencias</b></th>';
+            $salida='<center><div class="col-sm-2 col-md-6"><form name="configura" method="post">';
+            //$salida.='<p align="center"><table border=1 class="tablaDatos"><tbody>';
+            $salida.='<p align="center"><table border=2 class="table table-hover"><tbody>';
+            $salida.='<th colspan=2 class="info"><center><b>Preferencias</b></center></th>';
             $salida.='<tr><td>Nombre del Centro</td><td><input type="text" name="centro" value="'.$this->nombreCentro.'" size="30" /></td></tr>';
             $salida.='<tr><td>N&uacute;mero de filas</td><td><input type="text" name="filas" value="'.$this->numFilas.'" size="3" /></td></tr>';
             $salida.='<tr><td>Estilo</td><td><select name="estilo">';
             $salida.='<option value="personal" '.$personal.'>personal</option>';
             $salida.='<option '.$bluecurve.'>bluecurve</option>';
             $salida.='<option '.$cristal.'>cristal</option></select></td></tr>';
-            $salida.='<th colspan=2><b>Base de datos</b></th>';
+            $salida.='<th colspan=2 class="danger"><center><b>Base de datos</b></center></th>';
             $salida.='<tr><td>Servidor</td><td><input type="text" name="servidor" value="'.$this->servidor.'" size="30" /></td></tr>';
             $salida.='<tr><td>Base de datos</td><td><input type="text" name="baseDatos" value="'.$this->baseDatos.'" size="30" /></td></tr>';
             $salida.='<tr><td>Usuario</td><td><input type="text" name="usuario" value="'.$this->usuario.'" size="30" /></td></tr>';
             $salida.='<tr><td>Clave</td><td><input type="text" name="clave" value="'.$this->clave.'" size="30" /></td></tr>';
-            $salida.='<tr align=center><td colspan=2><input type="submit" align="center" value="Aceptar" name="aceptar" /></td></tr></p>';
-            $salida.='</form></center>';
+            $salida.='<tr align=center><td colspan=2><input type="submit" class="btn btn-primary" align="center" value="Aceptar" name="aceptar" /></td></tr></p>';
+            $salida.='</form></div></center>';
             return $salida;
         }
     }
