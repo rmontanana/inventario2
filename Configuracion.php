@@ -29,6 +29,7 @@
         private $configuracion="inc/configuracion.inc";
         private $confNueva="inc/configuracion.new";
         private $confAnterior="inc/configuracion.ant";
+        private $plantilla;
         
         public function ejecuta()
         {
@@ -65,6 +66,13 @@
                               if ($grabar) {
                                 $linea=str_replace($valor, $_POST['estilo'],$linea);
                                 $this->estilo=$_POST['estilo'];
+                            }
+                            break;
+                        case 'PLANTILLA':
+                            $this->plantilla=$valor;
+                            if ($grabar) {
+                                $linea=str_replace($valor, $_POST['plantilla'],$linea);
+                                $this->plantilla=$_POST['plantilla'];
                             }
                             break;
                         case 'SERVIDOR':
@@ -118,12 +126,17 @@
             $personal=$this->estilo=="personal"?'selected':' ';
             $bluecurve=$this->estilo=="bluecurve"?'selected':' ';
             $cristal=$this->estilo=="cristal"?'selected':' ';
+            $normal=$this->plantilla=="normal"? 'selected':' ';
+            $bootstrap=$this->plantilla=="bootstrap" ? 'selected':' '; 
             $salida='<center><div class="col-sm-2 col-md-6"><form name="configura" method="post">';
             //$salida.='<p align="center"><table border=1 class="tablaDatos"><tbody>';
             $salida.='<p align="center"><table border=2 class="table table-hover"><tbody>';
             $salida.='<th colspan=2 class="info"><center><b>Preferencias</b></center></th>';
             $salida.='<tr><td>Nombre del Centro</td><td><input type="text" name="centro" value="'.$this->nombreCentro.'" size="30" /></td></tr>';
             $salida.='<tr><td>N&uacute;mero de filas</td><td><input type="text" name="filas" value="'.$this->numFilas.'" size="3" /></td></tr>';
+            $salida.='<tr><td>Plantilla</td><td><select name="plantilla">';
+            $salida.='<option value="normal" '.$normal.'>normal</option>';
+            $salida.='<option '.$bootstrap.'>bootstrap</option></select></td></tr>';
             $salida.='<tr><td>Estilo</td><td><select name="estilo">';
             $salida.='<option value="personal" '.$personal.'>personal</option>';
             $salida.='<option '.$bluecurve.'>bluecurve</option>';

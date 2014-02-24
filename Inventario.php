@@ -33,7 +33,7 @@ class Inventario {
     private $opcActual; // Opción elegida por el usuario
     private $perfil; //Permisos del usuario.
     private $estado; //BD conectada o no
-    private $plant = 'plant/bootstrap.html';
+    private $plant;
 
     // Constructor
     public function __construct() {
@@ -53,6 +53,10 @@ class Inventario {
         } else {
             $this->estado = true;
         }
+        //Selecciona la plantilla a utilizar
+        $this->plant='plant/';
+        $this->plant.=PLANTILLA;
+        $this->plant.='.html';
         // Comprobamos si el usuario ya está registrado en esta sesión
         $this->registrado = isset($_SESSION['Registrado']);
         if ($this->registrado) {// si está...

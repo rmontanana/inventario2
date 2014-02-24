@@ -32,4 +32,5 @@ define('APLICACION',CENTRO.' '.PROGRAMA.VERSION);
 define('NUMFILAS',17); // Número de registros a mostrar en las pantallas de consulta iniciales
 define('PAUSA',2);//Nº segundos de pausa para mostrar mensaje id insertado
 define('ESTILO','personal'); //Estilo de los iconos de edición (personal, personal, personal)
+define('PLANTILLA','bootstrap'); //Estilo de la plantilla y recursos a utilizar
 ?>
