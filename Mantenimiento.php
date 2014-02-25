@@ -211,7 +211,7 @@ class Mantenimiento {
         //$salida .='"Buscar" />';
         //$salida .= '</form></center>';
         //$salida.='</p>';
-        $salida = '<form name="busqueda" method="POST"><div class="col-lg-6"><div class="input-group">
+        $salida = '<form name="busqueda" method="POST"><div class="col-sm-4 col-lg-6"><div class="input-group">
                 <input type="text" name="buscar" placeholder="Descripci&oacute;n" class="form-control">
                 <span class="input-group-btn"><button class="btn btn-primary" type="button">Buscar</button>
                 </span></div></div></form>';

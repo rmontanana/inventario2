@@ -28,7 +28,7 @@ define('CLAVE','tset'); //contraseña del usuario.
 define('VERSION','0.97 Beta');
 define('PROGRAMA','Gesti&oacute;n de Inventario.');
 define('CENTRO','I.E.S.O. Pascual Serrano');
-define('APLICACION',CENTRO.' '.PROGRAMA.VERSION);
+define('APLICACION',PROGRAMA.VERSION);
 define('NUMFILAS',17); // Número de registros a mostrar en las pantallas de consulta iniciales
 define('PAUSA',2);//Nº segundos de pausa para mostrar mensaje id insertado
 define('ESTILO','personal'); //Estilo de los iconos de edición (personal, personal, personal)
