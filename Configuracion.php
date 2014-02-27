@@ -108,13 +108,13 @@
                         case 'COLORLAT':
                             $this->colorLateral=$valor;
                             if ($grabar) {
-                                $linea=str_replace($valor,$POST['colorLat'],$linea);
+                                $linea=str_replace($valor,$_POST['colorLat'],$linea);
                                 $this->colorLateral=$_POST['colorLat'];
                             }
                         case 'COLORFON':
                             $this->colorFondo=$valor;
                             if ($grabar) {
-                                $linea=str_replace($valor,$POST['colorFon'],$linea);
+                                $linea=str_replace($valor,$_POST['colorFon'],$linea);
                                 $this->colorFondo=$_POST['colorFon'];
                             }
                     }
@@ -205,6 +205,15 @@
                             $('#init').trigger('click');
                         });
                     </script>";
+            $salida .= '<script type="text/javascript">
+                            $(function () {
+                                $('."'#ColorLat".$nfechas."').datetimepicker({
+                                    pick12HourFormat: false,
+                                    language: 'es',
+                                    pickTime: false
+                                    });
+                            });
+                            </script>";
             return $salida;
         }
     }

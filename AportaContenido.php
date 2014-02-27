@@ -94,7 +94,7 @@ class AportaContenido {
      */
     public function fechaActual($formato = '', $idioma = 'es_ES') {
         if ($formato == '')
-            $formato = "%d-%b-%Y %H:%M";
+            $formato = "%d-%b-%y";
         setlocale(LC_TIME, $idioma);
         return strftime($formato);
     }
