@@ -30,8 +30,8 @@
         private $confNueva="inc/configuracion.new";
         private $confAnterior="inc/configuracion.ant";
         private $plantilla;
-        private $colorLat;
-        private $colorCen;
+        private $colorLateral;
+        private $colorFondo;
         
         public function ejecuta()
         {
@@ -106,16 +106,16 @@
                             }
                             break;
                         case 'COLORLAT':
-                            $this->colorLat=$valor;
+                            $this->colorLateral=$valor;
                             if ($grabar) {
-                                $linea=str_replace($valor,$POST['COLORLAT'],$linea);
-                                $this->colorLat=$_POST['COLORLAT'];
+                                $linea=str_replace($valor,$POST['colorLat'],$linea);
+                                $this->colorLateral=$_POST['colorLat'];
                             }
-                        case 'COLORCEN':
-                            $this->colorCen=$valor;
+                        case 'COLORFON':
+                            $this->colorFondo=$valor;
                             if ($grabar) {
-                                $linea=str_replace($valor,$POST['COLORCEN'],$linea);
-                                $this->colorCen=$_POST['COLORCEN'];
+                                $linea=str_replace($valor,$POST['colorFon'],$linea);
+                                $this->colorFondo=$_POST['colorFon'];
                             }
                     }
                 }
@@ -148,27 +148,43 @@
             $salida.='<th colspan=2 class="info"><center><b>Preferencias</b></center></th>';
             $salida.='<tr><td>Nombre del Centro</td><td><input type="text" name="centro" value="'.$this->nombreCentro.'" size="30" /></td></tr>';
             $salida.='<tr><td>N&uacute;mero de filas</td><td><input type="text" name="filas" value="'.$this->numFilas.'" size="3" /></td></tr>';
-            $salida.='<tr><td>Plantilla</td><td><select name="plantilla">';
+            $salida.='<tr><td>Plantilla</td><td><select name="plantilla" class="form-control">';
             $salida.='<option value="normal" '.$normal.'>normal</option>';
             $salida.='<option '.$bootstrap.'>bootstrap</option></select></td></tr>';
-            $salida.='<tr><td>Estilo</td><td><select name="estilo">';
+            $salida.='<tr><td>Estilo</td><td><select name="estilo" class="form-control">';
             $salida.='<option value="personal" '.$personal.'>personal</option>';
             $salida.='<option '.$bluecurve.'>bluecurve</option>';
             $salida.='<option '.$cristal.'>cristal</option></select></td></tr>';
-            $salida.='<select name="colorpicker-bootstrap3-form" id="colorpicker-bootstrap3-form" class="form-control">
-        <option value="#7bd148">Green</option>
-        <option value="#5484ed">Bold blue</option>
-        <option value="#a4bdfc">Blue</option>
-        <option value="#46d6db">Turquoise</option>
-        <option value="#7ae7bf">Light green</option>
-        <option value="#51b749">Bold green</option>
-        <option value="#fbd75b">Yellow</option>
-        <option value="#ffb878">Orange</option>
-        <option value="#ff887c">Red</option>
-        <option value="#dc2127">Bold red</option>
-        <option value="#dbadff">Purple</option>
-        <option value="#e1e1e1">Gray</option>
-      </select>'
+            $salida.='<tr><td>Color Lateral</td><td><select name="colorLat" id="colorLat" class="form-control">
+                                <option value="#C4FAEC">Original</option>
+                                <option value="#7bd148">Green</option>        
+                                <option value="#5484ed">Bold blue</option>
+                                <option value="#a4bdfc">Blue</option>
+                                <option value="#46d6db">Turquoise</option>
+                                <option value="#7ae7bf">Light green</option>
+                                <option value="#51b749">Bold green</option>
+                                <option value="#fbd75b">Yellow</option>
+                                <option value="#ffb878">Orange</option>
+                                <option value="#ff887c">Red</option>
+                                <option value="#dc2127">Bold red</option>
+                                <option value="#dbadff">Purple</option>
+                                <option value="#e1e1e1">Gray</option>
+                              </select></td></tr>';
+            $salida.='<tr><td>Color Fondo</td><td><select name="colorFon" id="colorFon" class="form-control">
+                                <option value="#F3FEC8">Original</option>
+                                <option value="#7bd148">Green</option>        
+                                <option value="#5484ed">Bold blue</option>
+                                <option value="#a4bdfc">Blue</option>
+                                <option value="#46d6db">Turquoise</option>
+                                <option value="#7ae7bf">Light green</option>
+                                <option value="#51b749">Bold green</option>
+                                <option value="#fbd75b">Yellow</option>
+                                <option value="#ffb878">Orange</option>
+                                <option value="#ff887c">Red</option>
+                                <option value="#dc2127">Bold red</option>
+                                <option value="#dbadff">Purple</option>
+                                <option value="#e1e1e1">Gray</option>
+                              </select></td></tr>';
             $salida.='<th colspan=2 class="danger"><center><b>Base de datos</b></center></th>';
             $salida.='<tr><td>Servidor</td><td><input type="text" name="servidor" value="'.$this->servidor.'" size="30" /></td></tr>';
             $salida.='<tr><td>Base de datos</td><td><input type="text" name="baseDatos" value="'.$this->baseDatos.'" size="30" /></td></tr>';
@@ -176,101 +192,20 @@
             $salida.='<tr><td>Clave</td><td><input type="text" name="clave" value="'.$this->clave.'" size="30" /></td></tr>';
             $salida.='<tr align=center><td colspan=2><input type="submit" class="btn btn-primary" align="center" value="Aceptar" name="aceptar" /></td></tr></p>';
             $salida.='</form></div></center>';
+            $salida.="<script>
+                        $(document).ready(function() {
+                            $('#init').on('click', function() {
+                                $('#colorLat').simplecolorpicker({theme: 'glyphicons'});
+                            });
+
+                            $('#destroy').on('click', function() {
+                                $('select').simplecolorpicker('destroy');
+                            });
+                            // By default, activate simplecolorpicker plugin on HTML selects
+                            $('#init').trigger('click');
+                        });
+                    </script>";
             return $salida;
         }
     }
 ?>
-<h3>Bootstrap 3 form</h3>
-<form class="form-horizontal">
-  <div class="form-group">
-    <label class="col-sm-4 control-label" for="input01">Text input</label>
-    <div class="col-sm-6">
-      <input type="text" class="form-control" id="input01">
-    </div>
-  </div>
-  <div class="form-group">
-    <div class="col-sm-offset-4 col-sm-6">
-      <div class="checkbox">
-        <label>
-          <input type="checkbox"> Option one
-        </label>
-      </div>
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="col-sm-4 control-label" for="colorpicker-bootstrap3-form">colorpicker-bootstrap3-form</label>
-    <div class="col-sm-6">
-      <select name="colorLat" id="colorLat" class="form-control">
-        <option value="#7bd148">Green</option>
-        <option value="#5484ed">Bold blue</option>
-        <option value="#a4bdfc">Blue</option>
-        <option value="#46d6db">Turquoise</option>
-        <option value="#7ae7bf">Light green</option>
-        <option value="#51b749">Bold green</option>
-        <option value="#fbd75b">Yellow</option>
-        <option value="#ffb878">Orange</option>
-        <option value="#ff887c">Red</option>
-        <option value="#dc2127">Bold red</option>
-        <option value="#dbadff">Purple</option>
-        <option value="#e1e1e1">Gray</option>
-      </select>
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="col-sm-4 control-label" for="multiSelect">Multicon-select</label>
-    <div class="col-sm-6">
-      <select multiple id="multiSelect" class="form-control">
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
-        <option>5</option>
-      </select>
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="col-sm-4 control-label" for="fileInput">File input</label>
-    <div class="col-sm-6">
-      <input id="fileInput" type="file">
-    </div>
-  </div>
-  <div class="form-group">
-    <div class="col-sm-offset-4 col-sm-6">
-      <button type="submit" class="btn btn-primary">Save changes</button>
-      <button class="btn btn-default">Cancel</button>
-    </div>
-  </div>
-</form>
-
-
-
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.js"></script>
-<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.js"></script>
-<script src="jquery.simplecolorpicker.js"></script>
-
-<script>
-$(document).ready(function() {
-  $('select[name="colorLat"]').on('change', function() {
-    $(document.body).css('background-color', $('select[name="colorpicker-change-background-color"]').val());
-  });
-
-  
- 
-
-  $('#init').on('click', function() {
-    
-    $('select[name="colorLat"]').simplecolorpicker({theme: 'glyphicons'});
-    
-  });
-
-  $('#destroy').on('click', function() {
-    $('select').simplecolorpicker('destroy');
-  });
-
-  // By default, activate simplecolorpicker plugin on HTML selects
-  $('#init').trigger('click');
-});
-</script>
-
-</body>
-</html>
