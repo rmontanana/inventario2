@@ -33,6 +33,6 @@ define('NUMFILAS',17); // Número de registros a mostrar en las pantallas de con
 define('PAUSA',2);//Nº segundos de pausa para mostrar mensaje id insertado
 define('ESTILO','personal'); //Estilo de los iconos de edición (personal, personal, personal)
 define('PLANTILLA','bootstrap'); //Estilo de la plantilla y recursos a utilizar
-define('COLORLAT', '#C4FAEC'); //Color de la barra de menú lateral
+define('COLORLAT', '#a4bdfc'); //Color de la barra de menú lateral
 define('COLORFON', '#F3FEC8'); //Color del fondo de la pantalla
 ?>

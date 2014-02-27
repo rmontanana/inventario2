@@ -106,17 +106,21 @@
                             }
                             break;
                         case 'COLORLAT':
-                            $this->colorLateral=$valor;
+                            $valor = trim($valor);
+                            $this->colorLateral = $valor;
                             if ($grabar) {
                                 $linea=str_replace($valor,$_POST['colorLat'],$linea);
                                 $this->colorLateral=$_POST['colorLat'];
                             }
+                            break;
                         case 'COLORFON':
-                            $this->colorFondo=$valor;
+                            $valor = trim($valor);
+                            $this->colorFondo = $valor;
                             if ($grabar) {
                                 $linea=str_replace($valor,$_POST['colorFon'],$linea);
                                 $this->colorFondo=$_POST['colorFon'];
                             }
+                            break;
                     }
                 }
                 if ($grabar) {
@@ -132,59 +136,56 @@
                 unlink($this->confAnterior);
                 rename($this->configuracion,$this->confAnterior);
                 rename($this->confNueva,$this->configuracion);
+                // Actualiza la plantilla bootstrap con los cambios de color
+                $plantilla = file_get_contents("css/dashboard.css");
+                
             }
             return $salida;
         }
         private function formulario()
         {
+            $coloresLateral = array( "Original" => "#C4FAEC", "Verde" => "#7bd148", "Azul marino" => "#5484ed", "Azul" => "#a4bdfc", "Turquesa" => "#46d6db",
+                            "Verde claro" => "#7ae7bf", "Verde oscuro" => "#51b749", "Amarillo" => "#fbd75b", "Naranja" => "#ffb878", "Morado" => "#6633FF",
+                            "Rojo oscuro" => "#dc2127", "P&uacute;rpura" => "#dbadff", "Gris" => "#e1e1e1");
+            $coloresFondo = array( "Verde" => "#7bd148", "Azul marino" => "#5484ed", "Azul" => "#a4bdfc", "Turquesa" => "#46d6db",
+                            "Verde claro" => "#7ae7bf", "Verde oscuro" => "#51b749", "Amarillo" => "#fbd75b", "Naranja" => "#ffb878", "Rojo" => "#ff887c",
+                            "Rojo oscuro" => "#dc2127", "P&uacute;rpura" => "#dbadff", "Gris" => "#e1e1e1", "Original" => '#F3FEC8');
             $personal=$this->estilo=="personal"?'selected':' ';
             $bluecurve=$this->estilo=="bluecurve"?'selected':' ';
             $cristal=$this->estilo=="cristal"?'selected':' ';
             $normal=$this->plantilla=="normal"? 'selected':' ';
             $bootstrap=$this->plantilla=="bootstrap" ? 'selected':' '; 
-            $salida='<center><div class="col-sm-2 col-md-6"><form name="configura" method="post">';
+            $salida='<center><div class="col-sm-4 col-md-6"><form name="configura" method="post">';
             //$salida.='<p align="center"><table border=1 class="tablaDatos"><tbody>';
             $salida.='<p align="center"><table border=2 class="table table-hover"><tbody>';
             $salida.='<th colspan=2 class="info"><center><b>Preferencias</b></center></th>';
             $salida.='<tr><td>Nombre del Centro</td><td><input type="text" name="centro" value="'.$this->nombreCentro.'" size="30" /></td></tr>';
             $salida.='<tr><td>N&uacute;mero de filas</td><td><input type="text" name="filas" value="'.$this->numFilas.'" size="3" /></td></tr>';
-            $salida.='<tr><td>Plantilla</td><td><select name="plantilla" class="form-control">';
+            $salida.='<tr><td  style="vertical-align:middle">Plantilla</td><td><select name="plantilla" class="form-control">';
             $salida.='<option value="normal" '.$normal.'>normal</option>';
             $salida.='<option '.$bootstrap.'>bootstrap</option></select></td></tr>';
-            $salida.='<tr><td>Estilo</td><td><select name="estilo" class="form-control">';
+            $salida.='<tr><td  style="vertical-align:middle">Estilo</td><td><select name="estilo" class="form-control">';
             $salida.='<option value="personal" '.$personal.'>personal</option>';
             $salida.='<option '.$bluecurve.'>bluecurve</option>';
             $salida.='<option '.$cristal.'>cristal</option></select></td></tr>';
-            $salida.='<tr><td>Color Lateral</td><td><select name="colorLat" id="colorLat" class="form-control">
-                                <option value="#C4FAEC">Original</option>
-                                <option value="#7bd148">Green</option>        
-                                <option value="#5484ed">Bold blue</option>
-                                <option value="#a4bdfc">Blue</option>
-                                <option value="#46d6db">Turquoise</option>
-                                <option value="#7ae7bf">Light green</option>
-                                <option value="#51b749">Bold green</option>
-                                <option value="#fbd75b">Yellow</option>
-                                <option value="#ffb878">Orange</option>
-                                <option value="#ff887c">Red</option>
-                                <option value="#dc2127">Bold red</option>
-                                <option value="#dbadff">Purple</option>
-                                <option value="#e1e1e1">Gray</option>
-                              </select></td></tr>';
-            $salida.='<tr><td>Color Fondo</td><td><select name="colorFon" id="colorFon" class="form-control">
-                                <option value="#F3FEC8">Original</option>
-                                <option value="#7bd148">Green</option>        
-                                <option value="#5484ed">Bold blue</option>
-                                <option value="#a4bdfc">Blue</option>
-                                <option value="#46d6db">Turquoise</option>
-                                <option value="#7ae7bf">Light green</option>
-                                <option value="#51b749">Bold green</option>
-                                <option value="#fbd75b">Yellow</option>
-                                <option value="#ffb878">Orange</option>
-                                <option value="#ff887c">Red</option>
-                                <option value="#dc2127">Bold red</option>
-                                <option value="#dbadff">Purple</option>
-                                <option value="#e1e1e1">Gray</option>
-                              </select></td></tr>';
+            $salida.='<tr><td style="vertical-align:middle">Color Lateral (bootstrap)</td><td style="vertical-align:middle"><select name="colorLat" id="colorLat" class="form-control">';
+            foreach ($coloresLateral as $color => $codigo) {
+                $selec = "";
+                if ($this->colorLateral == $codigo) {
+                    $selec = "selected";
+                }
+                $salida.='<option value="'.$codigo.'" '.$selec.' >'.$color.'</option>';
+            }
+            $salida.='</select></td></tr>';
+            $salida.='<tr><td style="vertical-align:middle">Color Fondo (bootstrap)</td><td style="vertical-align:middle"><select name="colorFon" id="colorFon" class="form-control">';
+            foreach ($coloresFondo as $color => $codigo) {
+                $selec = "";
+                if ($this->colorFondo == $codigo) {
+                    $selec = "selected";
+                }
+                $salida.='<option value="'.$codigo.'" '.$selec.' >'.$color.'</option>';
+            }
+            $salida.='</select></td></tr>';
             $salida.='<th colspan=2 class="danger"><center><b>Base de datos</b></center></th>';
             $salida.='<tr><td>Servidor</td><td><input type="text" name="servidor" value="'.$this->servidor.'" size="30" /></td></tr>';
             $salida.='<tr><td>Base de datos</td><td><input type="text" name="baseDatos" value="'.$this->baseDatos.'" size="30" /></td></tr>';
@@ -194,26 +195,18 @@
             $salida.='</form></div></center>';
             $salida.="<script>
                         $(document).ready(function() {
-                            $('#init').on('click', function() {
-                                $('#colorLat').simplecolorpicker({theme: 'glyphicons'});
+                            $('select[name=" .'"colorFon"'. "]').on('change', function() {
+                               $(document.body).css('background-color', $('select[name=" .'"colorFon"'. "]').val());
+                               $('.main').css('background-color', $('select[name=" .'"colorFon"'. "]').val());    
                             });
-
-                            $('#destroy').on('click', function() {
-                                $('select').simplecolorpicker('destroy');
+                            $('select[name=" .'"colorLat"'. "]').on('change', function() {
+                               $('.sidebar').css('background-color', $('select[name=" .'"colorLat"'. "]').val());
                             });
-                            // By default, activate simplecolorpicker plugin on HTML selects
-                            $('#init').trigger('click');
+                            $('select[name=". '"colorLat"' ."]').simplecolorpicker({theme: 'glyphicons'});
+                            $('select[name=" .'"colorFon"' ."]').simplecolorpicker({theme: 'glyphicons'});
                         });
                     </script>";
-            $salida .= '<script type="text/javascript">
-                            $(function () {
-                                $('."'#ColorLat".$nfechas."').datetimepicker({
-                                    pick12HourFormat: false,
-                                    language: 'es',
-                                    pickTime: false
-                                    });
-                            });
-                            </script>";
+            //$salida.="<br>fondo=[$this->colorFondo] lateral=[$this->colorLateral]<br>";
             return $salida;
         }
     }
