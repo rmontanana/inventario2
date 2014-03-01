@@ -22,7 +22,7 @@
      */
 define('AUTOR','Ricardo Montañana Gómez');
 define('SERVIDOR','localhost'); //Ubicación del servidor MySQL
-define('BASEDATOS','Inventario2'); //Nombre de la base de datos.
+define('BASEDATOS','Inventario3'); //Nombre de la base de datos.
 define('USUARIO','test'); //Usuario con permisos de lectura/escritura en la base de datos
 define('CLAVE','tset'); //contraseña del usuario.
 define('VERSION','1.01b');

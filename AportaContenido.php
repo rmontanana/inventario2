@@ -213,7 +213,7 @@ class AportaContenido {
                             return $this->mensajePermisos('Informes');
                         }
                     case 'descuadres':
-                        if ($this->perfil['Informe'] && $this->p) {
+                        if ($this->perfil['Informe']) {
                             $enlace = 'xml/informe' . ucfirst($opcion) . '.xml';
                             $informe = new InformePDF($this->bdd, $enlace, $this->registrado);
                             $informe->crea($enlace);
