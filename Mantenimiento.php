@@ -142,6 +142,7 @@ class Mantenimiento {
         }
         //$salida.=print_r($this->perfil);
         //$salida.=$comando;
+        //var_dump($this->campos);
         while ($fila = $this->bdd->procesaResultado()) {
             $salida.='<tr align="center" bottom="middle">';
             foreach ($fila as $clave => $valor) {
@@ -159,6 +160,10 @@ class Mantenimiento {
                     }
                     $this->campoBusca = $dato[1];
                     $valor = '<a title="Inventario de ' . $valor . '" $target="_blank" href="index.php?informeInventario&opc=listar' . $datoEnlace . '&id=' . $id . '">' . $valor;
+                }
+                if ($this->campos[$clave]['Type'] == "Boolean(1)") {
+                    $checked = $valor == '1' ? 'checked' : '';
+                    $valor = '<input type="checkbox" disabled ' . $checked . '>';
                 }
                 $salida.="<td>$valor</td>\n";
             }
@@ -265,7 +270,15 @@ class Mantenimiento {
             } else {
                 $coma = ",";
             }
-            $valor = $_POST[$campo] == "" ? "null" : '"' . $_POST[$campo] . '"';
+            if ($this->campos[$campo]['Type'] == 'Boolean(1)') {
+                $valor = "";
+                if (empty($_POST[$campo])) {
+                    $valor = "0";
+                }
+                $valor = $_POST[$campo] == "on" ? '1' : $valor;                
+            } else {
+                $valor = $_POST[$campo] == "" ? "null" : '"' . $_POST[$campo] . '"';
+            }
             $comando.="$coma " . $valor;
         }
         $comando.=")";
@@ -284,6 +297,7 @@ class Mantenimiento {
         //echo "id=$id pag=$pag orden=$orden sentido=$sentido";die();
         $comando = "update " . $this->tabla . " set ";
         $lista = explode("&", $_POST['listacampos']);
+        //var_dump($lista);
         $primero = true;
         foreach ($lista as $campo) {
             if ($campo == "id" || $campo == "")
@@ -291,13 +305,23 @@ class Mantenimiento {
             if ($primero) {
                 $primero = false;
                 $coma = " ";
-            }
-            else
+            } else {
                 $coma = ",";
-            if (strlen(trim($_POST[$campo])) == 0)
-                $comando.="$coma $campo=null";
-            else
-                $comando.=$coma . ' ' . $campo . '="' . $_POST[$campo] . '"';
+            }
+            if ($this->campos[$campo]['Type'] == 'Boolean(1)') {
+                $valor = "";
+                if (empty($_POST[$campo])) {
+                    $valor = "0";
+                }
+                $valor = $_POST[$campo] == "on" ? '1' : $valor;
+                $comando.=$coma . ' ' . $campo . '="' . $valor . '"';
+            } else {
+                if (strlen(trim($_POST[$campo])) == 0) {
+                    $comando.="$coma $campo=null";
+                } else {
+                    $comando.=$coma . ' ' . $campo . '="' . $_POST[$campo] . '"';
+                }
+            }
         }
         $comando.=" where id=\"$id\"";
         if (!$this->bdd->ejecuta($comando)) {
@@ -306,6 +330,7 @@ class Mantenimiento {
 
         list($enlace, $resto) = explode("&", $this->url);
         $enlace.="&opc=inicial&orden=" . $orden . "&sentido=" . $sentido . "&id=" . $pag;
+        //echo $comando;
         header('Location: ' . $enlace);
         return;
     }
@@ -446,8 +471,10 @@ class Mantenimiento {
                 //Se salta los campos que no deben aparecer
                 continue;
             }
+            //Genera una lista con los campos que intervienen en el formulario.
             $salida .='<div class="form-group">';
             $campo = $valor['Campo'];
+            $campos.="$campo&";
             $salida.='<label class="col-sm-2 control-label" for="' . $campo . '">' . ucfirst($clave) . "</label> ";
             $salida.='<div class="col-sm-5">';
             //Se asegura que el id no se pueda modificar.
@@ -473,13 +500,13 @@ class Mantenimiento {
                     //
                     //Prueba
                     //
-                    $salida .= '<div class="input-group date" id="datetimepicker'.$nfechas.'">
-                    <input type="text" $name ="'.$campo.'" data-format="YYYY/MM/DD" value="'.$valorDato.'" '. $modoEfectivo. ' class="form-control" />
+                    $salida .= '<div class="input-group date" id="datetimepicker' . $nfechas . '">
+                    <input type="text" name="' . $campo . '" data-format="YYYY/MM/DD" value="' . $valorDato . '" ' . $modoEfectivo . ' class="form-control" />
                     <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                     </div>';
                     $salida .= '<script type="text/javascript">
                             $(function () {
-                                $('."'#datetimepicker".$nfechas."').datetimepicker({
+                                $(' . "'#datetimepicker" . $nfechas . "').datetimepicker({
                                     pick12HourFormat: false,
                                     language: 'es',
                                     pickTime: false
@@ -495,6 +522,14 @@ class Mantenimiento {
                 if ($tipoCampo == "Password") {
                     $tipo_campo = "password";
                 }
+                if ($tipoCampo == "Boolean(1)") {
+                    $checked = $valorDato == '1' ? 'checked' : '';
+                    //$salida .= '<div class="checkbox">';
+                    $modocheck = $modoEfectivo == "readonly" ? 'onclick="javascript: return false;" readonly ' : '';
+                    $salida .= '<input type="checkbox" name="' . $campo . '" ' . $checked . ' ' . $modocheck . ' class="form-control">';
+                    $salida .= '</div></div>';
+                    continue;
+                }
                 //Si no es una clave foránea añade un campo de texto normal
                 $salida.='<input class="form-control" type="' . $tipo_campo . '" name="' . $campo . '" value="' . $valorDato .
                         '" maxlength="' . $tamano . '" size="' . (string) (intval($tamano) + 5) . '" ' . $modoEfectivo . " ><br><br>\n";
@@ -503,8 +538,6 @@ class Mantenimiento {
                 $salida.=$this->generaLista($this->foraneas[$campo], $campo, $valorDato, $modoEfectivo);
                 $salida.="</div></div>";
             }
-            //Genera una lista con los campos que intervienen en el formulario.
-            $campos.="$campo&";
         }
         //genera un campo oculto con la lista de campos a modificar.
         $salida .= '<input name="listacampos" type="hidden" value="' . $campos . "\">\n";

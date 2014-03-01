@@ -135,10 +135,7 @@
                 fclose($fsalida);
                 unlink($this->confAnterior);
                 rename($this->configuracion,$this->confAnterior);
-                rename($this->confNueva,$this->configuracion);
-                // Actualiza la plantilla bootstrap con los cambios de color
-                $plantilla = file_get_contents("css/dashboard.css");
-                
+                rename($this->confNueva,$this->configuracion);                
             }
             return $salida;
         }

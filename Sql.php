@@ -80,9 +80,9 @@ class Sql {
     public function __destruct()
     {
         //Libera la memoria de una posible consulta.
-        if ($this->peticion) {
-            $this->peticion->free_result();
-        }
+        //if ($this->peticion) {
+        //    $this->peticion->free_result();
+        //}
         // Si estaba conectada la base de datos la cierra.
         if ($this->estado) {
             $this->bdd->close();

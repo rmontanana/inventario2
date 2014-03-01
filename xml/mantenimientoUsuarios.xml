@@ -10,12 +10,12 @@
         <Col Campo="nombre" Nombre="nombre" Ancho="8" Ajuste="L" Titulo="Nombre" Varios="ordenable" Editable="si"/>
         <Col Campo="clave" Nombre="clave" Ancho="16" Ajuste="L" Titulo="Clave" Tipo="Password" Editable="si"/>
         <Col Campo="idSesion" Nombre="idSesion" Ancho="32" Ajuste="L" Titulo="id Sesión" Editable="si"/>
-        <Col Campo="alta" Nombre="Alta" Ancho="1" Ajuste="R" Titulo="Altas" Editable="si"/>
-        <Col Campo="modificacion" Nombre="modificacion" Ancho="1" Ajuste="R" Titulo="Modificaciones" Editable="si"/>
-        <Col Campo="borrado" Nombre="borrado" Ancho="1" Ajuste="R" Titulo="Borrados" Editable="si"/>
-        <Col Campo="consulta" Nombre="consulta" Ancho="1" Ajuste="R" Titulo="Consultas" Editable="si"/>
-        <Col Campo="informe" Nombre="informe" Ancho="1" Ajuste="R" Titulo="Informes" Editable="si"/>
-        <Col Campo="usuarios" Nombre="usuarios" Ancho="1" Ajuste="R" Titulo="Usuarios" Editable="si"/>
-        <Col Campo="config" Nombre="config" Ancho="1" Ajuste="R" Titulo="Configuración" Editable="si"/>
+        <Col Campo="alta" Nombre="alta" Ancho="1" Ajuste="R" Tipo="Boolean" Titulo="Altas" Editable="si"/>
+        <Col Campo="modificacion" Nombre="modificacion" Ancho="1" Ajuste="R" Tipo="Boolean" Titulo="Modificaciones" Editable="si"/>
+        <Col Campo="borrado" Nombre="borrado" Ancho="1" Ajuste="R" Tipo="Boolean" Titulo="Borrados" Editable="si"/>
+        <Col Campo="consulta" Nombre="consulta" Ancho="1" Ajuste="R" Tipo="Boolean" Titulo="Consultas" Editable="si"/>
+        <Col Campo="informe" Nombre="informe" Ancho="1" Ajuste="R" Tipo="Boolean" Titulo="Informes" Editable="si"/>
+        <Col Campo="usuarios" Nombre="usuarios" Ancho="1" Ajuste="R" Tipo="Boolean" Titulo="Usuarios" Editable="si"/>
+        <Col Campo="config" Nombre="config" Ancho="1" Ajuste="R" Tipo="Boolean" Titulo="Configuración" Editable="si"/>
     </Campos>
 </Mantenimiento>
