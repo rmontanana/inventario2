@@ -487,8 +487,8 @@ class Mantenimiento {
                 $tipoCampo = $valor['Type'];
                 //Si es un campo fecha u hora y está insertando pone la fecha actual o la hora actual
                 if ($tipo == ANADIR) {
-                    if (stripos($tipoCampo, "echa") || stripos($tipoCampo, "ate")) {
-                        $valorDato = strftime("%d/%m/%Y");
+                    if (stripos($tipoCampo, "echa")<>0 || stripos($tipoCampo, "ate")<>0) {
+                        $valorDato = strftime("%Y/%m/%d");
                     }
                 }
                 // Calcula el tamaño y el tipo

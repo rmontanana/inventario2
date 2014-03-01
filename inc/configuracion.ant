@@ -33,6 +33,8 @@ define('NUMFILAS',17); // Número de registros a mostrar en las pantallas de con
 define('PAUSA',2);//Nº segundos de pausa para mostrar mensaje id insertado
 define('ESTILO','personal'); //Estilo de los iconos de edición (personal, personal, personal)
 define('PLANTILLA','bootstrap'); //Estilo de la plantilla y recursos a utilizar
-define('COLORLAT', '#7bd148'); //Color de la barra de menú lateral
+define('COLORLAT', '#7ae7bf'); //Color de la barra de menú lateral
 define('COLORFON', '#a4bdfc'); //Color del fondo de la pantalla
+define('MYSQLDUMP', '/usr/local/bin/mysqldumpf'); //camino a mysqldump
+define('GZIP', '/usr/bin/gzipfr'); //Camino a gzip
 ?>

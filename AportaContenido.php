@@ -145,7 +145,7 @@ class AportaContenido {
                     case 'principal':
                         return "Pantalla Inicial";
                     case 'elementos':
-                    case 'articulos': $opcion="art&iacute;culos";
+                    case 'articulos': $opcion = "art&iacute;culos";
                     case 'ubicaciones':
                     case 'usuarios':
                     case 'test':
@@ -213,7 +213,7 @@ class AportaContenido {
                             return $this->mensajePermisos('Informes');
                         }
                     case 'descuadres':
-                        if ($this->perfil['Informe']) {
+                        if ($this->perfil['Informe'] && $this->p) {
                             $enlace = 'xml/informe' . ucfirst($opcion) . '.xml';
                             $informe = new InformePDF($this->bdd, $enlace, $this->registrado);
                             $informe->crea($enlace);
@@ -231,21 +231,34 @@ class AportaContenido {
                             return $this->mensajePermisos("Actualizaci&oacute;n, creaci&oacute;n y borrado de elementos");
                         }
                     case 'copiaseg':
-                        if ($this->perfil['Informe']) {
-                            $mensaje = '<div class="panel panel-success"><div class="panel-heading">';
-                            $mensaje .= '<h3 class="panel-title">Informaci&oacute;n</h3></div>';
-                            $mensaje .= '<div class="panel-body">';
-                            $mensaje .= 'Copia de seguridad realizada con &eacute;xito.<br><br>Pulse sobre el siguiente enlace para descargar:<br><br>';
-                            $mensaje .= '<a href="tmp/copiaseg.sql.gz">Descargar Copia de Seguridad de Datos</a><br>';
-                            $mensaje .= $comando;
-                            $mensaje .= '</div>';
-                            $mensaje .= '</div>';
-                            $archivo = 'tmp/copiaseg.sql.gz';
-                            $comando = 'mysqldump -u '.USUARIO.'--password='.CLAVE.' '.BASEDATOS.'|gzip -9c>'.$archivo;
-                            system($comando);
-                            return $mensaje;
+                        if ($this->perfil['Config']) {
+                            $archivo_sql = "tmp/copiaseg.sql";
+                            $archivo = $archivo_sql . ".gz";
+                            if (file_exists($archivo)) {
+                                unlink($archivo);
+                            }
+                            $comando = escapeshellcmd(MYSQLDUMP . ' -u ' . USUARIO . ' --password=' . CLAVE . ' --result-file=' . $archivo_sql . ' ' . BASEDATOS);                                                       
+                            $comando2 = escapeshellcmd(GZIP . ' -9f ' . $archivo_sql);                                    
+                            exec($comando);
+                            exec($comando2);
+                            if (filesize($archivo) < 1024) {
+                                //No se ha realizado la copia de seguridad
+                                $mensaje = "La copia de seguridad no se ha realizado correctamente.<br><br>";
+                                $mensaje .= "Compruebe que las rutas a los programas mysqldump y gzip en configuraci&oacute;n est&aacute;n correctamente establecidas ";
+                                $mensaje .= "y que los datos de acceso a la base de datos sean correctos.<br>";
+                                $mensaje .= "mysqldump=[" . MYSQLDUMP . "]<br>";
+                                $mensaje .= "gzip=[" . GZIP . "]";
+                                $cabecera = "ERROR";
+                                $tipo = "danger";
+                            } else {
+                                $mensaje .= 'Copia de seguridad realizada con &eacute;xito.<br><br>Pulse sobre el siguiente enlace para descargar:<br><br>';
+                                $mensaje .= '<a href="' . $archivo . '">Descargar Copia de Seguridad de Datos</a><br>';
+                                $cabecera = "Informaci&oacute;n";
+                                $tipo = "success";
+                            }
+                            return $this->panel($cabecera,$mensaje,$tipo);
                         } else {
-                            return $this->mensajePermisos("Informes");
+                            return $this->mensajePermisos("Copias de seguridad");
                         }
                 } // Fin del contenido
             case 'usuario_incorrecto':
@@ -270,7 +283,16 @@ class AportaContenido {
      * @return string
      */
     public function mensajePermisos($tipo) {
-        return "<center><h1>No tiene permiso para acceder a " . $tipo . "</h1></center>";
+        return $this->panel("ERROR", "No tiene permiso para acceder a $tipo", "danger");
+    }
+
+    public function panel($cabecera, $mensaje, $tipo) {
+        $panel = '<div class="panel panel-' . $tipo . '"><div class="panel-heading">';
+        $panel .= '<h3 class="panel-title">' . $cabecera . '</h3></div>';
+        $panel .= '<div class="panel-body">';
+        $panel .= $mensaje;
+        $panel .= '</div>';
+        return $panel;
     }
 
 }

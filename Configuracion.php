@@ -32,6 +32,8 @@
         private $plantilla;
         private $colorLateral;
         private $colorFondo;
+        private $mysqldump; //comando mysqldump para la copia de seguridad
+        private $gzip; //comando gzip para comprimir la copia de seguridad
         
         public function ejecuta()
         {
@@ -121,6 +123,22 @@
                                 $this->colorFondo=$_POST['colorFon'];
                             }
                             break;
+                        case 'MYSQLDUMP':
+                            $valor = trim($valor);
+                            $this->mysqldump = $valor;
+                            if ($grabar) {
+                                $linea=str_replace($valor,$_POST['mysqldump'],$linea);
+                                $this->mysqldump=$_POST['mysqldump'];
+                            }
+                            break;
+                        case 'GZIP':
+                            $valor = trim($valor);
+                            $this->gzip = $valor;
+                            if ($grabar) {
+                                $linea=str_replace($valor,$_POST['gzip'],$linea);
+                                $this->gzip=$_POST['gzip'];
+                            }
+                            break;
                     }
                 }
                 if ($grabar) {
@@ -188,6 +206,8 @@
             $salida.='<tr><td>Base de datos</td><td><input type="text" name="baseDatos" value="'.$this->baseDatos.'" size="30" /></td></tr>';
             $salida.='<tr><td>Usuario</td><td><input type="text" name="usuario" value="'.$this->usuario.'" size="30" /></td></tr>';
             $salida.='<tr><td>Clave</td><td><input type="text" name="clave" value="'.$this->clave.'" size="30" /></td></tr>';
+            $salida.='<tr><td>mysqldump</td><td><input type="text" name="mysqldump" value="'.$this->mysqldump.'" size="30" /></td></tr>';
+            $salida.='<tr><td>gzip</td><td><input type="text" name="gzip" value="'.$this->gzip.'" size="30" /></td></tr>';
             $salida.='<tr align=center><td colspan=2><input type="submit" class="btn btn-primary" align="center" value="Aceptar" name="aceptar" /></td></tr></p>';
             $salida.='</form></div></center>';
             $salida.="<script>
