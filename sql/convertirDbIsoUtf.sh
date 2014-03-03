@@ -19,4 +19,6 @@ echo "Re-exportando los datos"
 mysqldump -u $1 --password=$2 --result-file=salida-final.sql $4
 echo "Re-importando los datos"
 mysql -u $1 --password=$2 $4 <salida-final.sql
+echo "Limpiando la casa"
+rm salida.sql salida2.sql salida.iconv.sql salida-final.sql
 echo "Proceso terminado"

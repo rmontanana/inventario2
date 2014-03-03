@@ -111,7 +111,7 @@ class Pdf_mysql_table extends Fpdf
             if ($this->procesandoTotales) {
                 $this->SetFont('Arial','B',12);
             }
-            $this->Cell($col['w'],5,$data[$col['f']],1,0,$alin,$fill);
+            $this->Cell($col['w'],5,utf8_decode($data[$col['f']]),1,0,$alin,$fill);
             //$this->Cell($col['w'],5,utf8_decode($data[$col['f']]),1,0,$alin,$fill);
             //$this->Cell($col['w'],5,utf8_decode($data['proveedor']),1,0,$alin,$fill);
             //$this->Write(5,"nombre=".$col['f'].",titulo=".$col['c'].",ancho=".$col['w'].",alin=".$col['a']);

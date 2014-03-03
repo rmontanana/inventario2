@@ -56,7 +56,7 @@ class InformeInventario {
         }
         $fila = $this->bdd->procesaResultado();
         $plantilla = str_replace("{id}", $id, $plantilla);
-        $plantilla = str_replace("{Descripcion}", utf8_encode($fila['Descripcion']), $plantilla);
+        $plantilla = str_replace("{Descripcion}", $fila['Descripcion'], $plantilla);
         file_put_contents($salida, $plantilla) or die('Fallo en la escritura de la plantilla ' . $salida);
         if ($salidaInforme == "pantalla") {
             $informe = new InformePDF($this->bdd, $salida, true);
@@ -92,9 +92,9 @@ class InformeInventario {
         }
         $fila = $this->bdd->procesaResultado();
         $plantilla = str_replace("{id}", $id, $plantilla);
-        $plantilla = str_replace("{Descripcion}", utf8_encode($fila['descripcion']), $plantilla);
-        $plantilla = str_replace("{Marca}", utf8_encode($fila['marca']), $plantilla);
-        $plantilla = str_replace("{Modelo}", utf8_encode($fila['modelo']), $plantilla);
+        $plantilla = str_replace("{Descripcion}", $fila['descripcion'], $plantilla);
+        $plantilla = str_replace("{Marca}", $fila['marca'], $plantilla);
+        $plantilla = str_replace("{Modelo}", $fila['modelo'], $plantilla);
         file_put_contents($salida, $plantilla) or die('Fallo en la escritura de la plantilla ' . $salida);
         if ($salidaInforme == "pantalla") {
             $informe = new InformePDF($this->bdd, $salida, true);
@@ -180,7 +180,7 @@ class InformeInventario {
             //$fila=$this->bdd->procesaResultado();
             $plantilla = file_get_contents($fichero) or die('Fallo en la apertura de la plantilla ' . $fichero);
             $plantilla = str_replace("{id}", $fila['id'], $plantilla);
-            $plantilla = str_replace("{Descripcion}", utf8_encode($fila['Descripcion']), $plantilla);
+            $plantilla = str_replace("{Descripcion}", $fila['Descripcion'], $plantilla);
             file_put_contents($salida, $plantilla) or die('Fallo en la escritura de la plantilla ' . $salida);
             if ($primero) {
                 $primero = false;

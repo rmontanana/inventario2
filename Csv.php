@@ -114,7 +114,7 @@ class Csv {
         // Escribe la cabecera del fichero
         $this->escribeLinea(array($consulta->Pagina->Cabecera, $consulta->Titulo['id'], $consulta->Titulo['Texto']));
         foreach ($consulta->Pagina->Cuerpo->Col as $campo) {
-            $campos[] = utf8_decode($campo['Titulo']);
+            $campos[] = $campo['Titulo'];
         }
         $this->escribeLinea($campos);
         // Escribe los datos de los campos
@@ -151,8 +151,8 @@ class Csv {
      */
     public function resumen() {
         //$mensaje .=
-        $mensaje = "<center><h1>Archivo [inventario" . utf8_decode($this->cabecera[0]) . "]</h1>";
-        $mensaje .= "<h2>id=[" . $this->cabecera[1] . "] Descripci&oacute;n=[" . utf8_decode($this->cabecera[2]) . "]</h2><br>";
+        $mensaje = "<center><h1>Archivo [inventario" . $this->cabecera[0] . "]</h1>";
+        $mensaje .= "<h2>id=[" . $this->cabecera[1] . "] Descripci&oacute;n=[" . $this->cabecera[2] . "]</h2><br>";
         $mensaje .= '<table border=1 class="table table-striped table-bordered table-condensed table-hover"><theader>';
         foreach ($this->datosFichero[0] as $campo) {
             $dato = $campo;

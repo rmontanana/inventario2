@@ -51,13 +51,13 @@ class InformePDF {
         // Recuperamos la definición del informe
         $this->def = simplexml_load_file($definicion);
         $this->bdd = $bdd;
-        $this->pdf = new Pdf_mysql_table($this->bdd->obtieneManejador(), (string) $this->def->Pagina['Orientacion'], (string) $this->def->Pagina['Formato'], (string) $this->def->Titulo['Texto'], (string) $this->def->Pagina->Cabecera);
+        $this->pdf = new Pdf_mysql_table($this->bdd->obtieneManejador(), (string) $this->def->Pagina['Orientacion'], (string) $this->def->Pagina['Formato'], (string) utf8_decode($this->def->Titulo['Texto']), (string) $this->def->Pagina->Cabecera);
         //echo $def->Titulo.$def->Cabecera;
         $this->pdf->Open();
-        $this->pdf->setAuthor(utf8_decode(AUTOR));
+        $this->pdf->setAuthor(AUTOR,true);
         $creador = CENTRO . " " . APLICACION;
-        $this->pdf->setCreator(utf8_decode(html_entity_decode($creador)));
-        $this->pdf->setSubject(utf8_decode($this->def->Titulo));
+        $this->pdf->setCreator(html_entity_decode($creador),true);
+        $this->pdf->setSubject($this->def->Titulo,true);
         $this->pdf->setAutoPageBreak(true, 10);
     }
 
