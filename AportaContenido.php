@@ -176,7 +176,7 @@ class AportaContenido {
                 switch ($opcion) {
                     case 'principal': // contenido inicial
                         return '<br><br><center><img src="img/logo.png" alt="' . PROGRAMA . '">' .
-                                '<br><label>' . PROGRAMA . '</label></center><br><br>' . PIE;
+                                '<br><label>' . CENTRO . '</label></center><br><br>' . PIE;
                     case 'articulos':
                     case 'ubicaciones':
                     case 'test':
@@ -197,7 +197,7 @@ class AportaContenido {
 
                     case 'bienvenido': // El usuario quiere iniciar sesión
                         return 'Bienvenid@ ' . $this->usuario . '<br><br><center><img src="img/codigoBarras.png" alt="' . PROGRAMA . '">' .
-                                '<br><label>' . PROGRAMA . '</label></center><br><br>' . PIE;
+                                '<br><label>' . CENTRO . '</label></center><br><br>' . PIE;
                     case 'configuracion':
                         if ($this->perfil['Config']) {
                             $conf = new Configuracion();

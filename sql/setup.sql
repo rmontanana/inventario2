@@ -28,7 +28,7 @@ CREATE TABLE `Articulos` (
   `modelo` varchar(20) default NULL COMMENT 'ordenable',
   `cantidad` int(11) default NULL COMMENT 'ordenable',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=785 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=785 DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
 
 
@@ -52,7 +52,7 @@ CREATE TABLE `Elementos` (
   KEY `id_Ubicacion` (`id_Ubicacion`),
   CONSTRAINT `Elementos_ibfk_1` FOREIGN KEY (`id_Articulo`) REFERENCES `Articulos` (`id`) ON DELETE CASCADE,
   CONSTRAINT `Elementos_ibfk_2` FOREIGN KEY (`id_Ubicacion`) REFERENCES `Ubicaciones` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1884 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1884 DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
 
 
@@ -65,9 +65,9 @@ SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `Ubicaciones` (
   `id` smallint(5) unsigned NOT NULL auto_increment,
-  `Descripcion` varchar(30) NOT NULL COMMENT 'ordenable,link/Ubicacion',
+  `Descripcion` varchar(50) NOT NULL COMMENT 'ordenable,link/Ubicacion',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=184 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=184 DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
 
 
@@ -92,7 +92,7 @@ CREATE TABLE `Usuarios` (
   `config` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `nombre` (`nombre`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
 
 --
