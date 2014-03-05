@@ -101,7 +101,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `Usuarios` WRITE;
 /*!40000 ALTER TABLE `Usuarios` DISABLE KEYS */;
-INSERT INTO `Usuarios` VALUES (1,'admin','galeote','s3LUSqxg{s',1,1,1,1,1,1,1),(2,'demo','demo','NogP_U0Byi',0,0,0,1,1,0,0);
+INSERT INTO `Usuarios` VALUES (1,'admin','pruebas','s3LUSqxg{s',1,1,1,1,1,1,1),(2,'demo','pruebas','NogP_U0Byi',0,0,0,1,1,0,0);
 /*!40000 ALTER TABLE `Usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
