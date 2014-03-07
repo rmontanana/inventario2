@@ -6,8 +6,6 @@ it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-![Status](https://www.codeship.io/projects/3419ed60-8792-0131-28be-1e0fe2cd9bcf/status)
-
 Aplicación de inventario para un centro educativo.
 
 Utiliza:
@@ -30,6 +28,7 @@ Para instalar la aplicación basta con seguir estos pasos:
     mkdir tmp
     chown apache tmp
     chown apache inc/configuracion.inc
+    chown apache inc
     
 ###3. Crear una base de datos en MySQL con el siguiente comando
 
@@ -48,7 +47,7 @@ Con esto queda instalado el programa. Se crean en este proceso dos usuarios:
     Usuario: admin              Usuario: demo
     Contraseña: pruebas         Contraseña: pruebas
 
-##Modelo
+##Modelo de datos
 El modelo de datos que se ha utilizado ha sido:
 ![modeloERInventario2.png](https://bitbucket.org/repo/Ag6zy8/images/4106389828-modeloERInventario2.png)
 

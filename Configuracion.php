@@ -151,9 +151,10 @@
                 //$salida.='<label class="warn">Configuraci&oacute;n guardada correctamente</label>';
                 $salida.='<p class="bg-primary">Configuraci&oacute;n guardada correctamente</p>';
                 fclose($fsalida);
-                unlink($this->confAnterior);
+                //unlink($this->confAnterior);
                 rename($this->configuracion,$this->confAnterior);
-                rename($this->confNueva,$this->configuracion);                
+                rename($this->confNueva,$this->configuracion);  
+                unlink($this->confAnterior);
             }
             return $salida;
         }

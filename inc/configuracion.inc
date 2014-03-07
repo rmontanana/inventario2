@@ -22,10 +22,10 @@
      */
 define('AUTOR','Ricardo Montañana Gómez');
 define('SERVIDOR','localhost'); //Ubicación del servidor MySQL
-define('BASEDATOS','Inventario2'); //Nombre de la base de datos.
+define('BASEDATOS','Inventario4'); //Nombre de la base de datos.
 define('USUARIO','test'); //Usuario con permisos de lectura/escritura en la base de datos
 define('CLAVE','tset'); //contraseña del usuario.
-define('VERSION','1.01b');
+define('VERSION','1.02');
 define('PROGRAMA','Gesti&oacute;n de Inventario.');
 define('CENTRO','I.E.S.O. Pascual Serrano');
 define('APLICACION',PROGRAMA.VERSION);
@@ -34,7 +34,7 @@ define('PAUSA',2);//Nº segundos de pausa para mostrar mensaje id insertado
 define('ESTILO','personal'); //Estilo de los iconos de edición (personal, personal, personal)
 define('PLANTILLA','bootstrap'); //Estilo de la plantilla y recursos a utilizar
 define('COLORLAT', '#7ae7bf'); //Color de la barra de menú lateral
-define('COLORFON', '#ffb878'); //Color del fondo de la pantalla
+define('COLORFON', '#a4bdfc'); //Color del fondo de la pantalla
 define('MYSQLDUMP', '/usr/local/bin/mysqldump'); //camino a mysqldump
 define('GZIP', '/usr/bin/gzip'); //Camino a gzip
 ?>
