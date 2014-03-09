@@ -118,14 +118,14 @@ class AportaContenido {
     public function __call($metodo, $parametros) {
         switch ($metodo) { // Dependiendo del método invocado
             case 'titulo': // devolvemos el título
-                return APLICACION;
+                return PROGRAMA.VERSION;
             case 'usuario':
                 if ($this->registrado)
                     return "Usuario=$this->usuario";
                 else
                     return '';
             case 'fecha': return $this->fechaActual();
-            case 'aplicacion': return APLICACION;
+            case 'aplicacion': return PROGRAMA.VERSION;
             case 'menu': // el menú
                 if ($this->registrado) {
                     return $this->miMenu->insertaMenu();
