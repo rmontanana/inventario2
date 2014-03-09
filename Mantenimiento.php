@@ -98,6 +98,7 @@ class Mantenimiento {
         $cabecera = $this->cabeceraTabla();
         //Trata con la cadena de búsqueda
         $this->cadenaBusqueda = isset($_POST['buscar']) ? $_POST['buscar'] : $this->cadenaBusqueda;
+        // @todo poner que la cadena de búsqueda pueda venir en un parámetro GET, ponerlo también en los enlaces de edición y borrado
         if (isset($this->cadenaBusqueda) && strlen($this->cadenaBusqueda)) {
             $sufijo = " where $this->campoBusca like '%" . $this->bdd->filtra($this->cadenaBusqueda) . "%'";
             $sufijoEnlace = "&buscar=" . $this->cadenaBusqueda;
@@ -113,7 +114,7 @@ class Mantenimiento {
             $comando = str_replace('{orden}', ' ', $comando);
         }
         //Introduce un botón para hacer búsquedas y el número de la página
-        $salida = $this->enlaceBusqueda($pagSigte);
+        $salida = $this->enlaceBusqueda($pagSigte, $this->cadenaBusqueda);
         //Esta orden de centrado se cierra en el pie de la tabla
         //$salida.='<center><h4>P&aacute;gina ' . $pagSigte . '</h4>';
 //        $salida .='<div class="nav-bar navbar-fixed"><ul class="nav nav-pills nav-stacked">
@@ -209,15 +210,16 @@ class Mantenimiento {
         return $salida;
     }
 
-    private function enlaceBusqueda($pagina) {
+    private function enlaceBusqueda($pagina, $valorAnterior) {
         //$salida = '<p align="center">';
         //$salida .='<center><form name="busqueda" method="POST"><input type="text" class="form-control" name="buscar"';
         //$salida .='value="' . $this->cadenaBusqueda . '" size="40" /><input type="submit" class="btn btn-primary" value="Buscar" name=';
         //$salida .='"Buscar" />';
         //$salida .= '</form></center>';
         //$salida.='</p>';
+        $valor = isset($valorAnterior) ? 'value="'.$valorAnterior.'"' : '';
         $salida = '<form name="busqueda" method="POST"><div class="col-sm-4 col-lg-6"><div class="input-group">
-                <input type="text" name="buscar" placeholder="Descripci&oacute;n" class="form-control">
+                <input type="text" name="buscar" placeholder="Descripci&oacute;n" class="form-control" '.$valor.'>
                 <span class="input-group-btn"><button class="btn btn-primary" type="button">Buscar</button>
                 </span></div></div></form>';
         //$salida .= '<div class="col-lg-1 pull-right"><ul class="nav nav-pills nav-stacked "><li class="active">
