@@ -96,12 +96,12 @@ class Mantenimiento {
         $pagRew = $pagAnt - 3 < 0 ? $pagAnt : $pagAnt - 3;
         //Tengo que procesar la cabecera antes de lo de la cadena de búsqueda por el tema de las búsquedas
         $cabecera = $this->cabeceraTabla();
-        //Trata con la cadena de búsqueda
+        //Trata con la cadena de búsqueda si viene del post debe quedarse con ella sino con la del get y si no está definida => vacía
+        $this->cadenaBusqueda = isset($_GET['buscar']) ? $_GET['buscar'] : null;
         $this->cadenaBusqueda = isset($_POST['buscar']) ? $_POST['buscar'] : $this->cadenaBusqueda;
-        // @todo poner que la cadena de búsqueda pueda venir en un parámetro GET, ponerlo también en los enlaces de edición y borrado
         if (isset($this->cadenaBusqueda) && strlen($this->cadenaBusqueda)) {
             $sufijo = " where $this->campoBusca like '%" . $this->bdd->filtra($this->cadenaBusqueda) . "%'";
-            $sufijoEnlace = "&buscar=" . $this->cadenaBusqueda;
+            $sufijoEnlace = '&buscar=' . $this->cadenaBusqueda .'';
             $comando = str_replace('{buscar}', $sufijo, $this->comandoConsulta);
         } else {
             $comando = str_replace('{buscar}', '', $this->comandoConsulta);
@@ -170,12 +170,12 @@ class Mantenimiento {
             }
             //Añade el icono de editar
             if ($this->perfil['Modificacion']) {
-                $salida.='<td><a href="index.php?' . $tabla . '&opc=editar&id=' . $id . "&pag=" . $pagina . $sufijoOrden .
+                $salida.='<td><a href="index.php?' . $tabla . '&opc=editar&id=' . $id . "&pag=" . $pagina . $sufijoOrden . $sufijoEnlace.
                         '"><img title="Editar" src="img/' . ESTILO . '/editar.png" alt="editar"></a>';
             }
             //Añade el icono de eliminar
             if ($this->perfil['Borrado']) {
-                $salida.='&nbsp;&nbsp;<a href="index.php?' . $tabla . '&opc=eliminar&id=' . $id .
+                $salida.='&nbsp;&nbsp;<a href="index.php?' . $tabla . '&opc=eliminar&id=' . $id . $sufijoEnlace.
                         '"><img title="Eliminar" src="img/' . ESTILO . '/eliminar.png" alt="eliminar"></a></td></tr>' . "\n";
             }
         }
@@ -235,6 +235,7 @@ class Mantenimiento {
     }
 
     protected function borrar($id) {
+        //@todo hay que tener en cuenta aquí la cadena de búsqueda y la página en la url
         $comando = "delete from " . $this->tabla . " where id=\"$id\"";
         if (!$this->bdd->ejecuta($comando)) {
             return $this->errorBD($comando);
@@ -297,6 +298,7 @@ class Mantenimiento {
         //La lista de atributos de la tupla viene en el campo oculto listacampos
         //print_r($_GET);
         //echo "id=$id pag=$pag orden=$orden sentido=$sentido";die();
+        //@todo hay que tener en cuenta aquí la página en la que se encuentra y la cadena de búsqueda
         $comando = "update " . $this->tabla . " set ";
         $lista = explode("&", $_POST['listacampos']);
         //var_dump($lista);
