@@ -2,7 +2,7 @@
 <Mantenimiento>
     <Titulo>Mantenimiento de Usuarios</Titulo>
     <Consulta>
-            SELECT id, nombre, clave, idSesion, alta, modificacion, borrado, consulta, informe, usuarios, config
+            SELECT SQL_CALC_FOUND_ROWS id, nombre, clave, idSesion, alta, modificacion, borrado, consulta, informe, usuarios, config
             FROM Usuarios {buscar} {orden} limit {inferior}, {superior};
     </Consulta>
     <Campos>

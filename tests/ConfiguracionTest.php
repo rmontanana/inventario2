@@ -16,7 +16,8 @@ class ConfiguracionTest extends PHPUnit_Framework_TestCase {
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp() {
+    protected function setUp()
+    {
         $this->config = new Configuracion;
     }
 
@@ -24,14 +25,16 @@ class ConfiguracionTest extends PHPUnit_Framework_TestCase {
      * Tears down the fixture, for example, closes a network connection.
      * This method is called after a test is executed.
      */
-    protected function tearDown() {
+    protected function tearDown()
+    {
         
     }
 
     /**
      * @covers Configuracion::ejecuta
      */
-    public function testEjecuta() {
+    public function testEjecuta()
+    {
         $this->assertFileExists('inc/Configuracion.inc', "El fichero de configuración no existe");
         $permisos = fileperms('inc/Configuracion.inc');
         //Comprueba que el propietario o el grupo tengan derecho de escritura
@@ -39,7 +42,7 @@ class ConfiguracionTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue($test, "El fichero de configuración no tiene los permisos adecuados");
         //Comprueba que existan todas las claves editables en el fichero de configuración.
         $fichero = $this->config->obtieneFichero();
-        $this->assertNotNull($fichero,"El fichero de configuración no se ha leído o no tiene contenido");
+        $this->assertNotNull($fichero, "El fichero de configuración no se ha leído o no tiene contenido");
         $lineas = explode("\n", $fichero);
         $campos = $this->config->obtieneLista();
         $numero = 0;
@@ -68,4 +71,5 @@ class ConfiguracionTest extends PHPUnit_Framework_TestCase {
     }
 
 }
+
 ?>

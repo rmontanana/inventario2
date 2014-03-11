@@ -1,25 +1,26 @@
 <?php
-    /**
-     * Fichero de configuración donde se introducirán los valores para
-     * la conexión con el servidor MySQL y otros para personalizar la aplicación.
-     * @package Inventario
-     * @copyright Copyright (c) 2008, Ricardo Montañana Gómez
-     * @license http://www.gnu.org/licenses/gpl-3.0.txt
-     * This file is part of Inventario.
-     * Inventario is free software: you can redistribute it and/or modify
-     * it under the terms of the GNU General Public License as published by
-     * the Free Software Foundation, either version 3 of the License, or
-     * (at your option) any later version.
-     *
-     * Inventario is distributed in the hope that it will be useful,
-     * but WITHOUT ANY WARRANTY; without even the implied warranty of
-     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-     * GNU General Public License for more details.
-     *
-     * You should have received a copy of the GNU General Public License
-     * along with Inventario.  If not, see <http://www.gnu.org/licenses/>.
-     *
-     */
+
+/**
+ * Fichero de configuración donde se introducirán los valores para
+ * la conexión con el servidor MySQL y otros para personalizar la aplicación.
+ * @package Inventario
+ * @copyright Copyright (c) 2008, Ricardo Montañana Gómez
+ * @license http://www.gnu.org/licenses/gpl-3.0.txt
+ * This file is part of Inventario.
+ * Inventario is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Inventario is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Inventario.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 define('AUTOR', 'Ricardo Montañana Gómez');
 define('SERVIDOR', 'localhost'); //Ubicación del servidor MySQL
 define('BASEDATOS', 'Inventario2'); //Nombre de la base de datos.
@@ -30,7 +31,7 @@ define('VERSION', '1.02');
 define('PROGRAMA', 'Gesti&oacute;n de Inventario.');
 define('CENTRO', 'I.E.S.O. Pascual Serrano');
 define('NUMFILAS', '17'); // Número de registros a mostrar en las pantallas de consulta iniciales
-define('PAUSA', '2');//Nº segundos de pausa para mostrar mensaje id insertado
+define('PAUSA', '2'); //Nº segundos de pausa para mostrar mensaje id insertado
 define('ESTILO', 'personal'); //Estilo de los iconos de edición (personal, personal, personal)
 define('PLANTILLA', 'bootstrap'); //Estilo de la plantilla y recursos a utilizar
 define('COLORLAT', '#46d6db'); //Color de la barra de menú lateral

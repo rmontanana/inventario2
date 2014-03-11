@@ -29,7 +29,6 @@ class Mantenimiento {
     private $descripcion;
     protected $bdd;
     protected $url;
-    protected $cabecera;
     protected $tabla;
     protected $cadenaBusqueda;
     protected $campos = array();
@@ -37,39 +36,85 @@ class Mantenimiento {
     protected $campoBusca = "Descripcion";
     protected $comandoConsulta = "";
     protected $perfil;
+    protected $datosURL = array();
+    protected $datosURLb = array();
 
-    public function __construct($baseDatos, $perfil, $nombre) {
+    public function __construct($baseDatos, $perfil, $nombre)
+    {
         $this->bdd = $baseDatos;
-        $this->url = "index.php?$nombre&opc=inicial";
-        $this->cabecera = 'Location: ' . $this->url;
+        $this->url = "index.php?$nombre";
+        //$this->datosURL['']
         $this->tabla = ucfirst($nombre);
         $this->perfil = $perfil;
+        $this->cargaDatosURL();
     }
 
-    public function ejecuta() {
-        $opc = $_GET['opc'];
-        $id = $_GET['id'];
-        $orden = isset($_GET['orden']) ? $_GET['orden'] : '';
-        $sentido = isset($_GET['sentido']) ? $_GET['sentido'] : 'asc';
-        //Sólo tiene sentido para las modificaciones.
-        //Es la página donde estaba el registro
-        $pag = isset($_GET['pag']) ? $_GET['pag'] : '0';
-        $this->cadenaBusqueda = $_GET['buscar'];
+    /**
+     * Carga en los atributos de la clase los datos de la URL
+     * Los datos constantes en la URL son:
+     *  - opc = {inicial, editar, eliminar, nuevo, insertar, modificar, borrar}
+     *  - orden = {id, ... } nombre del campo por el que se ordena la visualización
+     *  - sentido = {asc, desc}
+     *  - pag = nº página 0, 1, 2, ...
+     * Los datos opcionales de la URL son:
+     *  - buscar = cadena de búsqueda
+     *  - id = nº de la clave necesario para la edición o el borrado
+     */
+    public function cargaDatosURL()
+    {
+        $this->datosURL['opc'] = isset($_GET['opc']) ? $_GET['opc'] : 'inicial';
+        $this->datosURL['orden'] = isset($_GET['orden']) ? $_GET['orden'] : 'id';
+        $this->datosURL['sentido'] = isset($_GET['sentido']) ? $_GET['sentido'] : 'asc';
+        $this->datosURL['pag'] = isset($_GET['pag']) ? $_GET['pag'] : '0';
+        $this->cadenaBusqueda = isset($_GET['buscar']) ? $_GET['buscar'] : null;
+        $this->cadenaBusqueda = isset($_POST['buscar']) ? $_POST['buscar'] : $this->cadenaBusqueda;
+        $this->datosURL['buscar'] = $this->cadenaBusqueda;
+        $this->datosURL['id'] = isset($_GET['id']) ? $_GET['id'] : null;
+    }
+    
+    public function backupURL()
+    {
+        $this->datosURLb = $this->datosURL;
+    }
+    
+    public function restoreURL()
+    {
+        $this->datosURL = $this->datosURLb;
+    }
+    
+    //Monta una URL con los datos cargados en los atributos de la clase
+    private function montaURL()
+    {
+        //Primero los datos obligatorios
+        $opc = "&opc=" . $this->datosURL['opc'];
+        $orden = "&orden=" . $this->datosURL['orden'];
+        $sentido = "&sentido=" . $this->datosURL['sentido'];
+        $pag = "&pag=" . $this->datosURL['pag'];
+        //Ahora los datos opcionales
+        $buscar = isset($this->cadenaBusqueda) ? "buscar=$this->cadenaBusqueda" : null;
+        $id = isset($this->datosURL['id']) ? "&id=" . $this->datosURL['id'] : null;
+        $enlace = $this->url . $opc . $orden . $sentido . $pag . $buscar . $id;
+        return $enlace;
+    }
+
+    public function ejecuta()
+    {
         $this->obtenerCampos();
         $this->obtieneClavesForaneas();
-        switch ($opc) {
-            case 'inicial':return $this->consulta($id, $orden, $sentido);
-            case 'editar':return $this->muestra($id, EDICION, $pag, $orden, $sentido);
-            case 'eliminar':return $this->muestra($id, BORRADO);
-            case 'nuevo':return $this->muestra(null, ANADIR);
+        switch ($this->datosURL['opc']) {
+            case 'inicial':return $this->consulta();
+            case 'editar':return $this->muestra(EDICION);
+            case 'eliminar':return $this->muestra(BORRADO);
+            case 'nuevo':return $this->muestra(ANADIR);
             case 'insertar':return $this->insertar();
-            case 'modificar':return $this->modificar($id, $pag, $orden, $sentido);
-            case 'borrar':return $this->borrar($id);
-            default:return 'La clase Mantenimiento No entiende lo solicitado.';
+            case 'modificar':return $this->modificar();
+            case 'borrar':return $this->borrar();
+            default: return "La clase Mantenimiento No entiende lo solicitado [" . $this->datosURL['opc'] . "]";
         }
     }
 
-    protected function obtieneClavesForaneas() {
+    protected function obtieneClavesForaneas()
+    {
         $salida = null;
         foreach ($this->campos as $clave => $valor) {
             $trozos = explode(",", $valor["Comment"]);
@@ -87,21 +132,23 @@ class Mantenimiento {
         $this->foraneas = $salida;
     }
 
-    private function consulta($pagina, $orden, $sentido) {
+    private function consulta()
+    {
+        $orden = $this->datosURL['orden'];
+        $sentido = $this->datosURL['sentido'];
         //Calcula los números de página anterior y siguiente.
-        $pagina = $pagina + 0;
+        $pagina = $this->datosURL['pag'];
         $pagSigte = $pagina <= 0 ? 1 : $pagina + 1;
-        $pagAnt = $pagSigte - 2;
+        $pagAnt = $pagSigte - 2 < 0 ? 0 : $pagSigte -2;
         $pagFwd = $pagSigte + 3;
-        $pagRew = $pagAnt - 3 < 0 ? $pagAnt : $pagAnt - 3;
+        $pagRew = $pagAnt - 3 < 0 ? 0 : $pagAnt - 3;
         //Tengo que procesar la cabecera antes de lo de la cadena de búsqueda por el tema de las búsquedas
         $cabecera = $this->cabeceraTabla();
         //Trata con la cadena de búsqueda si viene del post debe quedarse con ella sino con la del get y si no está definida => vacía
-        $this->cadenaBusqueda = isset($_GET['buscar']) ? $_GET['buscar'] : null;
-        $this->cadenaBusqueda = isset($_POST['buscar']) ? $_POST['buscar'] : $this->cadenaBusqueda;
+        //$this->cadenaBusqueda = isset($_GET['buscar']) ? $_GET['buscar'] : null;
+        //$this->cadenaBusqueda = isset($_POST['buscar']) ? $_POST['buscar'] : $this->cadenaBusqueda;
         if (isset($this->cadenaBusqueda) && strlen($this->cadenaBusqueda)) {
             $sufijo = " where $this->campoBusca like '%" . $this->bdd->filtra($this->cadenaBusqueda) . "%'";
-            $sufijoEnlace = '&buscar=' . $this->cadenaBusqueda .'';
             $comando = str_replace('{buscar}', $sufijo, $this->comandoConsulta);
         } else {
             $comando = str_replace('{buscar}', '', $this->comandoConsulta);
@@ -114,36 +161,35 @@ class Mantenimiento {
             $comando = str_replace('{orden}', ' ', $comando);
         }
         //Introduce un botón para hacer búsquedas y el número de la página
-        $salida = $this->enlaceBusqueda($pagSigte, $this->cadenaBusqueda);
-        //Esta orden de centrado se cierra en el pie de la tabla
-        //$salida.='<center><h4>P&aacute;gina ' . $pagSigte . '</h4>';
-//        $salida .='<div class="nav-bar navbar-fixed"><ul class="nav nav-pills nav-stacked">
-//                  <li class="active">
-//                    <a href="#">
-//                      <span class="badge pull-right">' . $pagSigte . '</span>
-//                      P&aacute;gina
-//                    </a>
-//                  </li>
-//                </ul></div>';
+        $salida = $this->enlaceBusqueda($pagSigte);
         $salida.= $cabecera;
         //Consulta paginada de todas las tuplas
-        $comando = str_replace('{inferior}', ($pagAnt + 1) * NUMFILAS, $comando);
+        $comando = str_replace('{inferior}', $pagina * NUMFILAS, $comando);
         $comando = str_replace('{superior}', NUMFILAS, $comando);
-        //$salida.=$comando;
         $tabla = strtolower($this->tabla);
         $this->bdd->ejecuta($comando);
+        $numRegistros = $this->bdd->numeroTotalTuplas();
+        //Si el número de la página fwd es mayor que el total de páginas lo establece a éste
+        if (NUMFILAS > 0) {
+            $totalPags = (int) ($numRegistros / NUMFILAS) - 1;
+            if ($numRegistros % NUMFILAS) {
+                $totalPags++;
+            }
+        } else {
+            $totalPags = 0;
+        }
+        $pagFwd = $pagFwd > $totalPags ? $totalPags : $pagFwd;
         if ($this->bdd->numeroTuplas() == 0) {
             if ($pagSigte > 1) {
                 // Si no hay datos en la consulta y no es la primera página, 
-                // carga la página inicial
-                header('Location: ' . $this->url);
+                // carga la página final
+                $this->datosURL['pag'] = $totalPags;
+                header('Location: ' . $this->montaURL());
             } else {
                 $salida = "<p align=\"center\"><center><h2>No hay registros</h2></center></p><br>";
             }
         }
-        //$salida.=print_r($this->perfil);
         //$salida.=$comando;
-        //var_dump($this->campos);
         while ($fila = $this->bdd->procesaResultado()) {
             $salida.='<tr align="center" bottom="middle">';
             foreach ($fila as $clave => $valor) {
@@ -170,37 +216,56 @@ class Mantenimiento {
             }
             //Añade el icono de editar
             if ($this->perfil['Modificacion']) {
-                $salida.='<td><a href="index.php?' . $tabla . '&opc=editar&id=' . $id . "&pag=" . $pagina . $sufijoOrden . $sufijoEnlace.
+                //$salida.='<td><a href="index.php?' . $tabla . '&opc=editar&id=' . $id . "&pag=" . $pagina . $sufijoOrden . $sufijoEnlace .
+                $this->backupURL(); $this->datosURL['opc'] = "editar"; $this->datosURL['id'] = $id;
+                $salida.='<td><a href="' . $this->montaURL() .
                         '"><img title="Editar" src="img/' . ESTILO . '/editar.png" alt="editar"></a>';
+                $this->restoreURL();
             }
             //Añade el icono de eliminar
             if ($this->perfil['Borrado']) {
-                $salida.='&nbsp;&nbsp;<a href="index.php?' . $tabla . '&opc=eliminar&id=' . $id . $sufijoEnlace.
+                //$salida.='&nbsp;&nbsp;<a href="index.php?' . $tabla . '&opc=eliminar&id=' . $id . $sufijoEnlace .
+                $this->backupURL(); $this->datosURL['opc'] = "eliminar"; $this->datosURL['id'] = $id;
+                $salida.='&nbsp;&nbsp;<a href="' . $this->montaURL() .
                         '"><img title="Eliminar" src="img/' . ESTILO . '/eliminar.png" alt="eliminar"></a></td></tr>' . "\n";
+                $this->restoreURL();
             }
         }
         $salida.="</tbody></table></center></p>";
         //Añade botones de comandos
-        $enlace = '<a href="' . $this->url . $sufijoOrden . '&id=';
-        if ($this->bdd->numeroTuplas()) {
-            $anterior = $enlace . $pagAnt . $sufijoEnlace . "\"><img title=\"Pag. Anterior\" alt=\"anterior\" src=\"img/" . ESTILO . "/anterior.png\"></a>\n";
-            $siguiente = $enlace . $pagSigte . $sufijoEnlace . "\"><img title=\"Pag. Siguiente\" alt=\"siguiente\" src=\"img/" . ESTILO . "/siguiente.png\"></a>\n";
-            $fwd = $enlace . $pagFwd . $sufijoEnlace . "\"><img title=\"+5 Pags.\" alt=\"mas5p\" src=\"img/" . ESTILO . "/fwd.png\"></a>\n";
-            $rew = $enlace . $pagRew . $sufijoEnlace . "\"><img title=\"-5 Pags.\" alt=\"menos5p\" src=\"img/" . ESTILO . "/rew.png\"></a>\n";
-            if (strlen($orden) > 0) {
-                $az = '<a href="' . $this->url . '&orden=' . $orden . '&sentido=asc"><img alt="asc" title="Orden ascendente" src="img/' . ESTILO . '/ascendente.png"></a>';
-                $za = '<a href="' . $this->url . '&orden=' . $orden . '&sentido=desc"><img alt="desc" title="Orden descendente" src="img/' . ESTILO . '/descendente.png"></a>';
-            } else {
-                $az = $za = '';
-            }
+        
+        if ($numRegistros) {
+            $this->backupURL();
+            $this->datosURL['pag'] = $pagAnt;
+            $anterior = $this->montaURL();
+            $this->datosURL['pag'] = $pagSigte;
+            $siguiente = $this->montaURL();
+            $this->datosURL['pag'] = $pagFwd;
+            $fwd = $this->montaURL();
+            $this->datosURL['pag'] = $pagRew;
+            $rew = $this->montaURL();
+            $anterior = '<a href="' . $anterior . "\"><img title=\"Pag. Anterior\" alt=\"anterior\" src=\"img/" . ESTILO . "/anterior.png\"></a>\n";
+            $siguiente = '<a href="' . $siguiente . "\"><img title=\"Pag. Siguiente\" alt=\"siguiente\" src=\"img/" . ESTILO . "/siguiente.png\"></a>\n";
+            $fwd = '<a href="' . $fwd . "\"><img title=\"+4 Pags.\" alt=\"mas4pags\" src=\"img/" . ESTILO . "/fwd.png\"></a>\n";
+            $rew = '<a href="' . $rew . "\"><img title=\"-4 Pags.\" alt=\"menos4pags\" src=\"img/" . ESTILO . "/rew.png\"></a>\n";
+            $this->restoreURL();
+            $this->datosURL['sentido'] = "asc";
+            $az = $this->montaURL();
+            $az = '<a href="' . $az . '"><img alt="asc" title="Orden ascendente" src="img/' . ESTILO . '/ascendente.png"></a>';
+            $this->datosURL['sentido'] = "desc";
+            $za = $this->montaURL();
+            $za = '<a href="' . $za . '"><img alt="desc" title="Orden descendente" src="img/' . ESTILO . '/descendente.png"></a>';
+            $this->restoreURL();
             if ($this->perfil['Informe']) {
                 $informe = '<a href="index.php?' . $tabla . '&opc=informe" target="_blank"><img src="img/' . ESTILO . '/informe.png" alt="informe" title="Informe pdf"></a>';
             } else {
                 $informe = "";
             }
+            $this->restoreURL();
         }
         if ($this->perfil['Alta']) {
-            $anadir = '<a href="index.php?' . $tabla . '&opc=nuevo">' .
+            $this->datosURL['opc'] = 'nuevo';
+            $anadir = '<a href="' . $this->montaURL() . '">' .
                     '<img title="A&ntilde;adir registro" alt="nuevo" src="img/' . ESTILO . '/nuevo.png"></a>';
         } else {
             $anadir = "";
@@ -210,41 +275,35 @@ class Mantenimiento {
         return $salida;
     }
 
-    private function enlaceBusqueda($pagina, $valorAnterior) {
-        //$salida = '<p align="center">';
-        //$salida .='<center><form name="busqueda" method="POST"><input type="text" class="form-control" name="buscar"';
-        //$salida .='value="' . $this->cadenaBusqueda . '" size="40" /><input type="submit" class="btn btn-primary" value="Buscar" name=';
-        //$salida .='"Buscar" />';
-        //$salida .= '</form></center>';
-        //$salida.='</p>';
-        $valor = isset($valorAnterior) ? 'value="'.$valorAnterior.'"' : '';
+    private function enlaceBusqueda($pagina)
+    {
+        $valor = isset($this->cadenaBusqueda) ? 'value="' . $this->cadenaBusqueda . '"' : '';
         $salida = '<form name="busqueda" method="POST"><div class="col-sm-4 col-lg-6"><div class="input-group">
-                <input type="text" name="buscar" placeholder="Descripci&oacute;n" class="form-control" '.$valor.'>
+                <input type="text" name="buscar" placeholder="Descripci&oacute;n" class="form-control" ' . $valor . '>
                 <span class="input-group-btn"><button class="btn btn-primary" type="button">Buscar</button>
                 </span></div></div></form>';
-        //$salida .= '<div class="col-lg-1 pull-right"><ul class="nav nav-pills nav-stacked "><li class="active">
-        //           <a href="#"><span class="badge pull-right">'.$pagina.'</span>P&aacute;gina</a></li></ul></div>';
         $salida .= '<button class="btn btn-info pull-right" type="button">P&aacute;gina <span class="badge">'
                 . $pagina . '</span></button>';
-//        $salida .= '<div class="progress progress-striped">
-//  <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-//    P&aacute;gina 5 de 6<span class="sr-only">20% Complete</span>
-//  </div>
-//</div>';
         return $salida;
     }
 
-    protected function borrar($id) {
+    protected function borrar()
+    {
         //@todo hay que tener en cuenta aquí la cadena de búsqueda y la página en la url
+        $id = $this->datosURL['id'];
         $comando = "delete from " . $this->tabla . " where id=\"$id\"";
         if (!$this->bdd->ejecuta($comando)) {
             return $this->errorBD($comando);
         }
-        header('Location: ' . $this->url);
+        $this->datosURL['opc'] = 'inicial';
+        $this->datosURL['id'] = null;
+        $url = $this->montaURL();
+        header('Location: ' . $url);
         return;
     }
 
-    protected function insertar() {
+    protected function insertar()
+    {
         $comando = "insert into " . $this->tabla . " (";
         $lista = explode("&", $_POST['listacampos']);
         $primero = true;
@@ -278,7 +337,7 @@ class Mantenimiento {
                 if (empty($_POST[$campo])) {
                     $valor = "0";
                 }
-                $valor = $_POST[$campo] == "on" ? '1' : $valor;                
+                $valor = $_POST[$campo] == "on" ? '1' : $valor;
             } else {
                 $valor = $_POST[$campo] == "" ? "null" : '"' . $_POST[$campo] . '"';
             }
@@ -288,12 +347,14 @@ class Mantenimiento {
         if (!$this->bdd->ejecuta($comando)) {
             return $this->errorBD($comando);
         }
-        list($enlace, $resto) = explode("&", $this->url);
+        $this->datosURL['opc'] = 'inicial';
+        $this->datosURL['id'] = null;
         $enlace.="&opc=inicial";
-        return "<h1><a href=\"$enlace\">Se ha insertado el registro con la clave " . $this->bdd->ultimoId() . "</a></h1>";
+        return "<h1><a href=\"".$this->montaURL()."\">Se ha insertado el registro con la clave " . $this->bdd->ultimoId() . "</a></h1>";
     }
 
-    protected function modificar($id, $pag, $orden, $sentido) {
+    protected function modificar()
+    {
         //Los datos a utilizar para actualizar la tupla vienen en $_POST.
         //La lista de atributos de la tupla viene en el campo oculto listacampos
         //print_r($_GET);
@@ -301,7 +362,6 @@ class Mantenimiento {
         //@todo hay que tener en cuenta aquí la página en la que se encuentra y la cadena de búsqueda
         $comando = "update " . $this->tabla . " set ";
         $lista = explode("&", $_POST['listacampos']);
-        //var_dump($lista);
         $primero = true;
         foreach ($lista as $campo) {
             if ($campo == "id" || $campo == "")
@@ -327,20 +387,20 @@ class Mantenimiento {
                 }
             }
         }
-        $comando.=" where id=\"$id\"";
+        $comando.=" where id=\"" . $this->datosURL['id'] . "\"";
         if (!$this->bdd->ejecuta($comando)) {
             return $this->errorBD($comando);
         }
-
-        list($enlace, $resto) = explode("&", $this->url);
-        $enlace.="&opc=inicial&orden=" . $orden . "&sentido=" . $sentido . "&id=" . $pag;
-        //echo $comando;
-        header('Location: ' . $enlace);
+        $this->datosURL['id'] = null;
+        $this->datosURL['opc'] = inicial;
+        header('Location: ' . $this->montaURL());
         return;
     }
 
-    protected function muestra($id, $tipoAccion, $pag = "", $orden = "", $sentido = "") {
-        if (isset($id)) {
+    protected function muestra($tipoAccion)
+    {
+        $id = $this->datosURL['id'];
+        if ($tipoAccion != ANADIR) {
             $comando = "select * from " . $this->tabla . " where id='$id'";
             $resultado = $this->bdd->ejecuta($comando);
             if (!$resultado) {
@@ -350,14 +410,10 @@ class Mantenimiento {
         } else {
             $fila = null;
         }
-        //list($tipo,$valor)=explode($columna["Type"]);
-        $accion = "index.php?" . strtolower($this->tabla) . "&id=$id&opc=";
+        /*$accion = "index.php?" . strtolower($this->tabla) . "&id=$id&opc=";
         switch ($tipoAccion) {
             case EDICION:
                 $accion.="modificar";
-                $accion.=isset($pag) ? "&pag=$pag" : '';
-                $accion.=isset($orden) ? "&orden=$orden" : '';
-                $accion.=isset($sentido) ? "&sentido=$sentido" : '';
                 break;
             case BORRADO:
                 $accion.="borrar";
@@ -366,13 +422,18 @@ class Mantenimiento {
                 $accion.="insertar";
                 break;
         }
+        $accion.=isset($pag) ? "&pag=$pag" : '';
+        $accion.=isset($orden) ? "&orden=$orden" : '';
+        $accion.=isset($sentido) ? "&sentido=$sentido" : '';
+        $accion.=isset($this->cadenaBusqueda) ? "&buscar=$this->cadenaBusqueda" : '';*/
         //Genera un formulario con los datos de la tupla seleccionada.
-        return $this->formularioCampos($accion, $tipoAccion, $fila);
+        return $this->formularioCampos($tipoAccion, $fila);
     }
 
     //Función que genera un campo de lista con los valores de descripción de la
     //tabla a la cual pertenece la clave foránea.
-    protected function generaLista($datos, $campo, $valorInicial, $modo) {
+    protected function generaLista($datos, $campo, $valorInicial, $modo)
+    {
         $salida = "<select class=\"form-control\" name=\"$campo\">\n";
         list($tabla, $atributos) = explode(",", $datos);
         $atributos = str_replace("/", ",", $atributos);
@@ -405,7 +466,8 @@ class Mantenimiento {
         return $salida;
     }
 
-    private function obtenerCampos() {
+    private function obtenerCampos()
+    {
         //Si hay un fichero de descripción xml lo utiliza.
         $nombre = "xml/mantenimiento" . $this->tabla . ".xml";
         if (file_exists($nombre)) {
@@ -424,11 +486,12 @@ class Mantenimiento {
                 $this->campos[$datos[$i]["Field"]]["Campo"] = $datos[$i]["Field"];
                 $this->campos[$datos[$i]["Field"]]["Editable"] = "si";
             }
-            $this->comandoConsulta = "select * from " . $this->tabla . " {buscar} {orden} limit {inferior},{superior}";
+            $this->comandoConsulta = "select SQL_CALC_FOUND_ROWS * from " . $this->tabla . " {buscar} {orden} limit {inferior},{superior}";
         }
     }
 
-    private function cabeceraTabla() {
+    private function cabeceraTabla()
+    {
         //$salida = '<p align="center"><table border=1 class="tablaDatos"><tbody>';
         $salida = '<p align="center"><table border=1 class="table table-striped table-bordered table-condensed table-hover"><tbody>';
         foreach ($this->campos as $clave => $datos) {
@@ -448,7 +511,7 @@ class Mantenimiento {
             $clave = str_ireplace("ubicacion", "Ubicaci&oacute;n", $clave);
             $clave = str_ireplace("articulo", "Art&iacute;culo", $clave);
             if ($ordenable) {
-                $salida.="<th><b><a title=\"Establece orden por $clave \" href=\"$this->url&orden=" . strtolower($clave2) . "\"> " . ucfirst($clave) . " </a></b></th>\n";
+                $salida.="<th><b><a title=\"Establece orden por $clave \" href=\"". $this->montaURL() . "\"> " . ucfirst($clave) . " </a></b></th>\n";
             } else {
                 $salida.='<th><b>' . ucfirst($clave) . '</b></th>' . "\n";
             }
@@ -460,14 +523,26 @@ class Mantenimiento {
 
     /**
      * 
-     * @param string $accion URL de la acción del POST
-     * @param string $tipo ANADIR,EDITAR,BORRADO
+     * @param string $tipo ANADIR,EDICION,BORRADO
      * @param array $datos Vector con los datos del registro
      * @return array lista de campos y formulario de entrada
      */
-    private function formularioCampos($accion, $tipo, $datos) {
+    private function formularioCampos($tipo, $datos)
+    {
         $modo = $tipo == BORRADO ? "readonly" : "";
         $nfechas = 0;
+        switch ($tipo) {
+            case ANADIR:
+                $this->datosURL['opc'] = "insertar"; $this->datosURL['id'] = null;
+                break;
+            case EDICION:
+                $this->datosURL['opc'] = "modificar";
+                break;
+            case BORRADO:
+                $this->datosURL['opc'] = "borrar";
+                break;
+        }
+        $accion = $this->montaURL();
         $salida.='<div class="col-sm-8"><form name="mantenimiento.form" class="form-horizontal" role="form" method="post" action="' . $accion . '">' . "\n";
         $salida.="<fieldset style=\"width: 96%;\"><p><legend style=\"color: red;\"><b>$tipo</b></legend>\n";
         foreach ($this->campos as $clave => $valor) {
@@ -491,7 +566,7 @@ class Mantenimiento {
                 $tipoCampo = $valor['Type'];
                 //Si es un campo fecha u hora y está insertando pone la fecha actual o la hora actual
                 if ($tipo == ANADIR) {
-                    if (stripos($tipoCampo, "echa")<>0 || stripos($tipoCampo, "ate")<>0) {
+                    if (stripos($tipoCampo, "echa") <> 0 || stripos($tipoCampo, "ate") <> 0) {
                         $valorDato = strftime("%Y/%m/%d");
                     }
                 }
@@ -501,9 +576,6 @@ class Mantenimiento {
                     $tamano = "19";
                     $tipo_campo = "datetime";
                     $nfechas++;
-                    //
-                    //Prueba
-                    //
                     $salida .= '<div class="input-group date" id="datetimepicker' . $nfechas . '">
                     <input type="text" name="' . $campo . '" data-format="YYYY/MM/DD" value="' . $valorDato . '" ' . $modoEfectivo . ' class="form-control" />
                     <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
@@ -528,7 +600,6 @@ class Mantenimiento {
                 }
                 if ($tipoCampo == "Boolean(1)") {
                     $checked = $valorDato == '1' ? 'checked' : '';
-                    //$salida .= '<div class="checkbox">';
                     $modocheck = $modoEfectivo == "readonly" ? 'onclick="javascript: return false;" readonly ' : '';
                     $salida .= '<input type="checkbox" name="' . $campo . '" ' . $checked . ' ' . $modocheck . ' class="form-control">';
                     $salida .= '</div></div>';
@@ -547,21 +618,34 @@ class Mantenimiento {
         $salida .= '<input name="listacampos" type="hidden" value="' . $campos . "\">\n";
         $salida .= "</fieldset><p>";
         $salida .= '<center>';
-        $salida .= '<button type="button" onClick="location.href=' . "'$this->url'" . '" class="btn btn-info">Volver</button>';
+        $this->datosURL['opc'] = 'inicial';
+        $salida .= '<button type="button" onClick="location.href=' . "'" . $this->montaURL() . "'" . '" class="btn btn-info">Volver</button>';
         $salida .= '&nbsp;&nbsp;<button type="reset" class="btn btn-danger">Cancelar</button>';
         $salida .= '&nbsp;&nbsp;<button type=submit class="btn btn-primary">Aceptar</button>';
         $salida .= '<br></center></div>';
         return $salida;
     }
 
-    protected function errorBD($comando, $mensaje = "") {
-        if (!$mensaje) {
-            return "<h1>No pudo ejecutar correctamente el comando $comando error=" . $this->bdd->mensajeError() . " </h1>";
+    protected function errorBD($comando, $texto = "", $tipo = "danger", $cabecera = "&iexcl;Atenci&oacute;n!")
+    {
+        if (!$texto) {
+            $texto = "No pudo ejecutar correctamente el comando $comando error=" . $this->bdd->mensajeError();
         } else {
-            return "<h1>$mensaje error=" . $this->bdd->mensajeError() . "</h1>";
+            $texto = "$texto error=" . $this->bdd->mensajeError();
         }
+        return $this->panelMensaje($texto, "danger", $cabecera="&iexcl;Error!");
     }
-
+    
+    private function panelMensaje($info, $tipo = "danger", $cabecera = "&iexcl;Atenci&oacute;n!") {
+        $mensaje = '<div class="panel panel-' . $tipo . '"><div class="panel-heading">';
+        $mensaje .= '<h3 class="panel-title">' . $cabecera . '</h3></div>';
+        $mensaje .= '<div class="panel-body">';
+        $mensaje .= $info;
+        $mensaje .= '</div>';
+        $mensaje .= '</div>';
+        return $mensaje;
+    }
+            
 }
 
 ?>
