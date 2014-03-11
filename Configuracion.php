@@ -171,7 +171,7 @@
             $cristal=$this->estilo=="cristal"?'selected':' ';
             $normal=$this->plantilla=="normal"? 'selected':' ';
             $bootstrap=$this->plantilla=="bootstrap" ? 'selected':' '; 
-            $salida='<center><div class="col-sm-4 col-md-6"><form name="configura" method="post">';
+            $salida='<center><div class="col-sm-8 col-md-8"><form name="configura" method="post">';
             //$salida.='<p align="center"><table border=1 class="tablaDatos"><tbody>';
             $salida.='<p align="center"><table border=2 class="table table-hover"><tbody>';
             $salida.='<th colspan=2 class="info"><center><b>Preferencias</b></center></th>';
