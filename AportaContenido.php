@@ -144,8 +144,8 @@ class AportaContenido {
                         return "Men&uacute; Principal";
                     case 'principal':
                         return "Pantalla Inicial";
-                    case 'elementos':
                     case 'articulos': $opcion = "art&iacute;culos";
+                    case 'elementos':
                     case 'ubicaciones':
                     case 'usuarios':
                     case 'test':

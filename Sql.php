@@ -153,6 +153,22 @@ class Sql {
         return $this->numero;
     }
     /**
+     * Devuelve el número de tuplas total si se ha hecho una consulta select
+     * con SELECT SQL_CALC_FOUND_ROWS * ...
+     * @return integer Número de tuplas.
+     */
+    public function numeroTotalTuplas() 
+    {
+        $comando = "select found_rows();";
+        if (!$peticion=$this->bdd->query($comando)) {
+            $this->error=true;
+            $this->mensajeError='No pudo ejecutar la petici&oacute;n: '.$comando;
+            return false;
+        }
+        $numero = $peticion->fetch_row();
+        return $numero[0] ;
+    }
+    /**
      * Devuelve la condición de error de la última petición
      * @return boolean condición de error.
      */
