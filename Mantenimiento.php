@@ -37,7 +37,7 @@ class Mantenimiento {
     protected $comandoConsulta = "";
     protected $perfil;
     protected $datosURL = array();
-    protected $datosURLb = array();
+    protected $datosURLb = array(); //para hacer una copia
 
     public function __construct($baseDatos, $perfil, $nombre)
     {
@@ -91,7 +91,7 @@ class Mantenimiento {
         $sentido = "&sentido=" . $this->datosURL['sentido'];
         $pag = "&pag=" . $this->datosURL['pag'];
         //Ahora los datos opcionales
-        $buscar = isset($this->cadenaBusqueda) ? "buscar=$this->cadenaBusqueda" : null;
+        $buscar = isset($this->cadenaBusqueda) ? "&buscar=$this->cadenaBusqueda" : null;
         $id = isset($this->datosURL['id']) ? "&id=" . $this->datosURL['id'] : null;
         $enlace = $this->url . $opc . $orden . $sentido . $pag . $buscar . $id;
         return $enlace;
@@ -145,8 +145,6 @@ class Mantenimiento {
         //Tengo que procesar la cabecera antes de lo de la cadena de búsqueda por el tema de las búsquedas
         $cabecera = $this->cabeceraTabla();
         //Trata con la cadena de búsqueda si viene del post debe quedarse con ella sino con la del get y si no está definida => vacía
-        //$this->cadenaBusqueda = isset($_GET['buscar']) ? $_GET['buscar'] : null;
-        //$this->cadenaBusqueda = isset($_POST['buscar']) ? $_POST['buscar'] : $this->cadenaBusqueda;
         if (isset($this->cadenaBusqueda) && strlen($this->cadenaBusqueda)) {
             $sufijo = " where $this->campoBusca like '%" . $this->bdd->filtra($this->cadenaBusqueda) . "%'";
             $comando = str_replace('{buscar}', $sufijo, $this->comandoConsulta);
@@ -349,8 +347,10 @@ class Mantenimiento {
         }
         $this->datosURL['opc'] = 'inicial';
         $this->datosURL['id'] = null;
-        $enlace.="&opc=inicial";
-        return "<h1><a href=\"".$this->montaURL()."\">Se ha insertado el registro con la clave " . $this->bdd->ultimoId() . "</a></h1>";
+        $cabecera = "refresh:".PAUSA.";url=".$this->montaURL();
+        header($cabecera);
+        return $this->panelMensaje("Se ha insertado el registro con la clave " . $this->bdd->ultimoId(), "info", "Informaci&oacute;n");
+        //return "<h1><a href=\"".$this->montaURL()."\">Se ha insertado el registro con la clave " . $this->bdd->ultimoId() . "</a></h1>";
     }
 
     protected function modificar()
@@ -410,22 +410,6 @@ class Mantenimiento {
         } else {
             $fila = null;
         }
-        /*$accion = "index.php?" . strtolower($this->tabla) . "&id=$id&opc=";
-        switch ($tipoAccion) {
-            case EDICION:
-                $accion.="modificar";
-                break;
-            case BORRADO:
-                $accion.="borrar";
-                break;
-            case ANADIR:
-                $accion.="insertar";
-                break;
-        }
-        $accion.=isset($pag) ? "&pag=$pag" : '';
-        $accion.=isset($orden) ? "&orden=$orden" : '';
-        $accion.=isset($sentido) ? "&sentido=$sentido" : '';
-        $accion.=isset($this->cadenaBusqueda) ? "&buscar=$this->cadenaBusqueda" : '';*/
         //Genera un formulario con los datos de la tupla seleccionada.
         return $this->formularioCampos($tipoAccion, $fila);
     }
@@ -511,7 +495,10 @@ class Mantenimiento {
             $clave = str_ireplace("ubicacion", "Ubicaci&oacute;n", $clave);
             $clave = str_ireplace("articulo", "Art&iacute;culo", $clave);
             if ($ordenable) {
+                $this->backupURL();
+                $this->datosURL['orden'] = $clave2;
                 $salida.="<th><b><a title=\"Establece orden por $clave \" href=\"". $this->montaURL() . "\"> " . ucfirst($clave) . " </a></b></th>\n";
+                $this->restoreURL();
             } else {
                 $salida.='<th><b>' . ucfirst($clave) . '</b></th>' . "\n";
             }
@@ -644,8 +631,7 @@ class Mantenimiento {
         $mensaje .= '</div>';
         $mensaje .= '</div>';
         return $mensaje;
-    }
-            
+    }           
 }
 
 ?>
