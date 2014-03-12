@@ -22,8 +22,8 @@
 $host="localhost";
 $baseAnt="Inventario";
 $baseNueva="Inventario2";
-$usuario="root";
-$claveUsuario="galeote";
+$usuario="test";
+$claveUsuario="tset";
 $probar=false;
 
 

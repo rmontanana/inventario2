@@ -25,7 +25,7 @@ define('SERVIDOR','localhost'); //Ubicación del servidor MySQL
 define('BASEDATOS','Inventario2'); //Nombre de la base de datos.
 define('USUARIO','test'); //Usuario con permisos de lectura/escritura en la base de datos
 define('CLAVE','tset'); //contraseña del usuario.
-define('VERSION','1.02b');
+define('VERSION','1.03');
 define('PROGRAMA','Gesti&oacute;n de Inventario.');
 define('CENTRO','I.E.S.O. Pascual Serrano');
 define('APLICACION',PROGRAMA.VERSION);
