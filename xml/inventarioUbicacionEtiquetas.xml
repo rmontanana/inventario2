@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<Informe>
+	<Titulo Texto="{Descripcion}" id="{id}"/>
+	<Datos>
+		<Consulta>
+			select A.id as idArt,E.id as idEl,U.id as idUbic,A.Marca as marca,A.Modelo as modelo,E.numSerie as numserie,
+                                E.fechaCompra as fechaCompra,A.Descripcion as descripcion,E.Cantidad as cantidad, E.Cantidad as cantReal, 'N' as Baja
+				from Elementos E, Articulos A, Ubicaciones U where A.id=E.id_Articulo and U.id=E.id_Ubicacion
+				and U.id='{id}' order by A.descripcion;
+		</Consulta>
+	</Datos>
+	<Pagina Horizontal="2" Vertical="7">
+		<Cabecera>Ubicacion</Cabecera>
+		<Cuerpo>
+                        <Col Nombre="Qr" Valor="{url}"/>
+                        <Col Nombre="idEl" Titulo="idElem"/>
+                        <Col Nombre="idArt" Titulo="idArt"/>
+                        <Col Nombre="idUbic" Titulo="idUbic"/>
+                        <Col Nombre="descripcion" Titulo="Artículo"/>
+			<Col Nombre="marca" Titulo="Marca"/>
+			<Col Nombre="modelo" Titulo="Modelo"/>
+			<Col Nombre="numserie" Titulo="N Serie"/>
+			<Col Nombre="fechaCompra" Titulo="Fecha C." />
+			<Col Nombre="cantidad" Titulo="Cantidad"/>
+                        <Col Nombre="cantReal" Titulo="Cant. Real"/>
+		</Cuerpo>
+	</Pagina>
+</Informe>
