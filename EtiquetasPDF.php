@@ -37,6 +37,7 @@ class EtiquetasPDF {
     private $docu;
     private $pdf;
     private $def;
+    private $nombreFichero = "tmp/informeEtiquetas.pdf";
 
     /**
      * El constructor recibe como argumento el nombre del archivo XML con la definición, encargándose de recuperarla y guardar toda la información localmente
@@ -57,6 +58,7 @@ class EtiquetasPDF {
         $this->pdf = new FPDF();
         $this->pdf->SetMargins(0.2, 0.2, 0.2);
         $this->pdf->SetFont('Arial', '', 11);
+        $this->pdf->setAutoPageBreak(false);
         //echo $def->Titulo.$def->Cabecera;
         $this->pdf->setAuthor(AUTOR, true);
         $creador = CENTRO . " " . PROGRAMA . VERSION;
@@ -67,7 +69,6 @@ class EtiquetasPDF {
 
     public function crea($definicion)
     {
-
         //print_r($def);echo $bdd;die();
         // Iniciamos la creación del documento
         $this->def = simplexml_load_file($definicion);
@@ -79,7 +80,7 @@ class EtiquetasPDF {
         $tamLinea = 5;
         $fila = -1;
         $primero = true; $i = 0;
-        $url = split("/", $_SERVER['SCRIPT_NAME']);
+        $url = explode("/", $_SERVER['SCRIPT_NAME']);
         $aplicacion = $url[1];
         $enlace = "http://".$_SERVER['SERVER_NAME']."/".$aplicacion."/index.php?elementos&opc=editar&id=";
         while($tupla = $this->bdd->procesaResultado()) {            
@@ -100,14 +101,14 @@ class EtiquetasPDF {
                 }
                 $primero = false;
             }
-            $py = 6 + 39 * $fila;
+            $py = 6 + 41 * $fila;
             $enlace2=$enlace.$tupla['idEl'];
             $fichero = "tmp/etiq".rand(1000,9999).".png";
             QRcode::png($enlace2, $fichero);
             $this->pdf->image($fichero, $etiq2, $py, 30, 30);
             unlink($fichero);
             $this->pdf->setxy($etiq1, $py);
-            $this->pdf->Cell(30, 10, utf8_decode($tupla['descripcion']));
+            $this->pdf->Cell(30, 10, utf8_decode($tupla['articulo']));
             $py+=$tamLinea;
             $this->pdf->setxy($etiq1, $py);
             $this->pdf->Cell(30, 10, utf8_decode($tupla['marca']));
@@ -120,7 +121,10 @@ class EtiquetasPDF {
             $py+=$tamLinea;
             $this->pdf->setxy($etiq1, $py);
             $this->pdf->Cell(30, 10, $tupla['fechaCompra']);
-            $py+=$tamLinea;
+            $py+=$tamLinea-1;
+            $this->pdf->setxy($etiq2, $py);
+            $this->pdf->Cell(30, 10, utf8_decode($tupla['ubicacion']));
+            $py+=$tamLinea-1;
             $this->pdf->setxy($etiq2, $py);
             $cadena = "idElemento=" . $tupla['idEl'] . " / idArticulo=" . $tupla['idArt'] . " / idUbicacion=" . $tupla['idUbic'];           
             $this->pdf->Cell(30, 10, $cadena);
@@ -144,7 +148,7 @@ class EtiquetasPDF {
     {
         $cabecera = "Content-type: application/pdf";
         $cabecera = $cabecera . "Content-length: " . strlen($this->docu);
-        $cabecera = $cabecera . "Content-Disposition: inline; filename=tmp/Informe.pdf";
+        $cabecera = $cabecera . "Content-Disposition: inline; filename=" . $this->nombreFichero;
         return $cabecera;
     }
 
@@ -153,6 +157,7 @@ class EtiquetasPDF {
         $fichero = fopen($nombre, "w");
         fwrite($fichero, $this->getCabecera());
         fwrite($fichero, $this->getContenido(), strlen($this->getContenido()));
+        $this->nombreFichero = $nombre;
         fclose($fichero);
     }
 
@@ -161,7 +166,7 @@ class EtiquetasPDF {
         header("Content-type: application/pdf");
         $longitud = strlen($this->docu);
         header("Content-length: $longitud");
-        header("Content-Disposition: inline; filename=tmp/Informe.pdf");
+        header("Content-Disposition: inline; filename=" . $this->nombreFichero);
     }
 
     public function imprimeInforme()
@@ -169,7 +174,6 @@ class EtiquetasPDF {
         $this->enviaCabecera();
         echo $this->docu;
     }
-
 }
 
 ?>
