@@ -40,12 +40,19 @@ class InformeInventario {
 
     private function listarUbicacion() {
         $salidaInforme = isset($_POST['salida']) ? $_POST['salida'] : 'pantalla';
-        if ($salidaInforme == "pantalla") {
-            $fichero = "xml/inventarioUbicacion.xml";
-            $salida = "tmp/inventarioUbicacion.xml";
-        } else {
-            $fichero = "xml/inventarioUbicacionCSV.xml";
-            $salida = "tmp/inventarioUbicacionCSV.xml";
+        switch ($salidaInforme) {
+            case "pantalla":
+                $fichero = "xml/inventarioUbicacion.xml";
+                $salida = "tmp/inventarioUbicacion.xml";
+                break;
+            case "csv":
+                $fichero = "xml/inventarioUbicacionCSV.xml";
+                $salida = "tmp/inventarioUbicacionCSV.xml";
+                break;
+            case "etiquetas":
+                $fichero = "xml/inventarioUbicacionEtiquetas.xml";
+                $salida = "tmp/inventarioUbicacionEtiquetas.xml";
+                break;
         }
         $plantilla = file_get_contents($fichero) or die('Fallo en la apertura de la plantilla ' . $fichero);
         $id = $_POST['id'] == NULL ? $_GET['id'] : $_POST['id'];
@@ -58,30 +65,47 @@ class InformeInventario {
         $plantilla = str_replace("{id}", $id, $plantilla);
         $plantilla = str_replace("{Descripcion}", $fila['Descripcion'], $plantilla);
         file_put_contents($salida, $plantilla) or die('Fallo en la escritura de la plantilla ' . $salida);
-        if ($salidaInforme == "pantalla") {
-            $informe = new InformePDF($this->bdd, $salida, true);
-            $informe->crea($salida);
-            $informe->cierraPDF();
-            $informe->guardaArchivo("tmp/Informe.pdf");
-            echo '<script type="text/javascript"> window.open( "tmp/Informe.pdf" ) </script>';
-        } else {
-            //Genera una hoja de cálculo en formato csv
-            $nombre = "tmp/Ubicacion" . strftime("%Y%m%d") . rand(100, 999) . ".csv";
-            $hoja = new Csv($this->bdd);
-            $hoja->crea($nombre);
-            $hoja->ejecutaConsulta($salida);
-            echo '<script type="text/javascript"> window.open( "' . $nombre . '" ) </script>';
+        switch ($salidaInforme) {
+            case "pantalla":
+                $informe = new InformePDF($this->bdd, $salida, true);
+                $informe->crea($salida);
+                $informe->cierraPDF();
+                $informe->guardaArchivo("tmp/Informe.pdf");
+                echo '<script type="text/javascript"> window.open( "tmp/Informe.pdf" ) </script>';
+                break;
+            case "csv":
+                //Genera una hoja de cálculo en formato csv
+                $nombre = "tmp/Ubicacion" . strftime("%Y%m%d") . rand(100, 999) . ".csv";
+                $hoja = new Csv($this->bdd);
+                $hoja->crea($nombre);
+                $hoja->ejecutaConsulta($salida);
+                echo '<script type="text/javascript"> window.open( "' . $nombre . '" ) </script>';
+                break;
+            case "etiquetas":
+                $etiquetas = new EtiquetasPDF($this->bdd, $salida, true);
+                $etiquetas->crea($salida);
+                $etiquetas->cierraPDF();
+                $etiquetas->guardaArchivo("tmp/EtiquetasUbicacion.pdf");
+                echo '<script type="text/javascript"> window.open( "tmp/EtiquetasUbicacion.pdf" ) </script>';
+                break;
         }
     }
 
     private function listarArticulo() {
         $salidaInforme = isset($_POST['salida']) ? $_POST['salida'] : 'pantalla';
-        if ($salidaInforme == "pantalla") {
-            $fichero = "xml/inventarioArticulo.xml";
-            $salida = "tmp/inventarioArticulo.xml";
-        } else {
-            $fichero = "xml/inventarioArticuloCSV.xml";
-            $salida = "tmp/inventarioArticuloCSV.xml";
+        switch ($salidaInforme) {
+            case "pantalla":
+                $fichero = "xml/inventarioArticulo.xml";
+                $salida = "tmp/inventarioArticulo.xml";
+                break;
+            case "csv":
+                $fichero = "xml/inventarioArticuloCSV.xml";
+                $salida = "tmp/inventarioArticuloCSV.xml";
+                break;
+            case "etiquetas":
+                $fichero = "xml/inventarioArticuloEtiquetas.xml";
+                $salida = "tmp/inventarioArticuloEtiquetas.xml";
+                break;
         }
         $plantilla = file_get_contents($fichero) or die('Fallo en la apertura de la plantilla ' . $fichero);
         $id = $_POST['id'] == NULL ? $_GET['id'] : $_POST['id'];
@@ -96,21 +120,30 @@ class InformeInventario {
         $plantilla = str_replace("{Marca}", $fila['marca'], $plantilla);
         $plantilla = str_replace("{Modelo}", $fila['modelo'], $plantilla);
         file_put_contents($salida, $plantilla) or die('Fallo en la escritura de la plantilla ' . $salida);
-        if ($salidaInforme == "pantalla") {
-            $informe = new InformePDF($this->bdd, $salida, true);
-            $informe->crea($salida);
-            $informe->cierraPDF();
-            $informe->guardaArchivo("tmp/Informe.pdf");
-            echo '<script type="text/javascript"> window.open( "tmp/Informe.pdf" ) </script>';
-        } else {
-            //Genera una hoja de cálculo en formato csv
-            $nombre = "tmp/Articulo" . strftime("%Y%m%d") . rand(100, 999) . ".csv";
-            $hoja = new Csv($this->bdd);
-            $hoja->crea($nombre);
-            $hoja->ejecutaConsulta($salida);
-            echo '<script type="text/javascript"> window.open( "' . $nombre . '" ) </script>';
+        switch ($salidaInforme) {
+            case "pantalla":
+                $informe = new InformePDF($this->bdd, $salida, true);
+                $informe->crea($salida);
+                $informe->cierraPDF();
+                $informe->guardaArchivo("tmp/Informe.pdf");
+                echo '<script type="text/javascript"> window.open( "tmp/Informe.pdf" ) </script>'; 
+                break;
+            case "csv":
+                //Genera una hoja de cálculo en formato csv
+                $nombre = "tmp/Articulo" . strftime("%Y%m%d") . rand(100, 999) . ".csv";
+                $hoja = new Csv($this->bdd);
+                $hoja->crea($nombre);
+                $hoja->ejecutaConsulta($salida);
+                echo '<script type="text/javascript"> window.open( "' . $nombre . '" ) </script>';
+                break;
+            case "etiquetas":
+                $etiquetas = new EtiquetasPDF($this->bdd, $salida, true);
+                $etiquetas->crea($salida);
+                $etiquetas->cierraPDF();
+                $etiquetas->guardaArchivo("tmp/EtiquetasArticulo.pdf");
+                echo '<script type="text/javascript"> window.open( "tmp/EtiquetasArticulo.pdf" ) </script>';
+                break;
         }
-        //header('Location: index.php');
     }
 
     private function listaUbicaciones() {
@@ -149,6 +182,7 @@ class InformeInventario {
         $salida.="<br><br><label for='salida'>Salida del informe por:</label>";
         $salida.='<div class="radio"><label><input type="radio" name="salida" value="pantalla" checked>Pantalla</label></div>';
         $salida.='<div class="radio"><label><input type="radio" name="salida" value="csv">Archivo CSV</label></div>';
+        $salida.='<div class="radio"><label><input type="radio" name="salida" value="etiquetas">Etiquetas</label></div>';
         $salida.="<br><br></fieldset><p>";
         $salida.='<p align="center"><button type=submit class="btn btn-primary">Aceptar</button></p><br></div>' . "\n";
         return $salida;
@@ -192,7 +226,6 @@ class InformeInventario {
         $informe->cierraPDF();
         $informe->imprimeInforme();
     }
-
 }
 
 ?>
