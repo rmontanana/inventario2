@@ -276,7 +276,7 @@ class Mantenimiento {
     private function enlaceBusqueda($pagina)
     {
         $valor = isset($this->cadenaBusqueda) ? 'value="' . $this->cadenaBusqueda . '"' : '';
-        $salida = '<form name="busqueda" method="POST"><div class="col-sm-4 col-lg-6"><div class="input-group">
+        $salida = '<form name="busqueda" method="POST"><div class="col-xs-6 col-sm-4 col-md-6 col-lg-6"><div class="input-group">
                 <input type="text" name="buscar" placeholder="Descripci&oacute;n" class="form-control" ' . $valor . '>
                 <span class="input-group-btn"><button class="btn btn-primary" type="button">Buscar</button>
                 </span></div></div></form>';

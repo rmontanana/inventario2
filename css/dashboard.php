@@ -31,6 +31,13 @@ border-bottom: 1px solid #eee;
 .sidebar {
 display: none;
 }
+@media (max-width: 767px) {
+.sidebar {
+top: 50px;
+bottom: 150px;
+background-color: <?php echo COLORLAT; ?>
+}
+}
 @media (min-width: 768px) {
 .sidebar {
 position: fixed;
@@ -70,6 +77,11 @@ background-color: #428bca;
 
 .main {
 padding: 10px;
+}
+@media (max-width: 767px) {
+.main{
+    margin-top: 50px;
+}
 }
 @media (min-width: 768px) {
 .main {
