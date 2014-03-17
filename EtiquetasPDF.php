@@ -72,9 +72,8 @@ class EtiquetasPDF {
         //print_r($def);echo $bdd;die();
         // Iniciamos la creación del documento
         $this->def = simplexml_load_file($definicion);
-        $this->bdd->ejecuta(trim($this->def->Datos->Consulta));
         //Ejecuta la consulta y prepara las variables de la base de datos.
-        //$this->bdd->ejecuta(trim($this->def->Datos->Consulta));
+        $this->bdd->ejecuta(trim($this->def->Datos->Consulta));
         //Inicializa las variables para el control de las etiquetas.
         $this->pdf->AddPage();
         $tamLinea = 5;
@@ -82,7 +81,8 @@ class EtiquetasPDF {
         $primero = true; $i = 0;
         $url = explode("/", $_SERVER['SCRIPT_NAME']);
         $aplicacion = $url[1];
-        $enlace = "http://".$_SERVER['SERVER_NAME']."/".$aplicacion."/index.php?elementos&opc=editar&id=";
+        $protocolo = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443 ? "https://" : "http://";
+        $enlace = $protocolo . $_SERVER['SERVER_NAME'] . "/" . $aplicacion . "/index.php?elementos&opc=editar&id=";
         while($tupla = $this->bdd->procesaResultado()) {            
             if ($i % 2) {
                 //Columna 2
