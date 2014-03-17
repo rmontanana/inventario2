@@ -104,7 +104,7 @@ class Inventario {
                     $_SESSION['Usuario'] = $this->usuario;
                     $_SESSION['Perfil'] = $this->perfil;
                     // y enviamos la cookie para reconocerlo la próxima vez
-                    setcookie('InventarioId', $resultado, time() + 3600 * 24 * 365);
+                    setcookie('InventarioId', $resultado, time() + 3600 * 24);
                     // Lo enviamos a la página de bienvenida
                     header('Location: index.php?bienvenido');
                     exit;
