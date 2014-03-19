@@ -67,6 +67,12 @@ class AportaContenido {
      * @var array Permisos del usuario
      */
     private $perfil;
+    
+    /**
+     *
+     * @var array Datos pasados en la URL
+     */
+    private $datosURL = array();
 
     // El constructor necesita saber cuál es la opción actual
     /**
@@ -181,6 +187,29 @@ class AportaContenido {
                     case 'ubicaciones':
                     case 'test':
                     case 'elementos':
+                        $this->cargaDatosURL();
+                        if ($this->datosURL['opc'] == "informe") {
+                            if (!$this->pefil['Informe']) {
+                                $this->procesaURL();
+                                $fichero = 'xml/informe' . ucfirst($opcion) . '.xml';
+                                $salida = 'tmp/informe' . ucfirst($opcion) . '.xml';
+                                //Establece los posibles parámetros del listado.
+                                $orden = $this->datosURL['orden'];
+                                $sentido = $this->datosURL['sentido'] == "asc" ? ' ' : ' desc ';
+                                $filtro = isset($this->datosURL['buscar']) ? $this->bdd->filtra($this->datosURL['buscar']) : '';
+                                $plantilla = file_get_contents($fichero) or die('Fallo en la apertura de la plantilla ' . $fichero);
+                                $plantilla = str_replace("{filtro}", $filtro, $plantilla);
+                                $plantilla = str_replace("{orden}", $orden . $sentido, $plantilla);
+                                file_put_contents($salida, $plantilla) or die('Fallo en la escritura de la plantilla ' . $salida);
+                                $informe = new InformePDF($this->bdd, $salida, $this->registrado);
+                                $informe->crea($salida);
+                                $informe->cierraPDF();
+                                $informe->imprimeInforme();                    
+                                return;
+                            } else {
+                                return $this->mensajePermisos("Informes");
+                            }
+                        }
                         if ($this->perfil['Consulta']) {
                             $ele = new Mantenimiento($this->bdd, $this->perfil, $opcion);
                             return $ele->ejecuta();
@@ -189,6 +218,29 @@ class AportaContenido {
                         }
                     case 'usuarios':
                         if ($this->perfil['Usuarios']) {
+                            $this->cargaDatosURL();
+                            if ($this->datosURL['opc'] == "informe") {
+                                if (!$this->pefil['Informe']) {
+                                    $this->procesaURL();
+                                    $fichero = 'xml/informe' . ucfirst($opcion) . '.xml';
+                                    $salida = 'tmp/informe' . ucfirst($opcion) . '.xml';
+                                    //Establece los posibles parámetros del listado.
+                                    $orden = $this->datosURL['orden'];
+                                    $sentido = $this->datosURL['sentido'] == "asc" ? ' ' : ' desc ';
+                                    $filtro = isset($this->datosURL['buscar']) ? $this->bdd->filtra($this->datosURL['buscar']) : '';
+                                    $plantilla = file_get_contents($fichero) or die('Fallo en la apertura de la plantilla ' . $fichero);
+                                    $plantilla = str_replace("{filtro}", $filtro, $plantilla);
+                                    $plantilla = str_replace("{orden}", $orden . $sentido, $plantilla);
+                                    file_put_contents($salida, $plantilla) or die('Fallo en la escritura de la plantilla ' . $salida);
+                                    $informe = new InformePDF($this->bdd, $salida, $this->registrado);
+                                    $informe->crea($salida);
+                                    $informe->cierraPDF();
+                                    $informe->imprimeInforme();                    
+                                    return;
+                                } else {
+                                    return $this->mensajePermisos("Informes");
+                                }
+                            }
                             $ele = new Mantenimiento($this->bdd, $this->perfil, $opcion);
                             return $ele->ejecuta();
                         } else {
@@ -276,7 +328,15 @@ class AportaContenido {
                 return "Marca {$metodo} queda sin procesar";
         }
     }
-
+    public function cargaDatosURL()
+    {
+        $this->datosURL['opc'] = isset($_GET['opc']) ? $_GET['opc'] : 'inicial';
+        $this->datosURL['orden'] = isset($_GET['orden']) ? $_GET['orden'] : 'id';
+        $this->datosURL['sentido'] = isset($_GET['sentido']) ? $_GET['sentido'] : 'asc';
+        $this->datosURL['pag'] = isset($_GET['pag']) ? $_GET['pag'] : '0';
+        $this->datosURL['buscar'] = isset($_GET['buscar']) ? $_GET['buscar'] : null;
+        $this->datosURL['id'] = isset($_GET['id']) ? $_GET['id'] : null;
+    }
     /**
      *
      * @param string $tipo

@@ -2,10 +2,10 @@
 <Informe>
 	<Titulo Texto="Informe de Artículos" />
 	<Datos>
-		<Consulta>select * from Articulos order by descripcion;</Consulta>
+		<Consulta>select * from Articulos where descripcion like '%{filtro}%' order by {orden};</Consulta>
 	</Datos>
 	<Pagina Orientacion="P" Formato="A4">
-		<Cabecera>Relación alfabética</Cabecera>
+		<Cabecera>Relación Artículos</Cabecera>
 		<Cuerpo>
 			<Col Nombre="id" Ancho="10" Ajuste="D" Titulo="id"/>
 			<Col Nombre="descripcion" Ancho="70" Ajuste="I" Titulo="Descripción"/>

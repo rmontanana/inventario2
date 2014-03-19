@@ -161,7 +161,7 @@ class Pdf_mysql_table extends Fpdf
     function Table($query,$prop=array())
     {
         //Issue query
-        $res=$this->bdd->query($query) or die('Error: '.$this->bdd->mysql_error()."<BR>Query: $query");
+        $res=$this->bdd->query($query) or die('Error: '.$this->bdd->error."<BR>Query: $query");
         //Add all columns if none was specified
         if(count($this->aCols)==0)
         {

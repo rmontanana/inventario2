@@ -4,9 +4,9 @@
 	<Datos>
 		<Consulta>
 			SELECT E.id as id,U.Descripcion as ubicacion,A.Descripcion as articulo,A.Marca as marca,A.Modelo as modelo,E.numserie as numserie,E.cantidad,
-             DATE_FORMAT(E.fechacompra, '%d/%m/%Y') as fechaCompra 
-            FROM Elementos E inner join Articulos A on E.id_articulo=A.id inner join 
-            Ubicaciones U on E.id_ubicacion=U.id order by ubicacion,articulo,marca,modelo,numserie;
+                        DATE_FORMAT(E.fechacompra, '%d/%m/%Y') as fechaCompra 
+                        FROM Elementos E inner join Articulos A on E.id_articulo=A.id inner join 
+                        Ubicaciones U on E.id_ubicacion=U.id where A.Descripcion like '%{filtro}%' order by {orden};
 		</Consulta>
 	</Datos>
 	<Pagina Orientacion="L" Formato="A4">

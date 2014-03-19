@@ -2,7 +2,7 @@
 <Informe>
 	<Titulo Texto="Informe de Usuarios" />
 	<Datos>
-		<Consulta>select * from Usuarios order by Nombre;</Consulta>
+		<Consulta>select * from Usuarios where nombre like '%{filtro}%' order by {orden};</Consulta>
 	</Datos>
 	<Pagina Orientacion="P" Formato="A4">
 		<Cabecera>Relación alfabética</Cabecera>

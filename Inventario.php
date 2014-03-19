@@ -124,22 +124,10 @@ class Inventario {
                 // Creamos un objeto Distribución facilitándole el
                 // nombre del archivo plantilla y el objeto que aportará
                 // el contenido
-                $opc = $_GET['opc'];
-                list($opcion, $parametro) = explode("&", $this->opcActual);
-                switch ($opc) {
-                    case 'informe':
-                        $enlace = 'xml/informe' . ucfirst($opcion) . '.xml';
-                        //$enlace="tmp/inventarioUbicacion.xml";
-                        $informe = new InformePDF($this->bdd, $enlace, $this->registrado);
-                        $informe->crea($enlace);
-                        $informe->cierraPDF();
-                        $informe->imprimeInforme();
-                        return;
-                    default:
-                        $salida = new Distribucion($this->plant, $this->creaContenido());
-                        echo $salida->procesaPlantilla();
-                        break;
-                }
+                $salida = new Distribucion($this->plant, $this->creaContenido());
+                echo $salida->procesaPlantilla();
+                break;
+                
         }
     }
 

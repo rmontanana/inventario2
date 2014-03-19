@@ -255,7 +255,9 @@ class Mantenimiento {
             $za = '<a href="' . $za . '"><img alt="desc" title="Orden descendente" src="img/' . ESTILO . '/descendente.png"></a>';
             $this->restoreURL();
             if ($this->perfil['Informe']) {
-                $informe = '<a href="index.php?' . $tabla . '&opc=informe" target="_blank"><img src="img/' . ESTILO . '/informe.png" alt="informe" title="Informe pdf"></a>';
+                $this->datosURL['opc'] = "informe";
+                $inf = $this->montaURL();
+                $informe = '<a href="' . $inf . '" target="_blank"><img src="img/' . ESTILO . '/informe.png" alt="informe" title="Informe pdf"></a>';
             } else {
                 $informe = "";
             }
