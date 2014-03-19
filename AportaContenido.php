@@ -155,9 +155,9 @@ class AportaContenido {
                     case 'ubicaciones':
                     case 'usuarios':
                     case 'test':
-                        return "Mantenimiento de " . ucfirst($opcion) . ".";
+                        return "Mantenimiento de " . ucfirst($opcion);
                     case 'configuracion':
-                        return 'Configuraci&oacute;n y Preferencias.';
+                        return 'Configuraci&oacute;n y Preferencias';
                     case 'informeInventario':return "Informe de Inventario";
                     case 'descuadres':return 'Informe de descuadres';
                     case 'importacion': return 'Importaci&oacute;n de datos';
