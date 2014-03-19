@@ -118,14 +118,14 @@ class AportaContenido {
     public function __call($metodo, $parametros) {
         switch ($metodo) { // Dependiendo del método invocado
             case 'titulo': // devolvemos el título
-                return APLICACION;
+                return PROGRAMA.VERSION;
             case 'usuario':
                 if ($this->registrado)
                     return "Usuario=$this->usuario";
                 else
                     return '';
             case 'fecha': return $this->fechaActual();
-            case 'aplicacion': return APLICACION;
+            case 'aplicacion': return PROGRAMA.VERSION;
             case 'menu': // el menú
                 if ($this->registrado) {
                     return $this->miMenu->insertaMenu();
@@ -237,7 +237,7 @@ class AportaContenido {
                             if (file_exists($archivo)) {
                                 unlink($archivo);
                             }
-                            $comando = escapeshellcmd(MYSQLDUMP . ' -u ' . USUARIO . ' --password=' . CLAVE . ' --result-file=' . $archivo_sql . ' ' . BASEDATOS);                                                       
+                            $comando = escapeshellcmd(MYSQLDUMP . ' -h ' . SERVIDOR . ' -P ' . PUERTO . ' -u ' . USUARIO . ' --password=' . CLAVE . ' --result-file=' . $archivo_sql . ' ' . BASEDATOS);                                                       
                             $comando2 = escapeshellcmd(GZIP . ' -9f ' . $archivo_sql);                                    
                             exec($comando);
                             exec($comando2);

@@ -55,7 +55,7 @@ class InformePDF {
         //echo $def->Titulo.$def->Cabecera;
         $this->pdf->Open();
         $this->pdf->setAuthor(AUTOR,true);
-        $creador = CENTRO . " " . APLICACION;
+        $creador = CENTRO . " " . PROGRAMA.VERSION;
         $this->pdf->setCreator(html_entity_decode($creador),true);
         $this->pdf->setSubject($this->def->Titulo,true);
         $this->pdf->setAutoPageBreak(true, 10);
