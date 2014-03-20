@@ -206,6 +206,11 @@ class Mantenimiento {
                     $this->campoBusca = $dato[1];
                     $valor = '<a title="Inventario de ' . $valor . '" $target="_blank" href="index.php?informeInventario&opc=listar' . $datoEnlace . '&id=' . $id . '">' . $valor;
                 }
+                if (strstr($this->campos[$clave]['Comment'], "imagen") && isset($valor)) {
+                    $msj = '<button type="button" data-toggle="modal" data-target="#mensajeModal' . $id .'">'.$valor.'</button>';
+                    $msj .= $this->creaModal($valor, $id);
+                    $valor = $msj;
+                }
                 if ($this->campos[$clave]['Type'] == "Boolean(1)") {
                     $checked = $valor == '1' ? 'checked' : '';
                     $valor = '<input type="checkbox" disabled ' . $checked . '>';
@@ -594,6 +599,10 @@ class Mantenimiento {
                     $salida .= '</div></div>';
                     continue;
                 }
+                if ($tipoCampo == "imagen(".$tamano.")") {
+                    $salida .= $this->creaCampoImagen($campo, $valorDato);
+                    continue;
+                }
                 //Si no es una clave foránea añade un campo de texto normal
                 $salida.='<input class="form-control" type="' . $tipo_campo . '" name="' . $campo . '" value="' . $valorDato .
                         '" maxlength="' . $tamano . '" size="' . (string) (intval($tamano) + 5) . '" ' . $modoEfectivo . " ><br><br>\n";
@@ -613,6 +622,56 @@ class Mantenimiento {
         $salida .= '&nbsp;&nbsp;<button type=submit class="btn btn-primary">Aceptar</button>';
         $salida .= '<br></center></div>';
         return $salida;
+    }
+    
+    protected function creaCampoImagen($campo, $valor)
+    {
+        
+        if (file_exists($valor)) {
+            //El fichero existe.
+            $existe = true;
+            $tipo = "fileinput-exists";
+        } else {
+            $tipo = "fileinput-new";
+            $existe = false;
+        }
+        $mensaje = '
+                <div class="fileinput ' . $tipo . '" data-provides="fileinput">
+                <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;"><img src="img/sinImagen.gif" /></div>
+                <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;">';
+
+        if ($existe) {
+            $mensaje .= '<img src="' . $valor . '" onclick="$('."'#mensajeModal1'".').modal();">';
+        }
+        $mensaje .= '    
+                </div>
+                <div>
+                <span class="btn btn-default btn-file"><span class="fileinput-new">Añadir</span><span class="fileinput-exists">Cambiar</span><input type="file" name="imagen" /></span>
+                <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Eliminar</a>';
+
+        if ($existe) {
+            $mensaje .='<input type="hidden" name="' . $campo . '" value="' . $valor . '">';
+        }
+
+        $mensaje .='
+                </div>
+                </div>';
+        $mensaje .= $this->creaModal($valor, 1);
+        return $mensaje;
+ 
+    }
+    
+    private function creaModal($valor, $id)
+    {
+        $mensaje .= '
+                <div id="mensajeModal'.$id.'" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                <div class="modal-dialog text-center">
+                <div class="modal-content text-center">
+                <img src="' . $valor . '">
+                </div>
+                </div>
+                </div>';
+        return $mensaje;
     }
 
     protected function errorBD($comando, $texto = "", $tipo = "danger", $cabecera = "&iexcl;Atenci&oacute;n!")
