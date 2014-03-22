@@ -134,7 +134,7 @@ class Imagen {
     {
         $zebra = new Zebra_Image();
         $zebra->source_path = $this->archivoSubido;
-        $this->archivoComprimido = $id . "." . $this->extension;
+        $this->archivoComprimido = $this->dirData . "/" . $id . "." . $this->extension;
         $zebra->target_path = $this->archivoComprimido;
         $zebra->jpeg_quality = 100;
 
@@ -169,8 +169,8 @@ class Imagen {
             }
             return false;
         } else {
-            //
-            //unlink($this->archivoSubido);
+            //Borra el archivo subido
+            unlink($this->archivoSubido);
             return true;
         }
     } 
