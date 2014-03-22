@@ -207,7 +207,7 @@ class Mantenimiento {
                     $valor = '<a title="Inventario de ' . $valor . '" $target="_blank" href="index.php?informeInventario&opc=listar' . $datoEnlace . '&id=' . $id . '">' . $valor;
                 }
                 if (strstr($this->campos[$clave]['Comment'], "imagen") && isset($valor)) {
-                    $msj = '<button type="button" data-toggle="modal" data-target="#mensajeModal' . $id .'">'.$valor.'</button>';
+                    $msj = '<button class="btn btn-info btn-xs" type="button" data-toggle="modal" data-target="#mensajeModal' . $id .'">Imagen</button>';
                     $msj .= $this->creaModal($valor, $id);
                     $valor = $msj;
                 }
@@ -312,6 +312,7 @@ class Mantenimiento {
         $comando = "insert into " . $this->tabla . " (";
         $lista = explode("&", $_POST['listacampos']);
         $primero = true;
+        $hayImagen = false;
         //Añade la lista de campos
         foreach ($lista as $campo) {
             if ($campo == "") {
@@ -344,7 +345,22 @@ class Mantenimiento {
                 }
                 $valor = $_POST[$campo] == "on" ? '1' : $valor;
             } else {
-                $valor = $_POST[$campo] == "" ? "null" : '"' . $_POST[$campo] . '"';
+                if (stristr("imagen", $this->campos[$campo]['Type'])) {
+                    //procesa el envío de la imagen
+                    $imagen = new Imagen();
+                    $accion = $imagen->determinaAccion($campo);
+                    if ($accion != NOHACERNADA) {
+                        // El código 3 es no hacer nada.
+                        $mensaje = "";
+                        if (!$imagen->procesaEnvio("insertar", $campo, $mensaje)) {
+                            return $this->panelMensaje($mensaje, "danger", "ERROR PROCESANDO IMAGEN");
+                        }
+                        $hayImgen = true;
+                    }
+                    
+                } else {
+                    $valor = $_POST[$campo] == "" ? "null" : '"' . $_POST[$campo] . '"';
+                }
             }
             $comando.="$coma " . $valor;
         }
@@ -352,12 +368,57 @@ class Mantenimiento {
         if (!$this->bdd->ejecuta($comando)) {
             return $this->errorBD($comando);
         }
+        $id = $this->bdd->ultimoId();
+        if ($hayImagen) {
+            //Tiene que recuperar el id del registro insertado y actualizar el archivo de imagen
+            if (!$imagen->mueveImagenId($id, $mensaje)) {
+                return $this->panelMensaje($mensaje, "danger", "ERROR COMPRIMIENDO IMAGEN");
+            }
+            $comando = "update " . $this->tabla . " set " . $campo . "='" . $imagen->archivoComprimido . "' where id='" . $id ."';";
+            if (!$this->bdd->ejecuta($comando)) {
+                return $this->errorBD($comando);
+            }
+        }
         $this->datosURL['opc'] = 'inicial';
         $this->datosURL['id'] = null;
         $cabecera = "refresh:".PAUSA.";url=".$this->montaURL();
         header($cabecera);
-        return $this->panelMensaje("Se ha insertado el registro con la clave " . $this->bdd->ultimoId(), "info", "Informaci&oacute;n");
+        return $this->panelMensaje("Se ha insertado el registro con la clave " . $id, "info", "Informaci&oacute;n");
         //return "<h1><a href=\"".$this->montaURL()."\">Se ha insertado el registro con la clave " . $this->bdd->ultimoId() . "</a></h1>";
+    }
+    
+    private function procesaEnvioImagen($operacion, $campo)
+    {
+      
+        switch ($operacion) {
+        /*
+         * Insertar:
+         * Ha incluido archivo? sino fin
+         * Si se ha incluido ¿se ha subido correctamente? sino error
+         * mover archivo a tmp con un nombre
+         * comprimir con un nombre genérico y único en la carpeta de datos
+         * devolver el nombre del archivo creado como valor a guardar en el campo imagen
+         * (se podría activar una vez insertado el registro que se renombrara el archivo con el id del elemento y se cambiara el campo)
+         */
+
+        
+        /*
+         * Borrar:
+         * Hay imagen asociada? sino fin
+         * Se borra el archivo de imagen del directorio de datos
+         */
+        
+        /*
+         * Modificar:
+         * Casuística:
+         *  1: No existe imagen ni antes ni ahora.
+         *  2: No existía imagen y ahora sí
+         *  3: Existía imagen y ahora no
+         *  4: Existía imagen antes y ahora y es la misma
+         *  5: Existía imagen antes y ahora y es distinta
+         */
+        
+        }
     }
 
     protected function modificar()
@@ -667,7 +728,8 @@ class Mantenimiento {
                 <div id="mensajeModal'.$id.'" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                 <div class="modal-dialog text-center">
                 <div class="modal-content text-center">
-                <img src="' . $valor . '">
+                <img src="' . $valor . '" class="img-responsive">
+                <label>Archivo: ' . $valor . '</label>
                 </div>
                 </div>
                 </div>';
@@ -692,7 +754,8 @@ class Mantenimiento {
         $mensaje .= '</div>';
         $mensaje .= '</div>';
         return $mensaje;
-    }           
+    }
+    
 }
 
 ?>
