@@ -30,9 +30,9 @@ class Imagen {
     private $extension;
     private $dirData;
     
-    public function __construct($directorio = "img.data")
+    public function __construct()
     {
-        $this->dirData = $directorio;
+        $this->dirData = IMAGEDATA;
     }
     
     public function determinaAccion($campo)
@@ -40,7 +40,7 @@ class Imagen {
         if (isset($_POST[$campo]) && $_POST[$campo] == "") {
             return HAYQUEBORRAR; //Hay que borrar el archivo de imagen
         } elseif ($_FILES[$campo]['error'] == 0) {
-            return HAYQUEGUARDAR; //Hay que guardar el archivo de imagen enviado
+            return HAYQUEGRABAR; //Hay que guardar el archivo de imagen enviado
         } else {
             return NOHACERNADA; //No hay que hacer nada
         }
@@ -101,33 +101,24 @@ class Imagen {
         }
     }
     
-    public function mueveImagenId($id, &$mensaje)
+    public static function borraImagenId($tabla, $id)
     {
-        if (!$this->comprimeArchivo($id, $mensaje)) {
+        $extensiones = array ("png", "gif", "jpg");
+        foreach ($extensiones as $extension) {
+            $archivo = IMAGEDATA . "/" . $tabla . "_" . $id . "." . $extension;
+            if (file_exists($archivo)) {
+                unlink ($archivo);
+            }
+        }
+    }
+    
+    public function mueveImagenId($tabla, $id, &$mensaje)
+    {
+        if (!$this->comprimeArchivo($tabla . "_" . $id, $mensaje)) {
             return false;
         } else {
             return true;
         }       
-    }
-    
-    private function generaNombre()
-    {
-        //De momento no se utiliza
-        $i = 0;
-        $salir = false;
-        $nombre = strftime("%Y%m%d%H%M%S");
-        //limita a 1000 intentos el buscar un archivo inexistente
-        while ($i++<1000 and !$salir) {
-            $test = $nombre . $i;
-            $fichero = $this->dirData . "/" . $test . "." . $this->extension; 
-            if (!file_exists($fichero)) {
-                $salir = true;
-            }
-        }
-        if (!salir) {
-            throw new Exception("No se ha podido encontrar un nombre de archivo único en ".$this->dirData, 1);
-        }
-        return $fichero;
     }
     
     private function comprimeArchivo($id, &$mensaje) 
