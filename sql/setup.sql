@@ -27,6 +27,7 @@ CREATE TABLE `Articulos` (
   `marca` varchar(20) default NULL COMMENT 'ordenable',
   `modelo` varchar(20) default NULL COMMENT 'ordenable',
   `cantidad` int(11) default NULL COMMENT 'ordenable',
+  `imagen` varchar(45) default NULL COMMENT 'imagen',
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=785 DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
@@ -46,6 +47,7 @@ CREATE TABLE `Elementos` (
   `numserie` varchar(30) default NULL COMMENT 'ordenable',
   `cantidad` int(10) unsigned default NULL COMMENT 'ordenable',
   `fechaCompra` date NOT NULL COMMENT 'ordenable',
+  `imagen` varchar(45) default NULL COMMENT 'imagen',
   PRIMARY KEY  (`id`),
   KEY `id` (`id`),
   KEY `id_Articulo` (`id_Articulo`),

@@ -206,6 +206,11 @@ class Mantenimiento {
                     $this->campoBusca = $dato[1];
                     $valor = '<a title="Inventario de ' . $valor . '" $target="_blank" href="index.php?informeInventario&opc=listar' . $datoEnlace . '&id=' . $id . '">' . $valor;
                 }
+                if (strstr($this->campos[$clave]['Comment'], "imagen") && isset($valor)) {
+                    $msj = '<button class="btn btn-info btn-xs" type="button" data-toggle="modal" data-target="#mensajeModal' . $id .'">Imagen</button>';
+                    $msj .= $this->creaModal($valor, $id);
+                    $valor = $msj;
+                }
                 if ($this->campos[$clave]['Type'] == "Boolean(1)") {
                     $checked = $valor == '1' ? 'checked' : '';
                     $valor = '<input type="checkbox" disabled ' . $checked . '>';
@@ -297,6 +302,8 @@ class Mantenimiento {
         }
         $this->datosURL['opc'] = 'inicial';
         $this->datosURL['id'] = null;
+        //Comprueba si existe la imagen en datos para borrarla.
+        Imagen::borraImagenId($this->tabla, $id);
         $url = $this->montaURL();
         header('Location: ' . $url);
         return;
@@ -307,6 +314,7 @@ class Mantenimiento {
         $comando = "insert into " . $this->tabla . " (";
         $lista = explode("&", $_POST['listacampos']);
         $primero = true;
+        $hayImagen = false;
         //Añade la lista de campos
         foreach ($lista as $campo) {
             if ($campo == "") {
@@ -339,7 +347,21 @@ class Mantenimiento {
                 }
                 $valor = $_POST[$campo] == "on" ? '1' : $valor;
             } else {
-                $valor = $_POST[$campo] == "" ? "null" : '"' . $_POST[$campo] . '"';
+                if (stristr($this->campos[$campo]['Comment'], "imagen")) {
+                    //procesa el envío de la imagen
+                    $imagen = new Imagen();
+                    $accion = $imagen->determinaAccion($campo);
+                    if ($accion != NOHACERNADA) {
+                        $mensaje = "";
+                        if (!$imagen->procesaEnvio($campo, $mensaje)) {
+                            return $this->panelMensaje($mensaje, "danger", "ERROR PROCESANDO IMAGEN");
+                        }
+                        $hayImagen = true;
+                        $campoImagen = $campo;
+                    }                  
+                } else {
+                    $valor = $_POST[$campo] == "" ? "null" : '"' . $_POST[$campo] . '"';
+                }
             }
             $comando.="$coma " . $valor;
         }
@@ -347,14 +369,25 @@ class Mantenimiento {
         if (!$this->bdd->ejecuta($comando)) {
             return $this->errorBD($comando);
         }
+        $id = $this->bdd->ultimoId();
+        if ($hayImagen) {
+            //Tiene que recuperar el id del registro insertado y actualizar el archivo de imagen
+            if (!$imagen->mueveImagenId($this->tabla, $id, $mensaje)) {
+                return $this->panelMensaje($mensaje, "danger", "ERROR COMPRIMIENDO IMAGEN");
+            }
+            $comando = "update " . $this->tabla . " set " . $campoImagen . "='" . $imagen->archivoComprimido . "' where id='" . $id ."';";
+            if (!$this->bdd->ejecuta($comando)) {
+                return $this->errorBD($comando);
+            }
+        }
         $this->datosURL['opc'] = 'inicial';
         $this->datosURL['id'] = null;
         $cabecera = "refresh:".PAUSA.";url=".$this->montaURL();
         header($cabecera);
-        return $this->panelMensaje("Se ha insertado el registro con la clave " . $this->bdd->ultimoId(), "info", "Informaci&oacute;n");
+        return $this->panelMensaje("Se ha insertado el registro con la clave " . $id, "info", "Informaci&oacute;n");
         //return "<h1><a href=\"".$this->montaURL()."\">Se ha insertado el registro con la clave " . $this->bdd->ultimoId() . "</a></h1>";
     }
-
+    
     protected function modificar()
     {
         //Los datos a utilizar para actualizar la tupla vienen en $_POST.
@@ -382,10 +415,34 @@ class Mantenimiento {
                 $valor = $_POST[$campo] == "on" ? '1' : $valor;
                 $comando.=$coma . ' ' . $campo . '="' . $valor . '"';
             } else {
-                if (strlen(trim($_POST[$campo])) == 0) {
-                    $comando.="$coma $campo=null";
+                if (stristr($this->campos[$campo]['Comment'], "imagen")) {
+                    $valor = $_POST[$campo];
+                    $imagen = new Imagen();
+                    $accion = $imagen->determinaAccion($campo);
+                    if ($accion != NOHACERNADA) {
+                        if ($accion == HAYQUEGRABAR) {
+                            $mensaje = "";
+                            if (!$imagen->procesaEnvio($campo, $mensaje)) {
+                                return $this->panelMensaje($mensaje, "danger", "ERROR PROCESANDO IMAGEN");
+                            }
+                            $mensaje = "";
+                            if (!$imagen->mueveImagenId($this->tabla, $this->datosURL['id'], $mensaje)) {
+                                return $this->panelMensaje($mensaje, "danger", "ERROR COMPRIMIENDO IMAGEN");
+                            }                                    
+                            $comando .= "$coma $campo='" . $imagen->archivoComprimido . "'";
+                        } else {
+                            //Hay que borrar
+                            Imagen::borraImagenId($this->tabla, $this->datosURL['id']);
+                            $extensiones = array("png", "jpg", "gif");
+                            $comando .= "$coma $campo=null";
+                        }
+                    }
                 } else {
-                    $comando.=$coma . ' ' . $campo . '="' . $_POST[$campo] . '"';
+                    if (strlen(trim($_POST[$campo])) == 0) {
+                        $comando.="$coma $campo=null";
+                    } else {
+                        $comando.=$coma . ' ' . $campo . '="' . $_POST[$campo] . '"';
+                    }
                 }
             }
         }
@@ -532,7 +589,7 @@ class Mantenimiento {
                 break;
         }
         $accion = $this->montaURL();
-        $salida.='<div class="col-sm-8"><form name="mantenimiento.form" class="form-horizontal" role="form" method="post" action="' . $accion . '">' . "\n";
+        $salida.='<div class="col-sm-8"><form name="mantenimiento.form" enctype="multipart/form-data" class="form-horizontal" role="form" method="post" action="' . $accion . '">' . "\n";
         $salida.="<fieldset style=\"width: 96%;\"><p><legend style=\"color: red;\"><b>$tipo</b></legend>\n";
         foreach ($this->campos as $clave => $valor) {
             if ($valor["Editable"] == "no") {
@@ -594,6 +651,14 @@ class Mantenimiento {
                     $salida .= '</div></div>';
                     continue;
                 }
+                if (stristr($this->campos[$campo]['Comment'], "imagen")) {
+                    $salida .= $this->creaCampoImagen($campo, $valorDato, $tipo);
+                    continue;
+                }
+                if (stristr($this->campos[$campo]['Type'], "int")) {
+                    $tipo_campo = "number";
+                    $modoEfectivo .= ' onkeypress = "if ( isNaN(this.value + String.fromCharCode(event.keyCode) )) return false;" ';
+                }
                 //Si no es una clave foránea añade un campo de texto normal
                 $salida.='<input class="form-control" type="' . $tipo_campo . '" name="' . $campo . '" value="' . $valorDato .
                         '" maxlength="' . $tamano . '" size="' . (string) (intval($tamano) + 5) . '" ' . $modoEfectivo . " ><br><br>\n";
@@ -614,6 +679,58 @@ class Mantenimiento {
         $salida .= '<br></center></div>';
         return $salida;
     }
+    
+    protected function creaCampoImagen($campo, $valor, $tipoAccion)
+    {
+        
+        if (file_exists($valor)) {
+            //El fichero existe.
+            $existe = true;
+            $tipo = "fileinput-exists";
+        } else {
+            $tipo = "fileinput-new";
+            $existe = false;
+        }
+        $mensaje = '
+                <div class="fileinput ' . $tipo . '" data-provides="fileinput">
+                <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;"><img src="img/sinImagen.gif" /></div>
+                <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;">';
+
+        if ($existe) {
+            $mensaje .= '<img src="' . $valor . '" onclick="$('."'#mensajeModal1'".').modal();">';
+        }
+        $mensaje .= '</div>';
+        if ($tipoAccion == ANADIR || $tipoAccion == EDICION) {
+            $mensaje .= '<div>
+                <span class="btn btn-default btn-file" ><span class="fileinput-new">Añadir</span><span class="fileinput-exists">Cambiar</span><input type="file" name="imagen" /></span>
+                <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Eliminar</a>';
+        }
+        if ($existe) {
+            $mensaje .='<input type="hidden" name="' . $campo . '" value="' . $valor . '">';
+        }
+
+        $mensaje .='</div>';
+        if ($tipoAccion == ANADIR || $tipoAccion == EDICION) {        
+            $mensaje .= '</div>';
+        }
+        $mensaje .= $this->creaModal($valor, 1);
+        return $mensaje;
+ 
+    }
+    
+    private function creaModal($valor, $id)
+    {
+        $mensaje .= '
+                <div id="mensajeModal'.$id.'" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                <div class="modal-dialog text-center">
+                <div class="modal-content text-center">
+                <img src="' . $valor . '" class="img-responsive">
+                <label>Archivo: ' . $valor . '</label>
+                </div>
+                </div>
+                </div>';
+        return $mensaje;
+    }
 
     protected function errorBD($comando, $texto = "", $tipo = "danger", $cabecera = "&iexcl;Atenci&oacute;n!")
     {
@@ -633,7 +750,8 @@ class Mantenimiento {
         $mensaje .= '</div>';
         $mensaje .= '</div>';
         return $mensaje;
-    }           
+    }
+    
 }
 
 ?>

@@ -39,4 +39,5 @@ define('COLORLAT', '#46d6db'); //Color de la barra de menú lateral
 define('COLORFON', '#a4bdfc'); //Color del fondo de la pantalla
 define('MYSQLDUMP', '/usr/local/bin/mysqldump'); //camino a mysqldump
 define('GZIP', '/usr/bin/gzip'); //Camino a gzip
+define('IMAGEDATA', 'img.data'); //Directorio donde se almacenarán las imágenes
 ?>

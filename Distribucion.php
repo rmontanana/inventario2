@@ -70,7 +70,7 @@ class Distribucion {
 //            if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'],'gzip')) {
 //                // introducimos la cabecera que indica que el contenido está comprimido
 //                header('Content-Encoding: gzip');
-//                // y comprime al m�ximo la información antes de enviarla
+//                // y comprime al máximo la información antes de enviarla
 //                return gzencode($pagina, 9);
 //            }
             return $pagina; // enviamos sin comprimir
