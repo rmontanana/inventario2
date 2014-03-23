@@ -124,14 +124,14 @@ class AportaContenido {
     public function __call($metodo, $parametros) {
         switch ($metodo) { // Dependiendo del método invocado
             case 'titulo': // devolvemos el título
-                return PROGRAMA.VERSION;
+                return PROGRAMA." v".VERSION;
             case 'usuario':
                 if ($this->registrado)
                     return "Usuario=$this->usuario";
                 else
                     return '';
             case 'fecha': return $this->fechaActual();
-            case 'aplicacion': return PROGRAMA.VERSION;
+            case 'aplicacion': return PROGRAMA." v".VERSION;
             case 'menu': // el menú
                 if ($this->registrado) {
                     return $this->miMenu->insertaMenu();
@@ -187,7 +187,7 @@ class AportaContenido {
                     case 'ubicaciones':
                     case 'test':
                     case 'elementos':
-                        $this->cargaDatosURL();
+                        $this->DatosURL();
                         if ($this->datosURL['opc'] == "informe") {
                             if (!$this->pefil['Informe']) {
                                 $this->procesaURL();
@@ -284,31 +284,19 @@ class AportaContenido {
                         }
                     case 'copiaseg':
                         if ($this->perfil['Config']) {
-                            $archivo_sql = "tmp/copiaseg.sql";
-                            $archivo = $archivo_sql . ".gz";
-                            if (file_exists($archivo)) {
-                                unlink($archivo);
-                            }
-                            $comando = escapeshellcmd(MYSQLDUMP . ' -h ' . SERVIDOR . ' -P ' . PUERTO . ' -u ' . USUARIO . ' --password=' . CLAVE . ' --result-file=' . $archivo_sql . ' ' . BASEDATOS);                                                       
-                            $comando2 = escapeshellcmd(GZIP . ' -9f ' . $archivo_sql);                                    
-                            exec($comando);
-                            exec($comando2);
-                            if (filesize($archivo) < 1024) {
-                                //No se ha realizado la copia de seguridad
-                                $mensaje = "La copia de seguridad no se ha realizado correctamente.<br><br>";
-                                $mensaje .= "Compruebe que las rutas a los programas mysqldump y gzip en configuraci&oacute;n est&aacute;n correctamente establecidas ";
-                                $mensaje .= "y que los datos de acceso a la base de datos sean correctos.<br>";
-                                $mensaje .= "mysqldump=[" . MYSQLDUMP . "]<br>";
-                                $mensaje .= "gzip=[" . GZIP . "]";
-                                $cabecera = "ERROR";
-                                $tipo = "danger";
+                            $copia = new CopiaSeguridad();
+                            if ($_GET['confirmado'] == "1") {
+                                if (!$copia->creaCopia()) {
+                                    $tipo = "danger";
+                                    $cabecera = "ERROR";
+                                } else {
+                                    $tipo = "info";
+                                    $cabecera = "INFORMACIÓN";
+                                }
+                                return $this->panel($cabecera, $copia->mensaje(), $tipo);
                             } else {
-                                $mensaje .= 'Copia de seguridad realizada con &eacute;xito.<br><br>Pulse sobre el siguiente enlace para descargar:<br><br>';
-                                $mensaje .= '<a href="' . $archivo . '">Descargar Copia de Seguridad de Datos</a><br>';
-                                $cabecera = "Informaci&oacute;n";
-                                $tipo = "success";
+                                return $copia->dialogo();
                             }
-                            return $this->panel($cabecera,$mensaje,$tipo);
                         } else {
                             return $this->mensajePermisos("Copias de seguridad");
                         }
