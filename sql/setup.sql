@@ -68,6 +68,7 @@ SET character_set_client = utf8;
 CREATE TABLE `Ubicaciones` (
   `id` smallint(5) unsigned NOT NULL auto_increment,
   `Descripcion` varchar(50) NOT NULL COMMENT 'ordenable,link/Ubicacion',
+  `imagen` varchar(45) DEFAULT NULL COMMENT 'imagen',
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=184 DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
