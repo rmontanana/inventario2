@@ -358,7 +358,9 @@ class Mantenimiento {
                         }
                         $hayImagen = true;
                         $campoImagen = $campo;
-                    }                  
+                    } else {
+                        $valor = "null";
+                    }
                 } else {
                     $valor = $_POST[$campo] == "" ? "null" : '"' . $_POST[$campo] . '"';
                 }
