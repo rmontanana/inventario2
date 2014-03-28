@@ -175,16 +175,17 @@ class InformeInventario {
     }
 
     private function formulario($accion, $etiqueta, $lista) {
-        $salida = '<div class="col-sm-2 col-md-6"><form name="informeInventario.form" method="post" action="' . $accion . '">' . "\n";
+        $salida ='<div class="col-sm-6 col-md-6"><form name="informeInventario.form" method="post" action="' . $accion . '">' . "\n";
         $salida.="<fieldset style=\"width: 96%;\"><p><legend style=\"color: red;\"><b>Elige $etiqueta</b></legend>\n";
         $salida.="<br><br><label>$etiqueta</label>";
         $salida.=$lista;
-        $salida.="<br><br><label for='salida'>Salida del informe por:</label>";
-        $salida.='<div class="radio"><label><input type="radio" name="salida" value="pantalla" checked>Pantalla</label></div>';
-        $salida.='<div class="radio"><label><input type="radio" name="salida" value="csv">Archivo CSV</label></div>';
-        $salida.='<div class="radio"><label><input type="radio" name="salida" value="etiquetas">Etiquetas</label></div>';
+        $salida.="<br><br>
+            <label for='salida'>Salida del informe por:</label>";
+        $salida.='<div class="radio"><label><input type="radio" name="salida" value="pantalla" checked><span class="glyphicon glyphicon-list-alt"></span> Pantalla</label></div>';
+        $salida.='<div class="radio"><label><input type="radio" name="salida" value="csv"><span class="glyphicon glyphicon-cloud-download"></span> Archivo CSV</label></div>';
+        $salida.='<div class="radio"><label><input type="radio" name="salida" value="etiquetas"><span class="glyphicon glyphicon-qrcode"></span> Etiquetas</label></div>';
         $salida.="<br><br></fieldset><p>";
-        $salida.='<p align="center"><button type=submit class="btn btn-primary">Aceptar</button></p><br></div>' . "\n";
+        $salida.='<p align="center"><button type=submit class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Aceptar</button></p><br></div>' . "\n";
         return $salida;
     }
 

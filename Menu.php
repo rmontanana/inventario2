@@ -44,7 +44,9 @@ class Menu {
             if ($tipo==2)
                 $salida.='<li class="active"><a href="'.$enlace.'" target="'.$destino.'" title="'.$titulo.'">'.$opcion.'</a><br /></li>';
             else
-                $salida.='<label class="key">'.$opcion.'</label><br/>';
+                $salida.=
+                    //'<span class="label label-default">'.$opcion.'</span><br>';
+                    '<label class="">'.$opcion.'</label><br/>';
         }
         return $salida;
     }

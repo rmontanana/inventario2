@@ -80,7 +80,7 @@ class Configuracion {
         }
         $salida.=$this->formulario();
         if ($grabar) {
-            $salida.='<p class="bg-primary">Configuraci&oacute;n guardada correctamente</p>';
+            $salida.='<div class="alert alert-success">Configuraci&oacute;n guardada correctamente</div>';
             fclose($fsalida);
             //unlink($this->confAnterior);
             rename($this->configuracion, $this->confAnterior);
@@ -142,7 +142,7 @@ class Configuracion {
         $salida.='<tr><td>Clave</td><td><input type="text" name="CLAVE" value="' . $this->datosConf['CLAVE'] . '" size="30" /></td></tr>';
         $salida.='<tr><td>mysqldump</td><td><input type="text" name="MYSQLDUMP" value="' . $this->datosConf['MYSQLDUMP'] . '" size="30" /></td></tr>';
         $salida.='<tr><td>gzip</td><td><input type="text" name="GZIP" value="' . $this->datosConf['GZIP'] . '" size="30" /></td></tr>';
-        $salida.='<tr align=center><td colspan=2><input type="submit" class="btn btn-primary" align="center" value="Aceptar" name="aceptar" /></td></tr></p>';
+        $salida.='<tr align=center><td colspan=2><button type="submit" class="btn btn-primary" name="aceptar"><span class="glyphicon glyphicon-ok"></span> Aceptar</td></tr></p>';
         $salida.='</form></div></center>';
         $salida.="<script>
                         $(document).ready(function() {
