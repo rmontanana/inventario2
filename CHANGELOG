@@ -16,3 +16,4 @@ Versión 1.06 28-03-2014
                  Cambios en las dimensiones de los contenedores para mejorar la visualización.
 -img/fondos: Añadidos algunos ficheros de texturas para poder utilizarlos en el futuro.
 -CHANGELOG: Añadido este fichero para llevar un registro de cambios entre versiones.
+-img: Cambiadas las flechas de sentido ascendente y descendente (intercambiar) para ser coherente con las indicaciones en la cabecra de la tabla.
