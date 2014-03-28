@@ -6,7 +6,7 @@
             FROM Usuarios {buscar} {orden} limit {inferior}, {superior};
     </Consulta>
     <Campos>
-        <Col Campo="id" Nombre="id" Ancho="5" Ajuste="D" Titulo="id" Tipo="int(6)"/>
+        <Col Campo="id" Nombre="id" Ancho="5" Ajuste="D" Titulo="id" Tipo="int(6)" Varios="ordenable"/>
         <Col Campo="nombre" Nombre="nombre" Ancho="8" Ajuste="L" Titulo="Nombre" Varios="ordenable,buscable/nombre" Editable="si"/>
         <Col Campo="clave" Nombre="clave" Ancho="16" Ajuste="L" Titulo="Clave" Tipo="Password" Editable="si"/>
         <Col Campo="idSesion" Nombre="idSesion" Ancho="32" Ajuste="L" Titulo="id Sesión" Editable="si"/>

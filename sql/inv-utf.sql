@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `Articulos`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `Articulos` (
-  `id` smallint(6) NOT NULL auto_increment,
+  `id` smallint(6) NOT NULL auto_increment COMMENT 'ordenable',
   `descripcion` varchar(60) NOT NULL COMMENT 'ordenable,link/Articulo',
   `marca` varchar(20) default NULL COMMENT 'ordenable',
   `modelo` varchar(20) default NULL COMMENT 'ordenable',
@@ -51,7 +51,7 @@ DROP TABLE IF EXISTS `Elementos`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `Elementos` (
-  `id` int(10) unsigned NOT NULL auto_increment,
+  `id` int(10) unsigned NOT NULL auto_increment COMMENT 'ordenable',
   `id_Articulo` smallint(6) NOT NULL COMMENT 'foreign(Articulos;id),ordenable',
   `id_Ubicacion` smallint(5) unsigned NOT NULL COMMENT 'foreign(Ubicaciones;id),ordenable',
   `numserie` varchar(30) default NULL COMMENT 'ordenable',
@@ -85,7 +85,7 @@ DROP TABLE IF EXISTS `Ubicaciones`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `Ubicaciones` (
-  `id` smallint(5) unsigned NOT NULL auto_increment,
+  `id` smallint(5) unsigned NOT NULL auto_increment COMMENT 'ordenable',
   `Descripcion` varchar(50) NOT NULL COMMENT 'ordenable,link/Ubicacion',
   `imagen` varchar(45) DEFAULT NULL COMMENT 'imagen',
   PRIMARY KEY  (`id`)
@@ -110,7 +110,7 @@ DROP TABLE IF EXISTS `Usuarios`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `Usuarios` (
-  `id` int(10) unsigned NOT NULL auto_increment,
+  `id` int(10) unsigned NOT NULL auto_increment COMMENT 'ordenable',
   `nombre` varchar(16) NOT NULL default '',
   `clave` varchar(32) NOT NULL default '',
   `idSesion` varchar(20) NOT NULL default '',
