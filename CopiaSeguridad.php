@@ -45,8 +45,9 @@ class CopiaSeguridad {
         $dialogo = '<div class="container col-5"><div class="jumbotron">
                       <h1>Copia de Seguridad</h1>
                       <p>¿Desea realizar una copia de seguridad de todos los datos de la Base de Datos y de todas las Imágenes?</p>
-                      <p><a class="btn btn-primary btn-lg" role="button" onClick="location.href=' . "'index.php'" . '">Volver</a>
-                         <a class="btn btn-success btn-lg" role="button" onClick="location.href=' . "'index.php?copiaseg&confirmado=1'" . '">Continuar</a></p>
+                      <p><a class="btn btn-primary btn-lg" role="button" onClick="location.href=' . "'index.php'" . '"><span class="glyphicon glyphicon-arrow-left"></span> Volver</a>
+                         <a class="btn btn-success btn-lg" role="button" onClick="location.href=' . "'index.php?copiaseg&confirmado=1'" . '">
+                             <span class="glyphicon glyphicon-cloud-download"></span> Continuar</a></p>
                     </div></div>';
         return $dialogo;
     }

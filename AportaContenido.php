@@ -25,7 +25,7 @@ define('PIE', '<center><a target="_blank" href="http://www.gnu.org/licenses/gpl-
         '<a target="_blank" href="http://www.php.net"><img src="img/php.gif" alt="PHP Language" /></a> </center>');
 define('FORMULARIO_ACCESO', '<form name="formulario_acceso" action="index.php?registrarse" method="POST">' .
         'Usuario<br><input type="text" name="usuario" value="" size="8" /><br><br>Clave<br><input type="password" name="clave" value="" size="8" />' .
-        '<br><br><input type="submit" value="Iniciar" name="iniciar" /></form>');
+        '<br><br><button type="submit" name="iniciar" class="btn btn-primary">Iniciar <span class="glyphicon glyphicon-log-in"></span></button></form>');
 define('MENSAJE_DEMO', 'Puede Iniciar sesi&oacute;n con<br>usuario <i><b>demo</b></i><br>contrase&ntilde;a <i>demo</i><br>');
 define('USUARIO_INCORRECTO', '<label class="error">Usuario y clave incorrectos!</label><br><br>');
 
@@ -155,7 +155,7 @@ class AportaContenido {
                     case 'ubicaciones':
                     case 'usuarios':
                     case 'test':
-                        return "Mantenimiento de " . ucfirst($opcion);
+                        return "Mantenimiento " . ucfirst($opcion);
                     case 'configuracion':
                         return 'Configuraci&oacute;n y Preferencias';
                     case 'informeInventario':return "Informe de Inventario";
@@ -166,7 +166,7 @@ class AportaContenido {
                 return '';
             case 'control':
                 if ($this->registrado)
-                    return '<a href="index.php?cerrarSesion">Cerrar Sesi&oacute;n</a>';
+                    return '<a href="index.php?cerrarSesion">Cerrar Sesi&oacute;n <span class="glyphicon glyphicon-log-out"></span></a>';
                 else
                     return '';
             // Para incluir el contenido central de la página
@@ -248,8 +248,10 @@ class AportaContenido {
                         }
 
                     case 'bienvenido': // El usuario quiere iniciar sesión
-                        return 'Bienvenid@ ' . $this->usuario . '<br><br><center><img src="img/codigoBarras.png" alt="' . PROGRAMA . '">' .
-                                '<br><label>' . CENTRO . '</label></center><br><br>' . PIE;
+                        $mensaje = '<div class="alert alert-success">';
+                        $mensaje .= 'Bienvenid@ ' . $this->usuario . '</div><br><br><center><img src="img/codigoBarras.png" alt="' . PROGRAMA . '">' .
+                                '<br><label>' . CENTRO . '</label></center><br><br>' . PIE;;
+                        return $mensaje;
                     case 'configuracion':
                         if ($this->perfil['Config']) {
                             $conf = new Configuracion();

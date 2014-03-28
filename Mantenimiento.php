@@ -539,6 +539,12 @@ class Mantenimiento {
     {
         //$salida = '<p align="center"><table border=1 class="tablaDatos"><tbody>';
         $salida = '<p align="center"><table border=1 class="table table-striped table-bordered table-condensed table-hover"><tbody>';
+        if ($this->datosURL['sentido'] == 'asc') {
+            $sentidoFlecha = 'down';
+        } else {
+            $sentidoFlecha = 'up';
+        }
+        $flecha = '<span class="glyphicon glyphicon-chevron-'.$sentidoFlecha.'"></span>';
         foreach ($this->campos as $clave => $datos) {
             $comen = explode(",", $datos["Comment"]);
             $ordenable = false;
@@ -555,10 +561,12 @@ class Mantenimiento {
             $clave = str_ireplace("descripcion", "Descripci&oacute;n", $clave);
             $clave = str_ireplace("ubicacion", "Ubicaci&oacute;n", $clave);
             $clave = str_ireplace("articulo", "Art&iacute;culo", $clave);
+            $ordenActual = $this->datosURL['orden'];
             if ($ordenable) {
                 $this->backupURL();
                 $this->datosURL['orden'] = $clave2;
-                $salida.="<th><b><a title=\"Establece orden por $clave \" href=\"". $this->montaURL() . "\"> " . ucfirst($clave) . " </a></b></th>\n";
+                $resFlecha = $clave2 == $ordenActual ? $flecha : '';
+                $salida.="<th><b><a title=\"Establece orden por $clave \" href=\"". $this->montaURL() . "\"> " . ucfirst($clave) . $resFlecha . " </a></b></th>\n";
                 $this->restoreURL();
             } else {
                 $salida.='<th><b>' . ucfirst($clave) . '</b></th>' . "\n";
@@ -675,9 +683,9 @@ class Mantenimiento {
         $salida .= "</fieldset><p>";
         $salida .= '<center>';
         $this->datosURL['opc'] = 'inicial';
-        $salida .= '<button type="button" onClick="location.href=' . "'" . $this->montaURL() . "'" . '" class="btn btn-info">Volver</button>';
-        $salida .= '&nbsp;&nbsp;<button type="reset" class="btn btn-danger">Cancelar</button>';
-        $salida .= '&nbsp;&nbsp;<button type=submit class="btn btn-primary">Aceptar</button>';
+        $salida .= '<button type="button" onClick="location.href=' . "'" . $this->montaURL() . "'" . '" class="btn btn-info"><span class="glyphicon glyphicon-arrow-left"></span> Volver</button>';
+        $salida .= '&nbsp;&nbsp;<button type="reset" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>';
+        $salida .= '&nbsp;&nbsp;<button type=submit class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Aceptar</button>';
         $salida .= '<br></center></div>';
         return $salida;
     }
