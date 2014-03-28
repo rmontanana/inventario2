@@ -8,7 +8,7 @@
             Ubicaciones U on E.id_ubicacion=U.id  {buscar} {orden} limit {inferior},{superior};
     </Consulta>
     <Campos>
-        <Col Campo="id" Nombre="id" Ancho="5" Ajuste="D" Titulo="id" Tipo="smallint(6)"/>
+        <Col Campo="id" Nombre="id" Ancho="5" Ajuste="D" Titulo="id" Tipo="smallint(6)" Varios="ordenable"/>
         <Col Campo="id_Ubicacion" Nombre="ubicacion" Ancho="40" Ajuste="L" Titulo="Ubicación" Varios="ordenable,foreign(Ubicaciones->id;{Descripcion})" Editable="si"/>
         <Col Campo="id_Articulo" Nombre="articulo" Ancho="40" Ajuste="L" Titulo="Artículo" Varios="ordenable,buscable/A.Descripcion,foreign(Articulos->id;{Descripcion/Marca/Modelo})" Editable="si"/>
         <Col Nombre="marca" Ancho="40" Ajuste="L" Titulo="Marca" Varios="ordenable" Editable="no"/>
