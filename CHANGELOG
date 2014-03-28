@@ -1,0 +1,19 @@
+Versión 1.06 28-03-2014
+-Configuracion: Añadido icono en el botón de aceptar.
+                Cambiado el mensaje de éxito en la grabación de los cambios.
+-CopiaSeguridad: Añadidos iconos en los botones de aceptar y volver.
+-Csv: Añadidos iconos en los botones de acción.
+-Importacion: Añadidos iconos en los botones de acción.
+              Cambiado el control de subida de fichero por el de Jasny.
+              Cambiado el formato para controlar las columnas que ocupa el formulario de subida para que sea 'responsive'
+-AportaContenido: Quitado 'de' del mensaje de opción actual en Mantenimiento para acortar mensaje.
+-InformeInventario: Añadidos iconos en los botones de acción.
+                    Cambiado el formato para que sea correcto en todas las resoluciones de pantalla.
+-Mantenimiento: Añadidos iconos en los botones de acción.
+                Añadidas flechas para indicar el campo que marca el orden de visualización.
+-bootstrap.html: Añadida la opción de cerrar sesión en resolución pequeña.
+                 Añadida una textura al fondo de la cabecera.
+                 Cambios en las dimensiones de los contenedores para mejorar la visualización.
+-img/fondos: Añadidos algunos ficheros de texturas para poder utilizarlos en el futuro.
+-CHANGELOG: Añadido este fichero para llevar un registro de cambios entre versiones.
+-img: Cambiadas las flechas de sentido ascendente y descendente (intercambiar) para ser coherente con las indicaciones en la cabecra de la tabla.

@@ -55,12 +55,32 @@ class Importacion {
 
     private function formulario() {
         $accion = "index.php?importacion&opc=importar";
-        $salida = '<form  enctype="multipart/form-data" name="importacion.form" method="post" action="' . $accion . '">' . "\n";
+        $salida .= '<script type="text/javascript" src="css/bootstrap-filestyle.min.js"> </script>';
+        $salida .='<div class="col-sm-6 col-md-6">';
+        $salida .= '<form  enctype="multipart/form-data" name="importacion.form" method="post" action="' . $accion . '">' . "\n";
         $salida .= "<fieldset style=\"width: 96%;\"><p><legend style=\"color: red;\"><b>Elige Archivo</b></legend>\n";
-        $salida .= '<input type="file" name="fichero" id="fichero" onChange="seleccionFichero(this);">';
-        $salida .= '<p align="center"><button class="btn btn-primary" type=submit>Aceptar</button></p><br>' . "\n";
-        $mensaje = utf8_decode('Sólo se permiten archivos con extensión CSV');
-        $salida .= "<script type='text/javascript'>
+        //$salida .= '<input type="file" name="fichero" id="fichero" onChange="seleccionFichero(this);" class="filestyle" data-classButton="btn btn-primary">';
+        //$salida .= '<input type="file" name="fichero" id="fichero" onChange="seleccionFichero(this);">';
+        //$salida .= '<input type="file" class="filestyle" data-input="false">';
+        $salida .= '<div class="fileinput fileinput-new" data-provides="fileinput">
+                        <div class="input-group">
+                            <div class="form-control" data-trigger="fileinput">
+                                <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                                <span class="fileinput-filename"></span>
+                            </div>
+                            <span class="input-group-addon btn btn-default btn-file">
+                            <span class="fileinput-new">
+                            <span class="glyphicon glyphicon-folder-open"></span> Selecciona fichero</span>
+                            <span class="fileinput-exists">Cambiar</span><input type="file" name="fichero" id="fichero" onChange="seleccionFichero(this);"></span>
+                            <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Eliminar</a>
+                        </div>
+                    </div>';
+        $salida .= '<p align="center"><button class="btn btn-primary" type=submit><span class="glyphicon glyphicon-cloud-upload"></span> Aceptar</button></p><br>' . "\n";
+        $salida .= '</div>';
+        $mensaje = 'Sólo se permiten archivos con extensión CSV';
+        $salida .= "<script type='text/javascript'>".'
+            //$(":file").filestyle({classButton: "btn btn-primary"});'."
+
                 function seleccionFichero(obj) {
                 var filePath = obj.value;
 

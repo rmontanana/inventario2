@@ -198,8 +198,8 @@ class Csv {
         $mensaje .= $this->panelMensaje('Si se produce cualquier error en el procesamiento del fichero, no se aplicar&aacute; ning&uacute;n cambio en la base de datos.');
 
         $mensaje .= '<form method="post" name="Aceptar" action="index.php?importacion&opc=ejecutar">
-                <input type="button" name="Cancelar" value="Cancelar" onClick="location.href=' . "'index.php'" . '" class="btn btn-danger">
-                <input type="submit" name="Aceptar" value="Aceptar" class="btn btn-primary">
+                <button type="button" name="Cancelar" value="Cancelar" onClick="location.href=' . "'index.php'" . '" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+                <button type="submit" name="Aceptar" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Aceptar</button>
                 <input type="hidden" name="ficheroCSV" value="' . $this->nombre . '">
                 </form></center>';
 

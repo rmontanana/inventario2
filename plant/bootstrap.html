@@ -22,7 +22,8 @@
         <script type="text/javascript" src="./css/jquery.min.js"></script>
     </head>
     <body>
-        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <!--<body style="background-image:url(img/fondos/old_map.png); background-repeat:repeat">-->
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="background-image: url(img/fondos/bo_play_pattern.png); background-repeat: repeat">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar">
@@ -34,7 +35,7 @@
                     <a class="navbar-brand" href="index.php">{aplicacion}</a>
                 </div>
                 <div class="navbar-brand">
-                    <span class="label label-primary col-sm-14 col-sm-offset-3">{opcion}</span>
+                    <span class="label label-primary col-sm-12 col-sm-offset-2 col-xs-12 col-xs-offset-0">{opcion}</span>
                     <!--<label class="warn">{opcion}</label>-->
                 </div>
                 <div class="navbar-collapse collapse">
@@ -47,11 +48,16 @@
                       <input type="text" class="form-control" placeholder="Buscar...">
                     </form>-->
                 </div>
+                <div class="visible-xs">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>{control}</li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-2 col-md-1 sidebar">
+                <div class="col-sm-2 col-md-1 sidebar" >
                     <!--<ul class="nav nav-sidebar">-->
                     <ul class="nav nav-sidebar">
                         <!--<li class="active">{menu}</li>-->
@@ -59,24 +65,6 @@
                     </ul>
                 </div>
                 <div class="col-sm-10 col-sm-offset-2 col-md-11 col-md-offset-1 main">
-                    <!--<h1 class="page-header">{opcion}</h1>-->
-                    <!--<div id="divBarra" class="progress progress-striped active">
-                        <div class="progress-bar" id="barra" role="progressbar" aria-valuenow="0" aria-valuemin="40" aria-valuemax="100" style="width: 0%">
-                            <span id="barra-valor">0% Completado</span>
-                        </div>
-                    </div>
-                    <script>
-                        function actProgreso(valor) {
-                            $('.progress-bar').width(valor+"%")
-                            $("#barra-valor").text(valor+"% Completado");
-                        }
-                        function visualizaProgreso() {
-                            $('#divBarra').style.visibility = "visible";
-                        }
-                        function escondeProgreso() {
-                            $('#divBara').style.visibility = "hidden";
-                        }
-                    </script>-->
                     {contenido}
                 </div>
             </div>
