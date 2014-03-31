@@ -147,7 +147,7 @@ class InformeInventario {
     }
 
     private function listaUbicaciones() {
-        $salida = "<select class=\"form-control\" name=\"id\">\n";
+        $salida = "<select class=\"selectpicker show-tick\" name=\"id\" data-live-search=\"true\" data-width=\"auto\">\n";
         $comando = "select * from Ubicaciones order by Descripcion";
         $resultado = $this->bdd->ejecuta($comando);
         if (!$resultado) {
@@ -161,7 +161,7 @@ class InformeInventario {
     }
 
     private function listaArticulos() {
-        $salida = "<select class=\"form-control\" name=\"id\">\n";
+        $salida = "<select class=\"selectpicker show-tick\" name=\"id\" data-live-search=\"true\" data-width=\"auto\">\n";
         $comando = "select * from Articulos order by descripcion, marca, modelo";
         $resultado = $this->bdd->ejecuta($comando);
         if (!$resultado) {
@@ -177,7 +177,7 @@ class InformeInventario {
     private function formulario($accion, $etiqueta, $lista) {
         $salida ='<div class="col-sm-6 col-md-6"><form name="informeInventario.form" method="post" action="' . $accion . '">' . "\n";
         $salida.="<fieldset style=\"width: 96%;\"><p><legend style=\"color: red;\"><b>Elige $etiqueta</b></legend>\n";
-        $salida.="<br><br><label>$etiqueta</label>";
+        $salida.="<br><br><label>$etiqueta </label>";
         $salida.=$lista;
         $salida.="<br><br>
             <label for='salida'>Salida del informe por:</label>";
@@ -186,6 +186,7 @@ class InformeInventario {
         $salida.='<div class="radio"><label><input type="radio" name="salida" value="etiquetas"><span class="glyphicon glyphicon-qrcode"></span> Etiquetas</label></div>';
         $salida.="<br><br></fieldset><p>";
         $salida.='<p align="center"><button type=submit class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Aceptar</button></p><br></div>' . "\n";
+        $salida.="<script>$('.selectpicker').selectpicker();</script>";
         return $salida;
     }
 

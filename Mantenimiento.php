@@ -479,7 +479,8 @@ class Mantenimiento {
     //tabla a la cual pertenece la clave foránea.
     protected function generaLista($datos, $campo, $valorInicial, $modo)
     {
-        $salida = "<select class=\"form-control\" name=\"$campo\">\n";
+        $modoEfectivo = $modo == "readonly" ? "disabled" : "";
+        $salida = "<select class=\"selectpicker show-tick\" data-live-search=\"true\" data-width=\"auto\" name=\"$campo\" $modoEfectivo>\n";
         list($tabla, $atributos) = explode(",", $datos);
         $atributos = str_replace("/", ",", $atributos);
         // Elimina las llaves
@@ -489,7 +490,6 @@ class Mantenimiento {
         if (!$resultado) {
             return $this->errorBD($comando);
         }
-        $modoEfectivo = $modo == "readonly" ? "disabled" : "";
         $primero = true;
         while ($fila = $this->bdd->procesaResultado()) {
             foreach ($fila as $clave => $valor) {
@@ -508,6 +508,7 @@ class Mantenimiento {
             }
         }
         $salida.="</select>\n<br><br>";
+        $salida.="<script>$('.selectpicker').selectpicker();</script>";
         return $salida;
     }
 
@@ -636,15 +637,17 @@ class Mantenimiento {
                     <input type="text" name="' . $campo . '" data-format="YYYY/MM/DD" value="' . $valorDato . '" ' . $modoEfectivo . ' class="form-control" />
                     <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                     </div>';
-                    $salida .= '<script type="text/javascript">
-                            $(function () {
-                                $(' . "'#datetimepicker" . $nfechas . "').datetimepicker({
-                                    pick12HourFormat: false,
-                                    language: 'es',
-                                    pickTime: false
-                                    });
-                            });
-                            </script>";
+                    if ($modo != "readonly") {
+                        $salida .= '<script type="text/javascript">
+                                $(function () {
+                                    $(' . "'#datetimepicker" . $nfechas . "').datetimepicker({
+                                        pick12HourFormat: false,
+                                        language: 'es',
+                                        pickTime: false
+                                        });
+                                });
+                                </script>";
+                    }
                     $salida .= "</div></div>";
                     continue;
                 } else {
