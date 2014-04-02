@@ -1,3 +1,8 @@
+Versión 1.07 
+-Añadido bootstrap-select a la solicitud de informes de inventario de esta forma se pueden buscar artículos o ubicaciones en el select
+-Añadido bootstrap-select al mantenimiento para que en el alta de elementos se puedan buscar artículos o ubicaciones en el el select
+-Corregido un problema que permitía cambiar fechas en el formulario de bajas
+
 Versión 1.06 28-03-2014
 -Configuracion: Añadido icono en el botón de aceptar.
                 Cambiado el mensaje de éxito en la grabación de los cambios.
