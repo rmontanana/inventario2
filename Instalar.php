@@ -24,7 +24,8 @@
 function __autoload($class_name) {
     require_once $class_name . '.php';
 }
-include 'inc/configuracion.inc';
+
+require_once 'inc/configuracion.inc';
 define('NUMPASOS', 3);
 //Para el Paso 1
 define('MINBYTES', 4096000); // post_max_size y max_upload van con esto
@@ -35,13 +36,11 @@ define('TMP', './tmp');
 define('INC', './inc');
 
 $instalar = new Instalar();
-if (!$instalar->error) {
-    echo $instalar->ejecuta();
-} else {
-    echo $instalar->cabecera();
-    echo $instalar->panelMensaje($instalar->error_msj, "danger", "&iexcl;ERROR!");
-    echo "</body></html>";
+if ($instalar->error) {
+    echo $instalar->panelError();
+    return;
 }
+echo $instalar->ejecuta();
 
 class Instalar {
     private $contenido;
@@ -173,6 +172,12 @@ class Instalar {
         }
     }
     
+    private function botonVolver($enlace)
+    {
+        $boton = '<button type="button" onClick="location.href=' . "'$enlace'" . '" class="btn btn-success btn-lg pull-left">Paso anterior <span class="glyphicon glyphicon-arrow-left"></span></button>';
+        return $boton;
+    }
+    
     private function retornaLabel($error, $mensaje, $tipo = "danger")
     {
         if ($error) {
@@ -230,18 +235,61 @@ class Instalar {
         return $validar;
     }
     
+    private function actualizaConfiguracion($grabar, $campos, &$datos)
+    {
+        $conf = new Configuracion();
+        $fichero = $conf->obtieneFichero();
+        $datosFichero = explode("\n", $fichero);
+        if ($grabar) {
+            $fsalida = @fopen(CONFIGTMP, "wb");
+        }
+        foreach ($datosFichero as $linea) {
+            if (stripos($linea, "DEFINE") !== false) {
+                $conf->obtieneDatos($linea, $clave, $valor);
+                if (stripos($campos, $clave) !== false) {
+                    if ($grabar) {
+                        $linea = str_replace($valor, $datos[$clave], $linea);
+                        $valor = $datos[$clave];
+                    }
+                }
+                $datos[$clave] = $valor;
+            }
+            $registro = substr($linea, 0, 2) == "?>" ? $linea : $linea . "\n";
+            if ($grabar) {
+                fwrite($fsalida, $registro);
+            }
+        }
+        if ($grabar) {
+            fclose($fsalida);
+            unlink(CONFIGURACION);
+            rename(CONFIGTMP, CONFIGURACION);        
+        }
+    }
+    
     // Cuestiones de la base de datos
     private function paso1()
     {
-        $grabar = isset($_POST['SERVIDOR']);           
-            //Lee y si hace falta actualiza los datos del formulario en el fichero de configuración
-        $conf = new Configuracion();
+        $grabar = isset($_POST['SERVIDOR']);
+        $campos = 'SERVIDOR,PUERTO,BASEDATOS,USUARIO,CLAVE';
+        //Lee y si hace falta actualiza los datos del formulario en el fichero de configuración
+        if ($grabar) {
+            foreach ($_POST as $clave => $valor) {
+                $datos[$clave] = $valor;
+            }
+        } else {
+            $datos = array();
+        }
+        $this->actualizaConfiguracion($grabar, $campos, $datos);
+        if ($grabar && $this->validaPaso1()) {
+                //Pasa al paso siguiente
+                return $this->paso2();
+        }
+        /*$conf = new Configuracion();
         $fichero = $conf->obtieneFichero();
         $datos = explode("\n", $fichero);
         if ($grabar) {
             $fsalida = @fopen(CONFIGTMP, "wb");
         }
-        $campos = 'SERVIDOR,PUERTO,BASEDATOS,USUARIO,CLAVE';
         foreach ($datos as $linea) {
             if (stripos($linea, "DEFINE") !== false) {
                 $conf->obtieneDatos($linea, $clave, $valor);
@@ -266,7 +314,7 @@ class Instalar {
                 //Pasa al paso siguiente
                 return $this->paso2();
             }
-        }
+        }*/
         
         $info  = '<form method="post" name="conf" action="instalar.php?paso=1">';
         $info .= '<ul class="list-group">';
@@ -277,6 +325,7 @@ class Instalar {
         $info .= '<li class="list-group-item">Usuario <input type="text" name="USUARIO" class="form-control" placeholder="Usuario" value="'. $datos['USUARIO'] .'"></li>';
         $info .= '<li class="list-group-item">Contraseña <input type="text" name="CLAVE" class="form-control" placeholder="Contraseña" value="'. $datos['CLAVE'] .'"></li>';
         $info .= '</ul>';
+        $info .= $this->botonVolver("instalar.php");
         $info .= $this->validaPaso1() ? $this->retornaBoton(false, "instalar.php?paso=1", false) : $this->retornaBoton(true, "instalar.php?paso=1", false);
         $info .= '</form>';
         $panel = $this->panelMensaje($info, 'primary', 'PASO 2: Configuración de la Base de Datos.');
@@ -311,7 +360,7 @@ class Instalar {
         if (isset($_POST['usuario'])) {
             //ha enviado el formulario.
             //Crea la base de datos
-            $borra_database = "DROP DATABASE IF EXISTS " . BASEDATOS . ";";
+            $borra_database = "DROP DATABASE " . BASEDATOS . " ;";
             $database = "CREATE DATABASE " . BASEDATOS . " DEFAULT CHARACTER SET utf8;";
             $articulos = "CREATE TABLE `Articulos` (
                               `id` smallint(6) NOT NULL auto_increment COMMENT 'ordenable',
@@ -391,6 +440,9 @@ class Instalar {
                         if ($sql->error()) {
                 return $this->panelMensaje($sql->mensajeError(), "danger", "ERROR");
             }
+            $campos="INSTALADO";
+            $datos['INSTALADO'] = "sí";
+            $this->actualizaConfiguracion(true, $campos, $datos);
             return $this->resumen();
         }
         
@@ -415,7 +467,8 @@ class Instalar {
                 </div>
 
                 <div class="form-group col-sm-12">
-                    <button type="submit" class="btn btn-primary pull-right btn-lg" disabled="disabled">Crear base de datos y usuario administrador <span class="glyphicon glyphicon-arrow-right"></button>
+                ' . $this->botonVolver("instalar.php?paso=1") . '
+                    <button type="submit" class="btn btn-primary pull-right btn-lg" disabled="disabled">Crear base de datos y usuario <span class="glyphicon glyphicon-arrow-right"></button>
                 </div>
             </div>
         </form>
@@ -507,9 +560,29 @@ class Instalar {
                     <body>';
     }
     
+    public function panelError()
+    {
+        $mensaje = $this->cabecera();
+        $mensaje .= $this->panelMensaje($this->error_msj, "danger", "&iexcl;ERROR!");
+        $mensaje .= "</body></html>";
+        return $mensaje;
+    }
+    
     private function resumen()
     {
-        return 'Todo se ha hecho correctamente';
+        $info = '<ul class="list-group">';
+        $info .= '<li class="list-group-item list-group-item-info">Paso 1</li>';
+        $info .= $this->retornaElemento($this->retornaLabel(false, ""), "Configuración de PHP");
+        $info .= $this->retornaElemento($this->retornaLabel(false, ""), "Configuración de la aplicación");
+        $info .= '<li class="list-group-item list-group-item-info">Paso 2</li>';
+        $info .= $this->retornaElemento($this->retornaLabel(false, ""), "Configuración de la base de datos");
+        $info .= '<li class="list-group-item list-group-item-info">Paso 3</li>';
+        $info .= $this->retornaElemento($this->retornaLabel(false, ""), "Creación de Base de datos");
+        $info .= $this->retornaElemento($this->retornaLabel(false, ""), "Creación del usuario administrador"); 
+        $info .= '</ul>';
+        $info .= $this->retornaBoton(false, "index.php", true);
+        $panel = $this->panelMensaje($info, 'success', 'Instalación finalizada.');
+        return $panel;
         
     }
 }

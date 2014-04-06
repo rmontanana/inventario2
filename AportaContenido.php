@@ -28,6 +28,25 @@ define('FORMULARIO_ACCESO', '<form name="formulario_acceso" action="index.php?re
         '<br><br><button type="submit" name="iniciar" class="btn btn-primary">Iniciar <span class="glyphicon glyphicon-log-in"></span></button></form>');
 define('MENSAJE_DEMO', 'Puede Iniciar sesi&oacute;n con<br>usuario <i><b>demo</b></i><br>contrase&ntilde;a <i>demo</i><br>');
 define('USUARIO_INCORRECTO', '<label class="error">Usuario y clave incorrectos!</label><br><br>');
+define('CREDITOS', '<div class="modal fade" tabindex="-1" id="creditos" role="dialog" aria-labelledby="modalCreditos" aria-hidden="true">
+                      <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                              <h4>Créditos</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="jumbotron">
+                                    <img src="img/logo.png" class="img-responsive img-rounded" style="float:left"> 
+                                    <h1>Inventario2</h1>
+                                    <p> Aplicación para controlar el inventario de un centro educativo.</p><br><br><br><br><br><br>
+                                    <p><small>Copyright (C) 2008-2014 Ricardo Montañana Gómez<br>
+                                    Esta aplicación se distribuye con licencia <a target="_blank" href="http://www.gnu.org/licenses/gpl-3.0.html">GPLv3 </a></small></p>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>');
 
 // Esta clase aportará el contenido a la plantilla
 class AportaContenido {
@@ -181,8 +200,9 @@ class AportaContenido {
                 list($opcion, $parametro) = explode("&", $this->opcionActual);
                 switch ($opcion) {
                     case 'principal': // contenido inicial
-                        return '<br><br><center><img src="img/logo.png" alt="' . PROGRAMA . '">' .
-                                '<br><label>' . CENTRO . '</label></center><br><br>' . PIE;
+                        $creditos = "$('#creditos').modal({keyboard: false});";
+                        return '<br><br><center><img src="img/logo.png" alt="' . PROGRAMA . '" onClick="' . $creditos . '" >' .
+                                '<br><label>' . CENTRO . '</label></center><br><br>' . PIE . CREDITOS;
                     case 'articulos':
                     case 'ubicaciones':
                     case 'test':

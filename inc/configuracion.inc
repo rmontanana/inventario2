@@ -25,7 +25,7 @@ require_once 'version.inc';
 
 define('SERVIDOR', 'localhost'); //Ubicación del servidor MySQL
 define('PUERTO', '3306'); //Puerto donde se conecta a MySQL
-define('BASEDATOS', 'Inventario2'); //Nombre de la base de datos.
+define('BASEDATOS', 'Inventario'); //Nombre de la base de datos.
 define('BASEDATOSTEST', 'Inventario_test'); //Base de datos para los tests.
 define('USUARIO', 'test'); //Usuario con permisos de lectura/escritura en la base de datos
 define('CLAVE', 'tset'); //contraseña del usuario.
@@ -40,5 +40,5 @@ define('COLORFON', '#ffb878'); //Color del fondo de la pantalla
 define('MYSQLDUMP', '/usr/local/bin/mysqldump'); //camino a mysqldump
 define('GZIP', '/usr/bin/gzip'); //Camino a gzip
 define('IMAGEDATA', 'img.data'); //Directorio donde se almacenarán las imágenes
-define('INSTALADO', 'no'); //no = permite la ejecución de instalar.php
+define('INSTALADO', 'sí') //Indicador que permite ejecutar instalar.php
 ?>

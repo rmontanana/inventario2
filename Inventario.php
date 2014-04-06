@@ -40,6 +40,11 @@ class Inventario {
         // Analizamos la cadena de solicitud para saber
         // qué opción es la actual
         $this->opcActual = $_SERVER['QUERY_STRING'] == '' ? 'principal' : $_SERVER['QUERY_STRING'];
+        //Si el programa no está instalado, llama al instalador.
+        if (INSTALADO == "no") {
+            header('location: instalar.php');
+            return;
+        }
         // Iniciamos una sesión
         session_start();
         //Conexión con la base de datos.

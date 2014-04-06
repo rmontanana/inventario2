@@ -1,3 +1,5 @@
+-Inventario.php llama al instalador si la aplicación no está instalada
+-Añadido dialogo modal de Créditos cuando se pulsa sobre el gráfico de código de barras de la aplicación
 -Quitados los usuarios de ejemplo en el archivo setup.sql
 -Creado el programa instalar.php que permitirá configurar el acceso a la base de datos, comprobar la configuración del servidor y la creación del usuario administrador
 -Añadido un parámetro en el archivo configuracion.inc que permite o no ejecutar el programa instalar.php
