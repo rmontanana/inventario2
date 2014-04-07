@@ -96,9 +96,6 @@ class InformeInventario {
                 $informe->crea($salida);
                 $informe->cierraPDF();
                 return $this->devuelveInforme($informe);
-//                $informe->guardaArchivo("tmp/Informe.pdf");
-//                echo '<script type="text/javascript"> window.open( "tmp/Informe.pdf" ) </script>';
-                break;
             case "csv":
                 //Genera una hoja de cálculo en formato csv
                 $nombre = "tmp/Ubicacion" . strftime("%Y%m%d") . rand(100, 999) . ".csv";
@@ -112,9 +109,6 @@ class InformeInventario {
                 $etiquetas->crea($salida);
                 $etiquetas->cierraPDF();
                 return $this->devuelveInforme($etiquetas);
-//                $etiquetas->guardaArchivo("tmp/EtiquetasUbicacion.pdf");
-//                echo '<script type="text/javascript"> window.open( "tmp/EtiquetasUbicacion.pdf" ) </script>';
-                break;
         }
     }
 
@@ -154,8 +148,6 @@ class InformeInventario {
                 $informe->crea($salida);
                 $informe->cierraPDF();
                 return $this->devuelveInforme($informe);
-//                $informe->guardaArchivo("tmp/Informe.pdf");
-//                echo '<script type="text/javascript"> window.open( "tmp/Informe.pdf" ) </script>';
             case "csv":
                 //Genera una hoja de cálculo en formato csv
                 $nombre = "tmp/Articulo" . strftime("%Y%m%d") . rand(100, 999) . ".csv";
@@ -169,8 +161,6 @@ class InformeInventario {
                 $etiquetas->crea($salida);
                 $etiquetas->cierraPDF();
                 return $this->devuelveInforme($etiquetas);
-//                $etiquetas->guardaArchivo("tmp/EtiquetasArticulo.pdf");
-//                echo '<script type="text/javascript"> window.open( "tmp/EtiquetasArticulo.pdf" ) </script>';
         }
     }
 
@@ -247,7 +237,6 @@ class InformeInventario {
         $bdatos = new Sql(SERVIDOR, USUARIO, CLAVE, BASEDATOS);
         $primero = true;
         while ($fila = $this->bdd->procesaResultado()) {
-            //$fila=$this->bdd->procesaResultado();
             $plantilla = file_get_contents($fichero) or die('Fallo en la apertura de la plantilla ' . $fichero);
             $plantilla = str_replace("{id}", $fila['id'], $plantilla);
             $plantilla = str_replace("{Descripcion}", $fila['Descripcion'], $plantilla);
@@ -258,10 +247,8 @@ class InformeInventario {
             }
             $informe->crea($salida);
         }
-        $nombre = "tmp/total.pdf";
         $informe->cierraPDF();
         return $this->devuelveInforme($informe);
-        //$informe->imprimeInforme();
     }
 
 }
