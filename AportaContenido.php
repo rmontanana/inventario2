@@ -149,7 +149,19 @@ class AportaContenido {
                     return "Usuario=$this->usuario";
                 else
                     return '';
-            case 'fecha': return $this->fechaActual();
+            case 'fecha': 
+                $script = '<script type="text/javascript">
+                                $(function () {
+                                    $(' . "'#fechaCabecera'" . ").datetimepicker({
+                                        pick12HourFormat: false,
+                                        language: 'es',
+                                        pickTime: false
+                                        });
+                                });
+                                </script>";
+                $campo = '<input type="hidden" name="fechaCabecera" id="fechaCabecera" value="'.$this->fechaActual("%d/%m/%Y").'">';
+                $etiqueta = '<label for="fechaCabecera" onClick="$(' . "'#fechaCabecera'" . ").data('DateTimePicker').show();" . '">' . $this->fechaActual() . '</label>';
+                return $etiqueta . $campo . $script;
             case 'aplicacion': return PROGRAMA." v".VERSION;
             case 'menu': // el menú
                 if ($this->registrado) {
@@ -199,10 +211,14 @@ class AportaContenido {
 //                }
                 list($opcion, $parametro) = explode("&", $this->opcionActual);
                 switch ($opcion) {
+                    case 'bienvenido':
+                        $mensaje = '<div class="alert alert-success">';
+                        $mensaje .= 'Bienvenid@ ' . $this->usuario . '</div>';
                     case 'principal': // contenido inicial
+                    
                         $creditos = "$('#creditos').modal({keyboard: false});";
-                        return '<br><br><center><img src="img/logo.png" alt="' . PROGRAMA . '" onClick="' . $creditos . '" >' .
-                                '<br><label>' . CENTRO . '</label></center><br><br>' . PIE . CREDITOS;
+                        return $mensaje . '<br><br><center><img src="img/logo.png" alt="' . PROGRAMA . '" onClick="' . $creditos . '" >' .
+                                '<br><br><label onClick="'.$creditos.'">' . CENTRO . '</label></center><br><br>' . CREDITOS;
                     case 'articulos':
                     case 'ubicaciones':
                     case 'test':
@@ -266,12 +282,6 @@ class AportaContenido {
                         } else {
                             return $this->mensajePermisos('Usuarios');
                         }
-
-                    case 'bienvenido': // El usuario quiere iniciar sesión
-                        $mensaje = '<div class="alert alert-success">';
-                        $mensaje .= 'Bienvenid@ ' . $this->usuario . '</div><br><br><center><img src="img/codigoBarras.png" alt="' . PROGRAMA . '">' .
-                                '<br><label>' . CENTRO . '</label></center><br><br>' . PIE;;
-                        return $mensaje;
                     case 'configuracion':
                         if ($this->perfil['Config']) {
                             $conf = new Configuracion();
@@ -286,17 +296,17 @@ class AportaContenido {
                         } else {
                             return $this->mensajePermisos('Informes');
                         }
-                    case 'descuadres':
-                        if ($this->perfil['Informe']) {
-                            $enlace = 'xml/informe' . ucfirst($opcion) . '.xml';
-                            $informe = new InformePDF($this->bdd, $enlace, $this->registrado);
-                            $informe->crea($enlace);
-                            $informe->cierraPDF();
-                            $informe->imprimeInforme();
-                            return;
-                        } else {
-                            return $this->mensajePermisos('Informes');
-                        }
+//                    case 'descuadres':
+//                        if ($this->perfil['Informe']) {
+//                            $enlace = 'xml/informe' . ucfirst($opcion) . '.xml';
+//                            $informe = new InformePDF($this->bdd, $enlace, $this->registrado);
+//                            $informe->crea($enlace);
+//                            $informe->cierraPDF();
+//                            $informe->imprimeInforme();
+//                            return;
+//                        } else {
+//                            return $this->mensajePermisos('Informes');
+//                        }
                     case 'importacion':
                         if ($this->perfil['Modificacion'] && $this->perfil['Borrado']) {
                             $import = new Importacion($this->bdd, $this->registrado);

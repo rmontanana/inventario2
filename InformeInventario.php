@@ -23,11 +23,13 @@ class InformeInventario {
 
     private $bdd;
 
-    public function __construct($baseDatos) {
+    public function __construct($baseDatos)
+    {
         $this->bdd = $baseDatos;
     }
 
-    public function ejecuta() {
+    public function ejecuta()
+    {
         $opc = $_GET['opc'];
         switch ($opc) {
             case 'Ubicacion':return $this->formularioUbicacion();
@@ -35,10 +37,33 @@ class InformeInventario {
             case 'listarArticulo':return $this->listarArticulo();
             case 'Articulo':return $this->formularioArticulo();
             case 'Total':return $this->inventarioTotal();
+            case 'descuadres': return $this->inventarioDescuadres();
         }
     }
 
-    private function listarUbicacion() {
+    private function inventarioDescuadres()
+    {
+        $enlace = 'xml/informeDescuadres.xml';
+        $informe = new InformePDF($this->bdd, $enlace, true);
+        $informe->crea($enlace);
+        $informe->cierraPDF();
+        return $this->devuelveInforme($informe);
+    }
+
+    private function devuelveInforme($informe)
+    {
+        $letras = "abcefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        $nombre = "tmp/informe" . substr(str_shuffle($letras), 0, 10) . ".pdf";
+        $informe->guardaArchivo($nombre);
+        return '<div class="container">
+                    <!--<a href="' . $nombre . '" target="_blank"><span class="glyphicon glyphicon-cloud-download" style="font-size:1.5em;"></span>Descargar Informe</a>--> 
+                    <object data="' . $nombre . '" type="application/pdf" width="100%" height="700" style="float:left;">
+                    </object>
+                </div>';
+    }
+    
+    private function listarUbicacion()
+    {
         $salidaInforme = isset($_POST['salida']) ? $_POST['salida'] : 'pantalla';
         switch ($salidaInforme) {
             case "pantalla":
@@ -70,8 +95,9 @@ class InformeInventario {
                 $informe = new InformePDF($this->bdd, $salida, true);
                 $informe->crea($salida);
                 $informe->cierraPDF();
-                $informe->guardaArchivo("tmp/Informe.pdf");
-                echo '<script type="text/javascript"> window.open( "tmp/Informe.pdf" ) </script>';
+                return $this->devuelveInforme($informe);
+//                $informe->guardaArchivo("tmp/Informe.pdf");
+//                echo '<script type="text/javascript"> window.open( "tmp/Informe.pdf" ) </script>';
                 break;
             case "csv":
                 //Genera una hoja de cálculo en formato csv
@@ -85,13 +111,15 @@ class InformeInventario {
                 $etiquetas = new EtiquetasPDF($this->bdd, $salida, true);
                 $etiquetas->crea($salida);
                 $etiquetas->cierraPDF();
-                $etiquetas->guardaArchivo("tmp/EtiquetasUbicacion.pdf");
-                echo '<script type="text/javascript"> window.open( "tmp/EtiquetasUbicacion.pdf" ) </script>';
+                return $this->devuelveInforme($etiquetas);
+//                $etiquetas->guardaArchivo("tmp/EtiquetasUbicacion.pdf");
+//                echo '<script type="text/javascript"> window.open( "tmp/EtiquetasUbicacion.pdf" ) </script>';
                 break;
         }
     }
 
-    private function listarArticulo() {
+    private function listarArticulo()
+    {
         $salidaInforme = isset($_POST['salida']) ? $_POST['salida'] : 'pantalla';
         switch ($salidaInforme) {
             case "pantalla":
@@ -125,9 +153,9 @@ class InformeInventario {
                 $informe = new InformePDF($this->bdd, $salida, true);
                 $informe->crea($salida);
                 $informe->cierraPDF();
-                $informe->guardaArchivo("tmp/Informe.pdf");
-                echo '<script type="text/javascript"> window.open( "tmp/Informe.pdf" ) </script>'; 
-                break;
+                return $this->devuelveInforme($informe);
+//                $informe->guardaArchivo("tmp/Informe.pdf");
+//                echo '<script type="text/javascript"> window.open( "tmp/Informe.pdf" ) </script>';
             case "csv":
                 //Genera una hoja de cálculo en formato csv
                 $nombre = "tmp/Articulo" . strftime("%Y%m%d") . rand(100, 999) . ".csv";
@@ -140,13 +168,14 @@ class InformeInventario {
                 $etiquetas = new EtiquetasPDF($this->bdd, $salida, true);
                 $etiquetas->crea($salida);
                 $etiquetas->cierraPDF();
-                $etiquetas->guardaArchivo("tmp/EtiquetasArticulo.pdf");
-                echo '<script type="text/javascript"> window.open( "tmp/EtiquetasArticulo.pdf" ) </script>';
-                break;
+                return $this->devuelveInforme($etiquetas);
+//                $etiquetas->guardaArchivo("tmp/EtiquetasArticulo.pdf");
+//                echo '<script type="text/javascript"> window.open( "tmp/EtiquetasArticulo.pdf" ) </script>';
         }
     }
 
-    private function listaUbicaciones() {
+    private function listaUbicaciones()
+    {
         $salida = "<select class=\"selectpicker show-tick\" name=\"id\" data-live-search=\"true\" data-width=\"auto\">\n";
         $comando = "select * from Ubicaciones order by Descripcion";
         $resultado = $this->bdd->ejecuta($comando);
@@ -160,7 +189,8 @@ class InformeInventario {
         return $salida;
     }
 
-    private function listaArticulos() {
+    private function listaArticulos()
+    {
         $salida = "<select class=\"selectpicker show-tick\" name=\"id\" data-live-search=\"true\" data-width=\"auto\">\n";
         $comando = "select * from Articulos order by descripcion, marca, modelo";
         $resultado = $this->bdd->ejecuta($comando);
@@ -174,8 +204,9 @@ class InformeInventario {
         return $salida;
     }
 
-    private function formulario($accion, $etiqueta, $lista) {
-        $salida ='<div class="col-sm-6 col-md-6"><form name="informeInventario.form" method="post" action="' . $accion . '">' . "\n";
+    private function formulario($accion, $etiqueta, $lista)
+    {
+        $salida = '<div class="col-sm-6 col-md-6"><form name="informeInventario.form" method="post" action="' . $accion . '">' . "\n";
         $salida.="<fieldset style=\"width: 96%;\"><p><legend style=\"color: red;\"><b>Elige $etiqueta</b></legend>\n";
         $salida.="<br><br><label>$etiqueta </label>";
         $salida.=$lista;
@@ -190,18 +221,21 @@ class InformeInventario {
         return $salida;
     }
 
-    private function formularioUbicacion() {
+    private function formularioUbicacion()
+    {
         //Genera un formulario con las ubicaciones disponibles.
         $accion = "index.php?informeInventario&opc=listarUbicacion";
         return $this->formulario($accion, 'Ubicaci&oacute;n', $this->listaUbicaciones());
     }
 
-    private function formularioArticulo() {
+    private function formularioArticulo()
+    {
         $accion = "index.php?informeInventario&opc=listarArticulo";
         return $this->formulario($accion, 'Art&iacute;culo', $this->listaArticulos());
     }
 
-    private function inventarioTotal() {
+    private function inventarioTotal()
+    {
         $fichero = "xml/inventarioUbicacion.xml";
         $salida = "tmp/inventarioUbicacion.xml";
         $comando = "select * from Ubicaciones ;";
@@ -226,8 +260,10 @@ class InformeInventario {
         }
         $nombre = "tmp/total.pdf";
         $informe->cierraPDF();
-        $informe->imprimeInforme();
+        return $this->devuelveInforme($informe);
+        //$informe->imprimeInforme();
     }
+
 }
 
 ?>

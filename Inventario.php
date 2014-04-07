@@ -50,9 +50,9 @@ class Inventario {
         //Conexión con la base de datos.
         $this->bdd = new Sql(SERVIDOR, USUARIO, CLAVE, BASEDATOS);
         if ($this->bdd->error()) {
+            
             echo '<h1>Fallo al conectar con el servidor MySQL.</h1>';
-            echo SERVIDOR;
-            echo "Servidor [ " . SERVIDOR . " ] usuario [" . USUARIO . "] clave [" . CLAVE . "] base [" . BASEDATOS . "]";
+            echo "Servidor [ " . SERVIDOR . " ] base de datos [" . BASEDATOS . "]";
             $this->estado = false;
             return;
         } else {
@@ -203,7 +203,6 @@ class Inventario {
             $_SESSION['Perfil'] = $this->perfil;
         }
     }
-
 }
 
 ?>

@@ -284,37 +284,6 @@ class Instalar {
                 //Pasa al paso siguiente
                 return $this->paso2();
         }
-        /*$conf = new Configuracion();
-        $fichero = $conf->obtieneFichero();
-        $datos = explode("\n", $fichero);
-        if ($grabar) {
-            $fsalida = @fopen(CONFIGTMP, "wb");
-        }
-        foreach ($datos as $linea) {
-            if (stripos($linea, "DEFINE") !== false) {
-                $conf->obtieneDatos($linea, $clave, $valor);
-                if (stripos($campos, $clave) !== false) {
-                    if ($grabar) {
-                        $linea = str_replace($valor, $_POST[$clave], $linea);
-                        $valor = $_POST[$clave];
-                    }
-                }
-                $datos[$clave] = $valor;
-            }
-            $registro = substr($linea, 0, 2) == "?>" ? $linea : $linea . "\n";
-            if ($grabar) {
-                fwrite($fsalida, $registro);
-            }
-        }
-        if ($grabar) {
-            fclose($fsalida);
-            unlink(CONFIGURACION);
-            rename(CONFIGTMP, CONFIGURACION);  
-            if ($this->validaPaso1()) {
-                //Pasa al paso siguiente
-                return $this->paso2();
-            }
-        }*/
         
         $info  = '<form method="post" name="conf" action="instalar.php?paso=1">';
         $info .= '<ul class="list-group">';

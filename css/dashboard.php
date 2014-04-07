@@ -33,7 +33,7 @@ display: none;
 }
 @media (max-width: 767px) {
 .sidebar {
-top: 50px;
+top: 60px;
 bottom: 150px;
 background-color: <?php echo COLORLAT; ?>
 }
