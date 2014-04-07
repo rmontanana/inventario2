@@ -63,7 +63,7 @@ class Sql {
      */
     public function __construct($servidor,$usuario,$clave,$baseDatos)
     {
-        $this->bdd=new mysqli($servidor,$usuario,$clave,$baseDatos);
+        $this->bdd = @new mysqli($servidor,$usuario,$clave,$baseDatos);
         if (mysqli_connect_errno()) {
             $this->mensajeError='<h1>Fallo al conectar con el servidor MySQL.</h1>';
             $this->mensajeError.="Servidor [".$servidor ."] usuario=[".$usuario."] clave [".$clave."] base [".$baseDatos."]";

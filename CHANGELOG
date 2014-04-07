@@ -1,4 +1,15 @@
-Versión 1.07 
+Versión 1.08 07-04-2014
+-Los informes aparecen ahora en la pantalla de la aplicación embebidos.
+-Añadido un calendario al pulsar sobre la fecha en la cabecera de la aplicación.
+-Corregido pequeño problema de margen en resoluciones pequeñas donde se solapaba parte del menú.
+-Quitados los logos de GPLv3, MySQL y Apache
+-Inventario.php llama al instalador si la aplicación no está instalada
+-Añadido dialogo modal de Créditos cuando se pulsa sobre el gráfico de código de barras de la aplicación o sobre el nombre del centro
+-Quitados los usuarios de ejemplo en el archivo setup.sql
+-Creado el programa instalar.php que permitirá configurar el acceso a la base de datos, comprobar la configuración del servidor y la creación del usuario administrador
+-Añadido un parámetro en el archivo configuracion.inc que permite o no ejecutar el programa instalar.php
+
+Versión 1.07 31-03-2014
 -Añadido bootstrap-select a la solicitud de informes de inventario de esta forma se pueden buscar artículos o ubicaciones en el select
 -Añadido bootstrap-select al mantenimiento para que en el alta de elementos se puedan buscar artículos o ubicaciones en el el select
 -Corregido un problema que permitía cambiar fechas en el formulario de bajas

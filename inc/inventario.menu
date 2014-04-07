@@ -6,8 +6,8 @@
 1|Inventario|||
 2|Ubicaci&oacute;n|index.php?informeInventario&opc=Ubicacion|_self|Inventario de una ubicaci&oacute;n
 2|Art&iacute;culo|index.php?informeInventario&opc=Articulo|_self|Inventario de un Art&iacute;culo
-2|Total|index.php?informeInventario&opc=Total|_blank|Inventario de todas las ubicaciones
-2|Descuadres|index.php?descuadres|_blank|Diferencias entre art&iacute;culos y elementos
+2|Total|index.php?informeInventario&opc=Total|_self|Inventario de todas las ubicaciones
+2|Descuadres|index.php?informeInventario&opc=descuadres|_self|Diferencias entre art&iacute;culos y elementos
 1|Varios|||
 2|Configuraci&oacute;n|index.php?configuracion|_self|Opciones configurables de la aplicaci&oacute;n
 2|Importaci&oacute;n|index.php?importacion&opc=form|_self|Importa datos de una hoja de c&aacute;lculo
