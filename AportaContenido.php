@@ -86,7 +86,7 @@ class AportaContenido {
      * @var array Permisos del usuario
      */
     private $perfil;
-    
+
     /**
      *
      * @var array Datos pasados en la URL
@@ -102,7 +102,8 @@ class AportaContenido {
      * @param array $perfil Permisos de acceso del usuario
      * @param String $opcion Opción elegida por el usuario
      */
-    public function __construct($baseDatos, $registrado, $usuario, $perfil, $opcion) {
+    public function __construct($baseDatos, $registrado, $usuario, $perfil, $opcion)
+    {
         $this->bdd = $baseDatos;
         $this->miMenu = new Menu('inc/inventario.menu');
         $this->registrado = $registrado;
@@ -117,7 +118,8 @@ class AportaContenido {
      * @param string $idioma idioma para formatear la fecha, p.ej. es_ES
      * @return string
      */
-    public function fechaActual($formato = '', $idioma = 'es_ES') {
+    public function fechaActual($formato = '', $idioma = 'es_ES')
+    {
         if ($formato == '')
             $formato = "%d-%b-%y";
         setlocale(LC_TIME, $idioma);
@@ -128,7 +130,8 @@ class AportaContenido {
      * 
      * @return string Mensaje el usuario debe registrarse.
      */
-    private function mensajeRegistro() {
+    private function mensajeRegistro()
+    {
         return 'Debe registrarse para acceder a este apartado';
     }
 
@@ -140,16 +143,17 @@ class AportaContenido {
      * @param string $parametros Parámetros del método
      * @return string Contenido devuelto por el método
      */
-    public function __call($metodo, $parametros) {
+    public function __call($metodo, $parametros)
+    {
         switch ($metodo) { // Dependiendo del método invocado
             case 'titulo': // devolvemos el título
-                return PROGRAMA." v".VERSION;
+                return PROGRAMA . " v" . VERSION;
             case 'usuario':
                 if ($this->registrado)
                     return "Usuario=$this->usuario";
                 else
                     return '';
-            case 'fecha': 
+            case 'fecha':
                 $script = '<script type="text/javascript">
                                 $(function () {
                                     $(' . "'#fechaCabecera'" . ").datetimepicker({
@@ -159,10 +163,10 @@ class AportaContenido {
                                         });
                                 });
                                 </script>";
-                $campo = '<input type="hidden" name="fechaCabecera" id="fechaCabecera" value="'.$this->fechaActual("%d/%m/%Y").'">';
+                $campo = '<input type="hidden" name="fechaCabecera" id="fechaCabecera" value="' . $this->fechaActual("%d/%m/%Y") . '">';
                 $etiqueta = '<label for="fechaCabecera" onClick="$(' . "'#fechaCabecera'" . ").data('DateTimePicker').show();" . '">' . $this->fechaActual() . '</label>';
                 return $etiqueta . $campo . $script;
-            case 'aplicacion': return PROGRAMA." v".VERSION;
+            case 'aplicacion': return PROGRAMA . " v" . VERSION;
             case 'menu': // el menú
                 if ($this->registrado) {
                     return $this->miMenu->insertaMenu();
@@ -215,15 +219,15 @@ class AportaContenido {
                         $mensaje = '<div class="alert alert-success">';
                         $mensaje .= 'Bienvenid@ ' . $this->usuario . '</div>';
                     case 'principal': // contenido inicial
-                    
+
                         $creditos = "$('#creditos').modal({keyboard: false});";
                         return $mensaje . '<br><br><center><img src="img/logo.png" alt="' . PROGRAMA . '" onClick="' . $creditos . '" >' .
-                                '<br><br><label onClick="'.$creditos.'">' . CENTRO . '</label></center><br><br>' . CREDITOS;
+                                '<br><br><label onClick="' . $creditos . '">' . CENTRO . '</label></center><br><br>' . CREDITOS;
                     case 'articulos':
                     case 'ubicaciones':
                     case 'test':
                     case 'elementos':
-                        $this->DatosURL();
+                        $this->cargaDatosURL();
                         if ($this->datosURL['opc'] == "informe") {
                             if (!$this->pefil['Informe']) {
                                 $this->procesaURL();
@@ -240,8 +244,7 @@ class AportaContenido {
                                 $informe = new InformePDF($this->bdd, $salida, $this->registrado);
                                 $informe->crea($salida);
                                 $informe->cierraPDF();
-                                $informe->imprimeInforme();                    
-                                return;
+                                return $this->devuelveInforme($informe);
                             } else {
                                 return $this->mensajePermisos("Informes");
                             }
@@ -271,8 +274,7 @@ class AportaContenido {
                                     $informe = new InformePDF($this->bdd, $salida, $this->registrado);
                                     $informe->crea($salida);
                                     $informe->cierraPDF();
-                                    $informe->imprimeInforme();                    
-                                    return;
+                                    return $this->devuelveInforme($informe);
                                 } else {
                                     return $this->mensajePermisos("Informes");
                                 }
@@ -296,17 +298,6 @@ class AportaContenido {
                         } else {
                             return $this->mensajePermisos('Informes');
                         }
-//                    case 'descuadres':
-//                        if ($this->perfil['Informe']) {
-//                            $enlace = 'xml/informe' . ucfirst($opcion) . '.xml';
-//                            $informe = new InformePDF($this->bdd, $enlace, $this->registrado);
-//                            $informe->crea($enlace);
-//                            $informe->cierraPDF();
-//                            $informe->imprimeInforme();
-//                            return;
-//                        } else {
-//                            return $this->mensajePermisos('Informes');
-//                        }
                     case 'importacion':
                         if ($this->perfil['Modificacion'] && $this->perfil['Borrado']) {
                             $import = new Importacion($this->bdd, $this->registrado);
@@ -348,6 +339,7 @@ class AportaContenido {
                 return "Marca {$metodo} queda sin procesar";
         }
     }
+
     public function cargaDatosURL()
     {
         $this->datosURL['opc'] = isset($_GET['opc']) ? $_GET['opc'] : 'inicial';
@@ -357,16 +349,31 @@ class AportaContenido {
         $this->datosURL['buscar'] = isset($_GET['buscar']) ? $_GET['buscar'] : null;
         $this->datosURL['id'] = isset($_GET['id']) ? $_GET['id'] : null;
     }
+
     /**
      *
      * @param string $tipo
      * @return string
      */
-    public function mensajePermisos($tipo) {
+    public function mensajePermisos($tipo)
+    {
         return $this->panel("ERROR", "No tiene permiso para acceder a $tipo", "danger");
     }
-
-    public function panel($cabecera, $mensaje, $tipo) {
+    
+    private function devuelveInforme($informe)
+    {
+        $letras = "abcefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        $nombre = "tmp/informe" . substr(str_shuffle($letras), 0, 10) . ".pdf";
+        $informe->guardaArchivo($nombre);
+        return '<div class="container">
+                    <!--<a href="' . $nombre . '" target="_blank"><span class="glyphicon glyphicon-cloud-download" style="font-size:1.5em;"></span>Descargar Informe</a>--> 
+                    <object data="' . $nombre . '" type="application/pdf" width="100%" height="700" style="float:left;">
+                    </object>
+                </div>';
+    }
+    
+    public function panel($cabecera, $mensaje, $tipo)
+    {
         $panel = '<div class="panel panel-' . $tipo . '"><div class="panel-heading">';
         $panel .= '<h3 class="panel-title">' . $cabecera . '</h3></div>';
         $panel .= '<div class="panel-body">';
@@ -374,7 +381,6 @@ class AportaContenido {
         $panel .= '</div>';
         return $panel;
     }
-
 }
 
 ?>
