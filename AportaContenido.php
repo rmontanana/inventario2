@@ -39,9 +39,24 @@ define('CREDITOS', '<div class="modal fade" tabindex="-1" id="creditos" role="di
                                 <div class="jumbotron">
                                     <img src="img/logo.png" class="img-responsive img-rounded" style="float:left"> 
                                     <h1>Inventario2</h1>
-                                    <p> Aplicación para controlar el inventario de un centro educativo.</p><br><br><br><br><br><br>
-                                    <p><small>Copyright (C) 2008-2014 Ricardo Montañana Gómez<br>
-                                    Esta aplicación se distribuye con licencia <a target="_blank" href="http://www.gnu.org/licenses/gpl-3.0.html">GPLv3 </a></small></p>
+                                    <p> Aplicación para controlar el inventario de un centro educativo.</p>
+                                    <p>En la aplicación se hace uso de los siguientes módulos y/o bibliotecas</p>
+                                    <table class="table table-condensed">
+                                     <thead><tr><th>Biblioteca/Módulo</th><th>Licencia</th></tr></thead>
+                                     <tbody>
+                                      <tr><td><a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a></td><td><a target="_blank" href="https://github.com/twbs/bootstrap/blob/master/LICENSE">MIT</a></td>
+                                      <tr><td><a href="http://www.fpdf.org/" target="_blank">FPDF</a></td><td>Libre</td>
+                                      <tr><td><a href="http://phpqrcode.sourceforge.net/" target="_blank">PHP QR Code Enconder</a></td><td><a target="_blank" href="http://www.gnu.org/licenses/lgpl-3.0.txt">LGPL</a></td>
+                                      <tr><td><a href="http://stefangabos.ro/php-libraries/zebra-image/" target="_blank">Zebra_Image</a></td><td><a target="_blank" href="http://www.gnu.org/licenses/lgpl-3.0.txt">LGPL</a></td>
+                                      <tr><td><a href="http://jasny.github.io/bootstrap/" target="_blank">Jasny Bootstrap</a></td><td><a target="_blank" href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></td>
+                                      <tr><td><a href="http://1000hz.github.io/bootstrap-validator/" target="_blank">Bootstrap Validator</a></td><td><a target="_blank" href="https://github.com/1000hz/bootstrap-validator/blob/master/LICENSE">MIT</a></td>
+                                      <tr><td><a href="https://github.com/tkrotoff/jquery-simplecolorpicker" target="_blank">jquery-simplecolorpicker</a></td><td><a target="_blank" href="https://github.com/tkrotoff/jquery-simplecolorpicker/blob/master/LICENSE.txt">MIT</a></td>
+                                      <tr><td><a href="http://eonasdan.github.io/bootstrap-datetimepicker/" target="_blank">Bootstrap datetimepicker</a></td><td><a target="_blank" href="https://github.com/Eonasdan/bootstrap-datetimepicker/blob/master/src/js/bootstrap-datetimepicker.js">MIT</a></td>
+                                      <tr><td><a href="http://silviomoreto.github.io/bootstrap-select/" target="_blank">Bootstrap-select</a></td><td><a target="_blank" href="https://github.com/silviomoreto/bootstrap-select">MIT</a></td>
+                                     </tbody>
+                                    </table>
+                                    <p><h5>Copyright &copy; 2008-2014 Ricardo Montañana Gómez</h4>
+                                    <h5><small>Esta aplicación se distribuye con licencia <a target="_blank" href="http://www.gnu.org/licenses/gpl-3.0.html">GPLv3 </a></small></h5></p>
                                 </div>
                             </div>
                         </div>

@@ -262,7 +262,7 @@ class Mantenimiento {
             if ($this->perfil['Informe']) {
                 $this->datosURL['opc'] = "informe";
                 $inf = $this->montaURL();
-                $informe = '<a href="' . $inf . '" target="_blank"><img src="img/' . ESTILO . '/informe.png" alt="informe" title="Informe pdf"></a>';
+                $informe = '<a href="' . $inf . '"><img src="img/' . ESTILO . '/informe.png" alt="informe" title="Informe pdf"></a>';
             } else {
                 $informe = "";
             }
