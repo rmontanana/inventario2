@@ -40,4 +40,5 @@ define('COLORFON', '#ffb878'); //Color del fondo de la pantalla
 define('MYSQLDUMP', '/usr/local/bin/mysqldump'); //camino a mysqldump
 define('GZIP', '/usr/bin/gzip'); //Camino a gzip
 define('IMAGEDATA', 'img.data'); //Directorio donde se almacenarán las imágenes
+define('INSTALADO', 'sí') //Indicador que permite ejecutar instalar.php
 ?>
