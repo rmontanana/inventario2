@@ -1,3 +1,7 @@
+Versión 1.082 09-04-2014
+-Ahora git tiene en cuenta los directorios tmp e img.data y no tiene en cuenta su contenido
+-Fix #30. Arreglado el botón de buscar que no enviaba los datos. Cambiado el texto por la lupa.
+
 Versión 1.081 08-04-2014
 -Fix #29. Añade el programa instalar.php en el proceso de instalación en README.md
 -Fix #29. Añadida la tabla de módulos/bibliotecas utilizados en los créditos.
