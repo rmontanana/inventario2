@@ -38,14 +38,12 @@ Para instalar la aplicación basta con seguir estos pasos:
 
     grant all on Inventario.* to usuario identified by "contraseña";
 
-###5. Crear la estructura de la base de datos para poder comenzar a trabajar:
+###5. Conectarse a la aplicación en la url donde se ha instalado:
 
-    mysql -u usuario --password=contraseña <sql/setup.sql
+    http://<url>
 
-Con esto queda instalado el programa. Se crean en este proceso dos usuarios:
+Al hacer esto se arrancará automáticamente el programa de instalación con el que terminaremos de configurar la aplicación.
 
-    Usuario: admin              Usuario: demo
-    Contraseña: pruebas         Contraseña: pruebas
 
 ##Modelo de datos
 El modelo de datos que se ha utilizado ha sido:

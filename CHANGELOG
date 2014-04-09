@@ -1,3 +1,8 @@
+Versión 1.081 08-04-2014
+-Fix #29. Añade el programa instalar.php en el proceso de instalación en README.md
+-Fix #29. Añadida la tabla de módulos/bibliotecas utilizados en los créditos.
+-Fix #28. Corrige que el informe pedido desde matenimiento salga en una ventana nueva.
+
 Versión 1.08 07-04-2014
 -Los informes aparecen ahora en la pantalla de la aplicación embebidos.
 -Añadido un calendario al pulsar sobre la fecha en la cabecera de la aplicación.
