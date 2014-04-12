@@ -285,7 +285,7 @@ class Mantenimiento {
         $valor = isset($this->cadenaBusqueda) ? 'value="' . $this->cadenaBusqueda . '"' : '';
         $salida = '<form name="busqueda" method="POST"><div class="col-xs-6 col-sm-4 col-md-6 col-lg-6"><div class="input-group">
                 <input type="text" name="buscar" placeholder="Descripci&oacute;n" class="form-control" ' . $valor . '>
-                <span class="input-group-btn"><button class="btn btn-primary" type="button">Buscar</button>
+                <span class="input-group-btn"><button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-search"></span></button>
                 </span></div></div></form>';
         $salida .= '<button class="btn btn-info pull-right" type="button">P&aacute;gina <span class="badge">'
                 . $pagina . '</span></button>';
