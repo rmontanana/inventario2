@@ -217,12 +217,16 @@ class Mantenimiento {
                     $checked = $valor == '1' ? 'checked' : '';
                     $valor = '<input type="checkbox" disabled ' . $checked . '>';
                 }
-                if ($clave == "cantidad") {
+                if (strstr($this->campos[$clave]['Comment'], "ajax") && $this->perfil['Modificacion']) {
+                    $comen = explode(",", $this->campos[$clave]['Comment']);
+                    foreach ($comen as $co) {
+                        if (strstr($co, "ajax")) {
+                            $tmpco = explode("/", $co);
+                            $tipo = $tmpco[1];
+                        }
+                    }
                     $cant++;
-                    $opcion = $this->datosURL['opc'];
-                    $this->datosURL['opc'] = 'ajax';
-                    $valor = $this->campoAjax($id, $clave, $valor, $cant);
-                    $this->datosURL['opc'] = $opcion;
+                    $valor = $this->campoAjax($id, $clave, $tipo, $valor, $cant, $fila);
                 }
                 $salida.="<td>$valor</td>\n";
             }
@@ -781,16 +785,31 @@ class Mantenimiento {
         return $mensaje;
     }
     
-    private function campoAjax($id, $clave, $valor, $cant)
+    private function campoAjax($id, $clave, $tipo, $valor, $num, $datosFila)
     {
         //url: 'ajax.php?tabla=". $this->tabla  . "',
         //url: '" . $this->montaURL() . "&tabla=" . $this->tabla "',
-        $mensaje = '<a href="#" id="'.$clave.'" name="'.$clave.$cant.'" data-type="number" data-placement="right" data-pk="'.$id.'">' . $valor . '</a>
+        $formato = $tipo == "combodate" ? 'data-format="YYYY-MM-DD" data-viewformat="DD/MM/YYYY"' : '';
+        $remoto = "";
+        $titulo = $clave;
+        if (strstr($tipo, "select")) {
+            $datos = explode("-", $tipo);
+            $tipo = $datos[0];
+            $tabla2 = $datos[1];
+            $clave = "id_".$clave;
+            $indice = "id".$tabla2;
+            $valorDato = $datosFila[$indice];
+            $valorSelect = 'data-value="'.$valorDato.'" ';
+            $remoto = $valorSelect . ' data-sourceCache="true" data-sourceError="Error cargando datos" data-source="ajax.php?opc=get&tabla='.$tabla2.'"';
+        }
+            
+        $mensaje = '<a href="#" title="Modifica '.$titulo.'" id="'.$clave.'" name="'.$clave.$num.'" data-type="'.$tipo.'" data-placement="right" '.$formato.' data-pk="'.$id.'" '.$remoto.' >' . $valor . '</a>
                                 <script>
                                     $(function(){' . "
-                                        $('[name=\"".$clave.$cant."\"]').editable({
-                                            url: 'ajax.php?tabla=". $this->tabla  . "',
-                                            title: 'Cantidad:',
+                                        $('[name=\"".$clave.$num."\"]').editable({
+                                            url: 'ajax.php?opc=put&tabla=". $this->tabla  . "',
+                                            title: '" . $titulo . ":',
+                                            emptytext: 'Vacío',
                                             success: function(respuesta, newValue) {
                                                         if (respuesta.success === false) {
                                                             return respuesta.msj; //msj will be shown in editable form

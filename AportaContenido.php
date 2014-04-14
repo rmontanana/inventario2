@@ -53,6 +53,7 @@ define('CREDITOS', '<div class="modal fade" tabindex="-1" id="creditos" role="di
                                       <tr><td><a href="https://github.com/tkrotoff/jquery-simplecolorpicker" target="_blank">jquery-simplecolorpicker</a></td><td><a target="_blank" href="https://github.com/tkrotoff/jquery-simplecolorpicker/blob/master/LICENSE.txt">MIT</a></td>
                                       <tr><td><a href="http://eonasdan.github.io/bootstrap-datetimepicker/" target="_blank">Bootstrap datetimepicker</a></td><td><a target="_blank" href="https://github.com/Eonasdan/bootstrap-datetimepicker/blob/master/src/js/bootstrap-datetimepicker.js">MIT</a></td>
                                       <tr><td><a href="http://silviomoreto.github.io/bootstrap-select/" target="_blank">Bootstrap-select</a></td><td><a target="_blank" href="https://github.com/silviomoreto/bootstrap-select">MIT</a></td>
+                                      <tr><td><a href="https://github.com/vitalets/x-editable" target="_blank">X-editable</a></td><td><a target="_blank" href="https://github.com/vitalets/x-editable/blob/master/LICENSE-MIT">MIT</a></td>
                                      </tbody>
                                     </table>
                                     <p><h5>Copyright &copy; 2008-2014 Ricardo Montañana Gómez</h4>
