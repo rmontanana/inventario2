@@ -109,6 +109,7 @@ class Mantenimiento {
             case 'insertar':return $this->insertar();
             case 'modificar':return $this->modificar();
             case 'borrar':return $this->borrar();
+            case 'ajax': return $this->ajax();break;
             default: return "La clase Mantenimiento No entiende lo solicitado [" . $this->datosURL['opc'] . "]";
         }
     }
@@ -158,8 +159,9 @@ class Mantenimiento {
         } else {
             $comando = str_replace('{orden}', ' ', $comando);
         }
+        $salida = $this->cargaComplementos();
         //Introduce un botón para hacer búsquedas y el número de la página
-        $salida = $this->enlaceBusqueda($pagSigte);
+        $salida.= $this->enlaceBusqueda($pagSigte);
         $salida.= $cabecera;
         //Consulta paginada de todas las tuplas
         $comando = str_replace('{inferior}', $pagina * NUMFILAS, $comando);
@@ -214,6 +216,13 @@ class Mantenimiento {
                 if ($this->campos[$clave]['Type'] == "Boolean(1)") {
                     $checked = $valor == '1' ? 'checked' : '';
                     $valor = '<input type="checkbox" disabled ' . $checked . '>';
+                }
+                if ($clave == "cantidad") {
+                    $cant++;
+                    $opcion = $this->datosURL['opc'];
+                    $this->datosURL['opc'] = 'ajax';
+                    $valor = $this->campoAjax($id, $clave, $valor, $cant);
+                    $this->datosURL['opc'] = $opcion;
                 }
                 $salida.="<td>$valor</td>\n";
             }
@@ -762,6 +771,39 @@ class Mantenimiento {
         $mensaje .= $info;
         $mensaje .= '</div>';
         $mensaje .= '</div>';
+        return $mensaje;
+    }
+    
+    private function cargaComplementos()
+    {
+        $mensaje  = '<link href="css/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>';
+        //$mensaje .= '<script src="css/bootstrap3-editable/js/bootstrap-editable.min.js"></script>';
+        return $mensaje;
+    }
+    
+    private function campoAjax($id, $clave, $valor, $cant)
+    {
+        //url: 'ajax.php?tabla=". $this->tabla  . "',
+        //url: '" . $this->montaURL() . "&tabla=" . $this->tabla "',
+        $mensaje = '<a href="#" id="'.$clave.'" name="'.$clave.$cant.'" data-type="number" data-placement="right" data-pk="'.$id.'">' . $valor . '</a>
+                                <script>
+                                    $(function(){' . "
+                                        $('[name=\"".$clave.$cant."\"]').editable({
+                                            url: 'ajax.php?tabla=". $this->tabla  . "',
+                                            title: 'Cantidad:',
+                                            success: function(respuesta, newValue) {
+                                                        if (respuesta.success === false) {
+                                                            return respuesta.msj; //msj will be shown in editable form
+                                                        }
+                                                     },
+                                            validate: function(value) {
+                                                if($.trim(value) == '') {
+                                                    return 'No se puede dejar vacío';
+                                                }
+}
+                                        });
+                                    });
+                                </script>";
         return $mensaje;
     }
     
