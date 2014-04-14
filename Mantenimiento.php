@@ -808,7 +808,6 @@ class Mantenimiento {
                                     $(function(){' . "
                                         $('[name=\"".$clave.$num."\"]').editable({
                                             url: 'ajax.php?opc=put&tabla=". $this->tabla  . "',
-                                            title: '" . $titulo . ":',
                                             emptytext: 'Vacío',
                                             success: function(respuesta, newValue) {
                                                         if (respuesta.success === false) {
