@@ -109,7 +109,6 @@ class Mantenimiento {
             case 'insertar':return $this->insertar();
             case 'modificar':return $this->modificar();
             case 'borrar':return $this->borrar();
-            case 'ajax': return $this->ajax();break;
             default: return "La clase Mantenimiento No entiende lo solicitado [" . $this->datosURL['opc'] . "]";
         }
     }
@@ -806,14 +805,14 @@ class Mantenimiento {
             $indice = "id".$tabla2;
             $valorDato = $datosFila[$indice];
             $valorSelect = 'data-value="'.$valorDato.'" ';
-            $remoto = $valorSelect . ' data-sourceCache="true" data-sourceError="Error cargando datos" data-source="ajax.php?opc=get&tabla='.$tabla2.'"';
+            $remoto = $valorSelect . ' data-sourceCache="true" data-sourceError="Error cargando datos" data-source="Ajax.php?opc=get&tabla='.$tabla2.'"';
         }
  
         $mensaje = '<a href="#" title="Modifica '.$titulo.'" id="'.$clave.'" name="'.$clave.$num.'" data-type="'.$tipo.'" data-min="1" data-placement="right" '.$formato.' data-pk="'.$id.'" '.$remoto.' >' . $valor . '</a>
                                 <script>
                                     $(function(){' . "
                                         $('[name=\"".$clave.$num."\"]').editable({
-                                            url: 'ajax.php?opc=put&tabla=". $this->tabla  . "',
+                                            url: 'Ajax.php?opc=put&tabla=". $this->tabla  . "',
 
                                             emptytext: 'Vacío',
                                             success: function(respuesta, newValue) {
