@@ -7,9 +7,9 @@
     </Consulta>
     <Campos>
         <Col Campo="id" Nombre="id" Ancho="5" Ajuste="D" Titulo="id" Tipo="int(6)" Varios="ordenable"/>
-        <Col Campo="nombre" Nombre="nombre" Ancho="8" Ajuste="L" Titulo="Nombre" Varios="ordenable,buscable/nombre" Editable="si"/>
-        <Col Campo="clave" Nombre="clave" Ancho="16" Ajuste="L" Titulo="Clave" Tipo="Password" Editable="si"/>
-        <Col Campo="idSesion" Nombre="idSesion" Ancho="32" Ajuste="L" Titulo="id Sesión" Editable="si"/>
+        <Col Campo="nombre" Nombre="nombre" Ancho="8" Ajuste="L" Titulo="Nombre" Varios="ordenable,buscable/nombre,ajax/text" Editable="si"/>
+        <Col Campo="clave" Nombre="clave" Ancho="16" Ajuste="L" Titulo="Clave" Tipo="Password" Editable="si" Varios="ajax/text"/>
+        <Col Campo="idSesion" Nombre="idSesion" Ancho="32" Ajuste="L" Titulo="id Sesión" Editable="si" Varios="ajax/text"/>
         <Col Campo="alta" Nombre="alta" Ancho="1" Ajuste="R" Tipo="Boolean" Titulo="Altas" Editable="si"/>
         <Col Campo="modificacion" Nombre="modificacion" Ancho="1" Ajuste="R" Tipo="Boolean" Titulo="Modificaciones" Editable="si"/>
         <Col Campo="borrado" Nombre="borrado" Ancho="1" Ajuste="R" Tipo="Boolean" Titulo="Borrados" Editable="si"/>

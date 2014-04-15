@@ -16,23 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `Articulos`
---
-
-DROP TABLE IF EXISTS `Articulos`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-CREATE TABLE `Articulos` (
-  `id` smallint(6) NOT NULL auto_increment,
-  `descripcion` varchar(60) NOT NULL COMMENT 'ordenable,link/Articulo',
-  `marca` varchar(20) default NULL COMMENT 'ordenable',
-  `modelo` varchar(20) default NULL COMMENT 'ordenable',
-  `cantidad` int(11) default NULL COMMENT 'ordenable',
-  PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=785 DEFAULT CHARSET=latin1;
-SET character_set_client = @saved_cs_client;
-
---
 -- Dumping data for table `Articulos`
 --
 
@@ -41,29 +24,6 @@ LOCK TABLES `Articulos` WRITE;
 INSERT INTO `Articulos` VALUES (589,'Armario con puertas y cajones','M. E. C.','Dotación Inicial',26),(590,'Armario vitrina con puertas de cristal','M. E. C.','Dotación Inicial',49),(591,'Retrato del Rey','M. E. C.','Dotación Inicial',6),(592,'Encerado para laboratorio','M. E. C.','Dotación Inicial',2),(593,'Estantería de madera con trasera','M. E. C.','Dotación Inicial',61),(594,'Percha de 8 ganchos','M. E. C.','Dotación Inicial',68),(595,'Pupitre M.19','M. E. C.','Dotación Inicial',271),(596,'Tablero de corcho 2,00x1,00','M. E. C.','Dotación Inicial',29),(597,'Estantería metálica','M. E. C.','Dotación Inicial',18),(598,'Encerado P-1','M. E. C.','Dotación Inicial',21),(599,'Mesa de profesor','M. E. C.','Dotación Inicial',19),(600,'Sillón de profesor','M. E. C.','Dotación Inicial',19),(601,'Silla pala plegable (diestros)','M. E. C.','Dotación Inicial',26),(602,'Silla plegable (zurdos)','M. E. C.','Dotación Inicial',4),(603,'Banqueta altura regulable sin respaldo','M. E. C.','Dotación Inicial',95),(604,'Mesa de aula de plástica','M. E. C.','Dotación Inicial',6),(605,'Armario archivador A-2','M. E. C.','Dotación Inicial',4),(606,'Armario metálico','M. E. C.','Dotación Inicial',6),(607,'Armario con puertas ciegas','M. E. C.','Dotación Inicial',9),(608,'Banco de trabajo','M. E. C.','Dotación Inicial',6),(609,'Botiquín','M. E. C.','Dotación Inicial',3),(610,'Mesa de dibujo con banqueta','M. E. C.','Dotación Inicial',2),(611,'Mesa Trabajos teóricos con 5 sillas','M. E. C.','Dotación Inicial',6),(612,'Mesa de reuniones con 6 sillas','M. E. C.','Dotación Inicial',11),(613,'Encuadernadora de canutillo','M. E. C.','Dotación Inicial',1),(614,'Guillotina manual','M. E. C.','Dotación Inicial',1),(615,'Caseta meteorológica','M. E. C.','Dotación Inicial',1),(616,'Carro con ruedas para laboratorio','M. E. C.','Dotación Inicial',1),(617,'Centrifugadora eléctrica','M. E. C.','Dotación Inicial',2),(618,'Colección de rocas y minerales','M. E. C.','Dotación Inicial',6),(619,'Equipo experimentación II M. Preparación','M. E. C.','Dotación Inicial',1),(620,'Equipo multimedia de microscopía','M. E. C.','Dotación Inicial',1),(621,'Equipo de campo','M. E. C.','Dotación Inicial',2),(622,'Equipo de experiencias de mecánica','M. E. C.','Dotación Inicial',7),(623,'Equipo de óptica para alumnos','M. E. C.','Dotación Inicial',6),(624,'Hombre clástico y modelos anatómicos','M. E. C.','Dotación Inicial',1),(625,'Mechero tipo Bunsen','M. E. C.','Dotación Inicial',6),(626,'Mesa de trabajo de alumnos','M. E. C.','Dotación Inicial',6),(627,'Microscopio biológico para profesor','M. E. C.','Dotación Inicial',1),(628,'Mesa de laboratorio tipo B','M. E. C.','Dotación Inicial',8),(629,'Mesa de laboratorio tipo C','M. E. C.','Dotación Inicial',4),(630,'Nevera','M. E. C.','Dotación Inicial',1),(631,'Reactivos para química','M. E. C.','Dotación Inicial',1),(632,'Tabla periódica mural','M. E. C.','Dotación Inicial',1),(633,'Cajón para transparencias','M. E. C.','Dotación Inicial',1),(634,'Clasificador cajones aula plástica','M. E. C.','Dotación Inicial',1),(635,'Colección diapositivas educación plástica y visual','M. E. C.','Dotación Inicial',1),(636,'Equipo de grabado y estampación','M. E. C.','Dotación Inicial',10),(637,'Encerado portatil con trama','M. E. C.','Dotación Inicial',2),(638,'Equipo plantillas y escalas','M. E. C.','Dotación Inicial',1),(639,'Equipo paralex de metacrilato','M. E. C.','Dotación Inicial',15),(640,'Juego de poliedros','M. E. C.','Dotación Inicial',1),(641,'Juesgo de piezas volumétricas seccionadas','M. E. C.','Dotación Inicial',1),(642,'Proyector de diapositivas','M. E. C.','Dotación Inicial',3),(643,'Retroproyector','M. E. C.','Dotación Inicial',3),(644,'Televisor','M. E. C.','Dotación Inicial',4),(645,'Tripode de modelado de mesa','M. E. C.','Dotación Inicial',10),(646,'Colección diapositivas arte España','M. E. C.','Dotación Inicial',1),(647,'Colección diapositivas arte mundial','M. E. C.','Dotación Inicial',1),(648,'Colección diapositivas geografía España','M. E. C.','Dotación Inicial',1),(649,'Mapas históricos murales','M. E. C.','Dotación Inicial',1),(650,'Sistema soporte almacenamiento mapas','M. E. C.','Dotación Inicial',1),(651,'Equipo de fotografía','M. E. C.','Dotación Inicial',1),(652,'Colección diapositivas geografía Mundial','M. E. C.','Dotación Inicial',1),(653,'Equipo didáctico de material cartográfico','M. E. C.','Dotación Inicial',1),(654,'Cassette grabadora','M. E. C.','Dotación Inicial',4),(655,'Calculadora Científica','M. E. C.','Dotación Inicial',33),(656,'Equipo de medidas de campo','M. E. C.','Dotación Inicial',1),(657,'Equipo probabilidad, proc. estocásticos','M. E. C.','Dotación Inicial',1),(658,'Equipo para la construcción de poliedros','M. E. C.','Dotación Inicial',1),(659,'Equipo de geometría del espacio','M. E. C.','Dotación Inicial',1),(660,'Equipo de geometría del plano','M. E. C.','Dotación Inicial',1),(661,'Juego para encerado','M. E. C.','Dotación Inicial',2),(662,'Atril plegable','M. E. C.','Dotación Inicial',10),(663,'Conjunto de instrumentos de percusión de laminas','M. E. C.','Dotación Inicial',2),(664,'Conjunto de instrumentos de pequeña percusión (S.O.)','M. E. C.','Dotación Inicial',1),(665,'Equipo audiovisual aula de música','M. E. C.','Dotación Inicial',1),(666,'Encerado pautado portatil','M. E. C.','Dotación Inicial',1),(667,'Guitarra española','M. E. C.','Dotación Inicial',2),(668,'Piano electrónico','M. E. C.','Dotación Inicial',1),(669,'Clasificador de cajones aula de tecnología','M. E. C.','Dotación Inicial',2),(670,'Conjunto de elementos de contrucción y montaje','M. E. C.','Dotación Inicial',2),(671,'Equipo de dibujo técnico aula de tecnología','M. E. C.','Dotación Inicial',1),(672,'Electroesmeriladora portatil','M. E. C.','Dotación Inicial',1),(673,'Equipo de herramientas con armario (S.O.)','M. E. C.','Dotación Inicial',1),(674,'Equipo de herramientas para alumno','M. E. C.','Dotación Inicial',6),(675,'Equipo de herramientas para madera','M. E. C.','Dotación Inicial',1),(676,'Equipo de operadores tecnológicos-mecánicos','M. E. C.','Dotación Inicial',1),(677,'Equipo de operadores tecnológicos-neumáticos','M. E. C.','Dotación Inicial',1),(678,'Equipo de soldadura eléctrica portatil (S.O.)','M. E. C.','Dotación Inicial',1),(679,'Fuente de alimentación S.O.','M. E. C.','Dotación Inicial',6),(680,'Polímetro analógico didáctico','M. E. C.','Dotación Inicial',6),(681,'Polímetro digital','M. E. C.','Dotación Inicial',1),(682,'Sierra de calar','M. E. C.','Dotación Inicial',3),(683,'Taladradora de sobremesa','M. E. C.','Dotación Inicial',1),(684,'Tornillo de banco de 100 mm.','M. E. C.','Dotación Inicial',6),(685,'Torno de sobremesa','M. E. C.','Dotación Inicial',1),(686,'Mesa de director con sillón','M. E. C.','Dotación Inicial',3),(687,'Silla tapizada','M. E. C.','Dotación Inicial',8),(688,'Fichero F-2','M. E. C.','Dotación Inicial',5),(689,'Banco de pasillo','M. E. C.','Dotación Inicial',6),(690,'Pupitre M.03','M. E. C.','Dotación Inicial',16),(691,'Juego postes y red de voleibol','M. E. C.','Dotación Inicial',1),(692,'Juego de porterías de balonmano','M. E. C.','Dotación Inicial',1),(693,'Cámara de video','M. E. C.','Dotación Inicial',1),(694,'Cassette estero portatil con reproductor de CD','M. E. C.','Dotación Inicial',3),(695,'Mini cadena musical','M. E. C.','Dotación Inicial',1),(696,'Mesa soporte de proyector de diapositivas','M. E. C.','Dotación Inicial',2),(697,'Proyector de cuerpos opacos','M. E. C.','Dotación Inicial',1),(698,'Silla giratoria auxiliar','M. E. C.','Dotación Inicial',1),(699,'Mesa lectura 1,40x75x70 con 6 sillas','M. E. C.','Dotación Inicial',12),(700,'Agitador magnético','M. E. C.','Dotación Inicial',6),(701,'Balanza granatorio electrónica','M. E. C.','Dotación Inicial',2),(702,'Baño maría','M. E. C.','Dotación Inicial',1),(703,'Colección de fósiles','M. E. C.','Dotación Inicial',1),(704,'Equipo de análisis de agua','M. E. C.','Dotación Inicial',1),(705,'Esqueleto humano','M. E. C.','Dotación Inicial',1),(706,'Mapa de fondos oceánicos','M. E. C.','Dotación Inicial',1),(707,'Modelos de organización animal y vegetal','M. E. C.','Dotación Inicial',1),(708,'Modelos geológicos','M. E. C.','Dotación Inicial',1),(709,'Video estacionario','M. E. C.','Dotación Inicial',3),(710,'Planisferio de Peters','M. E. C.','Dotación Inicial',1),(711,'Cizalla-plegadora-punzonadora','M. E. C.','Dotación Inicial',1),(712,'Equipo de operadores tecnológicos electrico-electrónicos','M. E. C.','Dotación Inicial',2),(713,'Pistola decapante','M. E. C.','Dotación Inicial',2),(714,'Mesa auxiliar administrativo','M. E. C.','Dotación Inicial',1),(715,'Equipo básico de alumnos para experimentos de electricidad','M. E. C.','Dotación Inicial',6),(716,'Equipo de ilumniación aula plástica y visual','M. E. C.','Dotación Inicial',1),(717,'Pantalla','M. E. C.','Dotación Inicial',4),(718,'Tórculo pequeño con mesa','M. E. C.','Dotación Inicial',1),(719,'Banco sueco','M. E. C.','Dotación Inicial',8),(720,'Plinto','M. E. C.','Dotación Inicial',1),(721,'Juego Butacas modulares','M. E. C.','Dotación Inicial',2),(722,'Trampolín de tres alturas','M. E. C.','Dotación Inicial',1),(723,'Saltómetro','M. E. C.','Dotación Inicial',1),(724,'Material de gimnasia vario','M. E. C.','Dotación Inicial',1),(725,'Juego esterillas suelo','M. E. C.','Dotación Inicial',1),(726,'Colchonetade 2x1x0,05','M. E. C.','Dotación Inicial',8),(727,'Taladro portatil con soporte y accesorio','M. E. C.','Dotación Inicial',3),(728,'Material de vidrio para laboratorio','M. E. C.','Dotación Inicial',1),(729,'Lupa binocular para profesor','M. E. C.','Dotación Inicial',1),(730,'Lupa binocular para alumnos','M. E. C.','Dotación Inicial',15),(731,'Equipo termología alumnos','M. E. C.','Dotación Inicial',6),(732,'Equipo de Análisis de suelo','M. E. C.','Dotación Inicial',1),(733,'Equipo de Experimentación I.M. Disección','M. E. C.','Dotación Inicial',15),(734,'Juego de banderas','M. E. C.','Dotación Inicial',1),(735,'PC Notes','STI','PCNT_USB',1),(736,'Switch','Hewlett Packard','J4813A',1),(737,'Altavoces Sistema sobwoofer-satélites','','2106',1),(738,'Auriculares con micrófono','Creative','HS300',31),(739,'Impresora multifunción HP Officejet','Hewlett Packard','7205',1),(740,'Teclado','Inves','K366',16),(741,'Teclado y ratón','Toshiba','HCA32602690',1),(742,'Ratón','Inves','MS23',16),(743,'Equipo para el estudio del relieve','M. E. C.','Dotación Inicial',1),(744,'Material General de Física','M. E. C.','Dotación Inicial',1),(745,'Material de Laboratorio','M. E. C.','Dotación Inicial',1),(746,'Microscopio para Alumnos','M. E. C.','Dotación Inicial',15),(747,'Caballete de Pintura','M. E. C.','Dotación Inicial',10),(748,'Juego de Intrumentos para Rotular','M. E. C.','Dotación Inicial',1),(749,'Material General de Dibujo','M. E. C.','Dotación Inicial',1),(750,'Sierra Térmica de Porexpan','M. E. C.','Dotación Inicial',1),(751,'Equipo para la elaboración de circuitos impresos','M. E. C.','Dotación Inicial',1),(752,'Plegadora de plásticos con accesorios','M. E. C.','Dotación Inicial',1),(753,'Servidor Externo','Toshiba','Magnia Z415',1),(754,'Cámara flexo','Avermedia','POB106',1),(755,'Sintonizador externo','Avermedia','Aver TV Box',1),(756,'Monitor CRT 17\"','Inves','C708 Negro CCMM 3P',16),(757,'Ordenador de sobremesa aula Althia','Inves','SIERRA-DMT1400 2.66P',15),(758,'Ordenador de profesor aula Althia','Inves','Sierra DMT 1800 2.66',1),(759,'Balanza Granatorio','M. E. C.','Dotación Inicial',1),(760,'Reproductor DVD','MX-Onda','MX-DVD855NZ',1),(761,'Reproductor DVD con Divx','LG','DVX9743',1),(762,'Ordenador','Airis','dotación inicial',7),(763,'Monitor 17','AOC','FT720',7),(764,'Ordenador Santillana','Regalo Ed.Santillana','',3),(765,'Ordenador Dptos.','Monitor Philips','AMD2800/512/80/17\"',5),(766,'Estufa climatizadora','Ufesa','Climacontrol',3),(767,'Estufa 2000W','Ufesa','TV2610',6),(768,'Switch 8 puertos','Conceptronic','C100S8',2),(769,'Cañón proyector','NEC','VT480G',2),(770,'Protection Center 500 USB DIN','MGE','ProtectionCenter 500',2),(771,'Pantalla COMM-TEC (conectividad)','COMM-TEC','',2),(772,'Monitor CRT 17\" (conectividad)','APD','NH-778',4),(773,'Ordenador fijo conectividad','APD','ALDA CE 915GV',4),(774,'Ordenador portatil conectividad','Toshiba','Tecra S3-290',5),(775,'Bolsa de transporte de portatil','Toshiba','',5),(776,'Cámara de fotos digital','Nikon','Coolpix P2',1),(777,'Conmutador teclado-pantalla-usb','D-Link','DKVM-2KU',1),(778,'Punto de Acceso US-Robotics MAXg','US-Robotics','USR5451',1),(779,'Altavoces estereo','Genius','SP-G06',1),(780,'HP iPAQ rx4240 SP','HP','FA782AA#ABE',20),(781,'Ordenador Proyecto Hermes','Hewlett Packard','Hermes',1),(782,'Monitor 17','Hewlett Packard','Hermes',1),(783,'Ordenador Core2Quad','Packard Bell','Imedia X1610',1),(784,'Monitor 20','LG','Flatron Wide',1);
 /*!40000 ALTER TABLE `Articulos` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `Elementos`
---
-
-DROP TABLE IF EXISTS `Elementos`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-CREATE TABLE `Elementos` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `id_Articulo` smallint(6) NOT NULL COMMENT 'foreign(Articulos;id),ordenable',
-  `id_Ubicacion` smallint(5) unsigned NOT NULL COMMENT 'foreign(Ubicaciones;id),ordenable',
-  `numserie` varchar(30) default NULL COMMENT 'ordenable',
-  `cantidad` int(10) unsigned default NULL COMMENT 'ordenable',
-  `fechaCompra` date NOT NULL COMMENT 'ordenable',
-  PRIMARY KEY  (`id`),
-  KEY `id` (`id`),
-  KEY `id_Articulo` (`id_Articulo`),
-  KEY `id_Ubicacion` (`id_Ubicacion`),
-  CONSTRAINT `Elementos_ibfk_1` FOREIGN KEY (`id_Articulo`) REFERENCES `Articulos` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `Elementos_ibfk_2` FOREIGN KEY (`id_Ubicacion`) REFERENCES `Ubicaciones` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1884 DEFAULT CHARSET=latin1;
-SET character_set_client = @saved_cs_client;
 
 --
 -- Dumping data for table `Elementos`
@@ -76,20 +36,6 @@ INSERT INTO `Elementos` VALUES (1414,589,140,'',1,'2004-12-07 00:00:00'),(1415,5
 UNLOCK TABLES;
 
 --
--- Table structure for table `Ubicaciones`
---
-
-DROP TABLE IF EXISTS `Ubicaciones`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-CREATE TABLE `Ubicaciones` (
-  `id` smallint(5) unsigned NOT NULL auto_increment,
-  `Descripcion` varchar(50) NOT NULL COMMENT 'ordenable,link/Ubicacion',
-  PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=184 DEFAULT CHARSET=latin1;
-SET character_set_client = @saved_cs_client;
-
---
 -- Dumping data for table `Ubicaciones`
 --
 
@@ -98,30 +44,6 @@ LOCK TABLES `Ubicaciones` WRITE;
 INSERT INTO `Ubicaciones` VALUES (140,'Secretario'),(141,'Aula Althia'),(142,'Almacén'),(143,'Aula de Música'),(144,'Aula de Plástica'),(145,'Aula Tecnología'),(146,'Aula Polivalente'),(147,'Aula 01'),(148,'Aula 02'),(149,'Aula 03'),(150,'Aula 04'),(151,'Aula 11'),(152,'Aula 12'),(153,'Aula 13'),(154,'Aula 14'),(155,'Biblioteca'),(156,'Departamento Ciencias'),(157,'Departamento Lenguas Extranjer'),(158,'Departamento Música y E.F.'),(159,'Departamento Socio-Lingüístico'),(160,'Departamento Tecnología-Plást.'),(161,'Conserjería'),(162,'Laboratorio'),(163,'Aula PT'),(164,'AMPA'),(165,'Director'),(166,'Jefa Estudios'),(167,'Orientadora'),(168,'Pasillos y hall'),(169,'Pista deportiva'),(170,'Sala de profesores'),(171,'Secretaría'),(172,'Averías'),(173,'Nicolás Moyano'),(174,'Salvador Pons'),(175,'Loli'),(176,'Noelia'),(177,'Joaquín'),(178,'Dolores'),(179,'José Miguel'),(180,'José García Serrano'),(181,'Eva Sánchez Muñoz'),(182,'Rafael Picazo'),(183,'Celia Martínez');
 /*!40000 ALTER TABLE `Ubicaciones` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `Usuarios`
---
-
-DROP TABLE IF EXISTS `Usuarios`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-CREATE TABLE `Usuarios` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `nombre` varchar(16) NOT NULL default '',
-  `clave` varchar(32) NOT NULL default '',
-  `idSesion` varchar(20) NOT NULL default '',
-  `alta` tinyint(1) NOT NULL default '0',
-  `modificacion` tinyint(1) NOT NULL default '0',
-  `borrado` tinyint(1) NOT NULL default '0',
-  `consulta` tinyint(1) NOT NULL default '1',
-  `informe` tinyint(1) NOT NULL default '1',
-  `usuarios` tinyint(1) NOT NULL default '0',
-  `config` tinyint(1) NOT NULL default '0',
-  PRIMARY KEY  (`id`),
-  KEY `nombre` (`nombre`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
-SET character_set_client = @saved_cs_client;
 
 --
 -- Dumping data for table `Usuarios`
@@ -133,28 +55,7 @@ INSERT INTO `Usuarios` VALUES (2,'admin','galeote','s3LUSqxg{s',1,1,1,1,1,1,1),(
 /*!40000 ALTER TABLE `Usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
---
--- Table structure for table `test`
---
 
-DROP TABLE IF EXISTS `test`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-CREATE TABLE `test` (
-  `id` smallint(6) NOT NULL auto_increment,
-  `Descripcion` varchar(30) NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-SET character_set_client = @saved_cs_client;
-
---
--- Dumping data for table `test`
---
-
-LOCK TABLES `test` WRITE;
-/*!40000 ALTER TABLE `test` DISABLE KEYS */;
-/*!40000 ALTER TABLE `test` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
