@@ -8,14 +8,16 @@
             Ubicaciones U on E.id_ubicacion=U.id  {buscar} {orden} limit {inferior},{superior};
     </Consulta>
     <Campos>
-        <Col Campo="id" Nombre="id" Ancho="5" Ajuste="D" Titulo="id" Tipo="smallint(6)" Varios="ordenable"/>
-        <Col Campo="id_Ubicacion" Nombre="ubicacion" Ancho="40" Ajuste="L" Titulo="Ubicación" Varios="ordenable,foreign(Ubicaciones->id;{Descripcion}),ajax/select-Ubicaciones" Editable="si"/>
-        <Col Campo="id_Articulo" Nombre="articulo" Ancho="40" Ajuste="L" Titulo="Artículo" Varios="ordenable,buscable/A.Descripcion,foreign(Articulos->id;{Descripcion/Marca/Modelo}),ajax/select-Articulos" Editable="si"/>
-        <Col Nombre="marca" Ancho="40" Ajuste="L" Titulo="Marca" Varios="ordenable" Editable="no"/>
-        <Col Nombre="modelo" Ancho="40" Ajuste="L" Titulo="Modelo" Varios="ordenable" Editable="no"/>
-        <Col Campo="numserie" Nombre="numserie" Ancho="30" Ajuste="L" Titulo="Nº Serie" Varios="ordenable,ajax/text" Editable="si"/>
-        <Col Campo="fechaCompra" Nombre="fechaCompra" Ancho="25" Ajuste="L" Titulo="Compra" Varios="ordenable,ajax/combodate" Tipo="fecha" Editable="si"/>
-        <Col Campo="cantidad" Nombre="cantidad" Ancho="15" Ajuste="D" Titulo="Cant."  Tipo="Int(11)" Editable="si" Varios="ajax/number"/>
-        <Col Campo="imagen" Nombre="imagen" Ancho="10" Titulo="Imagen" Tipo="imagen" Editable="si" Varios="imagen"/>
+        <Col Campo="id" Nombre="id" Ancho="5" Ajuste="D" Titulo="id" Tipo="smallint(6)" Varios="ordenable" Visible="si"/>
+        <Col Campo="id_Ubicacion" Nombre="ubicacion" Ancho="40" Ajuste="L" Titulo="Ubicación" Visible="si" Varios="ordenable,foreign(Ubicaciones->id;{Descripcion}),ajax/select-Ubicaciones" Editable="si"/>
+        <Col Campo="id_Articulo" Nombre="articulo" Ancho="40" Ajuste="L" Titulo="Artículo" Visible="si" Varios="ordenable,buscable/A.Descripcion,foreign(Articulos->id;{Descripcion/Marca/Modelo}),ajax/select-Articulos" Editable="si"/>
+        <Col Nombre="marca" Ancho="40" Ajuste="L" Titulo="Marca" Varios="ordenable" Editable="no" Visible="si"/>
+        <Col Nombre="modelo" Ancho="40" Ajuste="L" Titulo="Modelo" Varios="ordenable" Editable="no" Visible="si"/>
+        <Col Campo="numserie" Nombre="numserie" Ancho="30" Ajuste="L" Titulo="Nº Serie" Visible="si" Varios="ordenable,ajax/text" Editable="si"/>
+        <Col Campo="fechaCompra" Nombre="fechaCompra" Ancho="25" Ajuste="L" Titulo="Compra" Visible="si" Varios="ordenable,ajax/combodate" Tipo="fecha" Editable="si"/>
+        <Col Campo="cantidad" Nombre="cantidad" Ancho="15" Ajuste="D" Titulo="Cant."  Tipo="Int(11)" Visible="si" Editable="si" Varios="ajax/number"/>
+        <Col Campo="imagen" Nombre="imagen" Ancho="10" Titulo="Imagen" Tipo="imagen" Editable="si" Visible="si" Varios="imagen"/>
+        <Col Campo="idUbicaciones" Nombre="idUbicaciones" Ancho="10" Titulo="idUbicaciones" Tipo="int" Editable="no" Visible="no" Varios=""/>
+        <Col Campo="idArticulos" Nombre="idArticulos" Ancho="10" Titulo="idArticulos" Tipo="int" Editable="no" Visible="no" Varios=""/>
     </Campos>
 </Mantenimiento>

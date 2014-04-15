@@ -807,15 +807,14 @@ class Mantenimiento {
             $valorDato = $datosFila[$indice];
             $valorSelect = 'data-value="'.$valorDato.'" ';
             $remoto = $valorSelect . ' data-sourceCache="true" data-sourceError="Error cargando datos" data-source="ajax.php?opc=get&tabla='.$tabla2.'"';
-            $select2 = 'select2: { dropdownAutoWidth: true }, ';
         }
-            
+ 
         $mensaje = '<a href="#" title="Modifica '.$titulo.'" id="'.$clave.'" name="'.$clave.$num.'" data-type="'.$tipo.'" data-placement="right" '.$formato.' data-pk="'.$id.'" '.$remoto.' >' . $valor . '</a>
                                 <script>
                                     $(function(){' . "
                                         $('[name=\"".$clave.$num."\"]').editable({
                                             url: 'ajax.php?opc=put&tabla=". $this->tabla  . "',
-                                            " . $select2 . "
+
                                             emptytext: 'Vacío',
                                             success: function(respuesta, newValue) {
                                                         if (respuesta.success === false) {
@@ -826,7 +825,7 @@ class Mantenimiento {
                                                 if($.trim(value) == '') {
                                                     return 'No se puede dejar vacío';
                                                 }
-}
+                                            }
                                         });
                                     });
                                 </script>";
