@@ -809,7 +809,7 @@ class Mantenimiento {
             $remoto = $valorSelect . ' data-sourceCache="true" data-sourceError="Error cargando datos" data-source="ajax.php?opc=get&tabla='.$tabla2.'"';
         }
  
-        $mensaje = '<a href="#" title="Modifica '.$titulo.'" id="'.$clave.'" name="'.$clave.$num.'" data-type="'.$tipo.'" data-placement="right" '.$formato.' data-pk="'.$id.'" '.$remoto.' >' . $valor . '</a>
+        $mensaje = '<a href="#" title="Modifica '.$titulo.'" id="'.$clave.'" name="'.$clave.$num.'" data-type="'.$tipo.'" data-min="1" data-placement="right" '.$formato.' data-pk="'.$id.'" '.$remoto.' >' . $valor . '</a>
                                 <script>
                                     $(function(){' . "
                                         $('[name=\"".$clave.$num."\"]').editable({
