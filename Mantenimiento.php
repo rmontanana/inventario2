@@ -109,6 +109,7 @@ class Mantenimiento {
             case 'insertar':return $this->insertar();
             case 'modificar':return $this->modificar();
             case 'borrar':return $this->borrar();
+            case 'ajax': return $this->ajax();break;
             default: return "La clase Mantenimiento No entiende lo solicitado [" . $this->datosURL['opc'] . "]";
         }
     }
@@ -158,8 +159,9 @@ class Mantenimiento {
         } else {
             $comando = str_replace('{orden}', ' ', $comando);
         }
+        $salida = $this->cargaComplementos();
         //Introduce un botón para hacer búsquedas y el número de la página
-        $salida = $this->enlaceBusqueda($pagSigte);
+        $salida.= $this->enlaceBusqueda($pagSigte);
         $salida.= $cabecera;
         //Consulta paginada de todas las tuplas
         $comando = str_replace('{inferior}', $pagina * NUMFILAS, $comando);
@@ -194,6 +196,9 @@ class Mantenimiento {
                 if ($clave == "id") {
                     $id = $valor;
                 }
+                if ($this->campos[$clave]['Visible'] == "no") {
+                    continue;
+                }
                 // Comprueba si tiene que añadir el enlace de inventario
                 if (strstr($this->campos[$clave]['Comment'], "link")) {
                     $comen = explode(",", $this->campos[$clave]['Comment']);
@@ -214,6 +219,17 @@ class Mantenimiento {
                 if ($this->campos[$clave]['Type'] == "Boolean(1)") {
                     $checked = $valor == '1' ? 'checked' : '';
                     $valor = '<input type="checkbox" disabled ' . $checked . '>';
+                }
+                if (strstr($this->campos[$clave]['Comment'], "ajax") && $this->perfil['Modificacion']) {
+                    $comen = explode(",", $this->campos[$clave]['Comment']);
+                    foreach ($comen as $co) {
+                        if (strstr($co, "ajax")) {
+                            $tmpco = explode("/", $co);
+                            $tipo = $tmpco[1];
+                        }
+                    }
+                    $cant++;
+                    $valor = $this->campoAjax($id, $clave, $tipo, $valor, $cant, $fila);
                 }
                 $salida.="<td>$valor</td>\n";
             }
@@ -520,7 +536,7 @@ class Mantenimiento {
             $def = simplexml_load_file($nombre);
             foreach ($def->Campos->Col as $columna) {
                 $this->campos[(string) $columna['Nombre']] = array("Field" => (string) $columna['Titulo'], "Comment" => (string) $columna['Varios'],
-                    "Type" => (string) $columna['Tipo'] . "(" . $columna['Ancho'] . ")", "Editable" => (string) $columna['Editable'], "Campo" => (string) $columna['Campo']);
+                    "Type" => (string) $columna['Tipo'] . "(" . $columna['Ancho'] . ")", "Editable" => (string) $columna['Editable'], "Campo" => (string) $columna['Campo'], "Visible" => (string) $columna['Visible']);
             }
             $this->comandoConsulta = $def->Consulta;
         } else {
@@ -547,6 +563,9 @@ class Mantenimiento {
         }
         $flecha = '<span class="glyphicon glyphicon-chevron-'.$sentidoFlecha.'"></span>';
         foreach ($this->campos as $clave => $datos) {
+            if ($this->campos[$clave]['Visible'] == "no") {
+                continue;
+            }
             $comen = explode(",", $datos["Comment"]);
             $ordenable = false;
             foreach ($comen as $co) {
@@ -762,6 +781,54 @@ class Mantenimiento {
         $mensaje .= $info;
         $mensaje .= '</div>';
         $mensaje .= '</div>';
+        return $mensaje;
+    }
+    
+    private function cargaComplementos()
+    {
+        $mensaje  = '<link href="css/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>';
+        //$mensaje .= '<script src="css/bootstrap3-editable/js/bootstrap-editable.min.js"></script>';
+        return $mensaje;
+    }
+    
+    private function campoAjax($id, $clave, $tipo, $valor, $num, $datosFila)
+    {
+        //url: 'ajax.php?tabla=". $this->tabla  . "',
+        //url: '" . $this->montaURL() . "&tabla=" . $this->tabla "',
+        $formato = $tipo == "combodate" ? 'data-format="YYYY-MM-DD" data-viewformat="DD/MM/YYYY"' : '';
+        $remoto = ""; $select2 = "";
+        $titulo = $clave;
+        if (strstr($tipo, "select")) {
+            $datos = explode("-", $tipo);
+            $tipo = $datos[0];
+            $tabla2 = $datos[1];
+            $clave = "id_".$clave;
+            $indice = "id".$tabla2;
+            $valorDato = $datosFila[$indice];
+            $valorSelect = 'data-value="'.$valorDato.'" ';
+            $remoto = $valorSelect . ' data-sourceCache="true" data-sourceError="Error cargando datos" data-source="ajax.php?opc=get&tabla='.$tabla2.'"';
+        }
+ 
+        $mensaje = '<a href="#" title="Modifica '.$titulo.'" id="'.$clave.'" name="'.$clave.$num.'" data-type="'.$tipo.'" data-min="1" data-placement="right" '.$formato.' data-pk="'.$id.'" '.$remoto.' >' . $valor . '</a>
+                                <script>
+                                    $(function(){' . "
+                                        $('[name=\"".$clave.$num."\"]').editable({
+                                            url: 'ajax.php?opc=put&tabla=". $this->tabla  . "',
+
+                                            emptytext: 'Vacío',
+                                            success: function(respuesta, newValue) {
+                                                        if (respuesta.success === false) {
+                                                            return respuesta.msj; //msj will be shown in editable form
+                                                        }
+                                                     },
+                                            validate: function(value) {
+                                                if($.trim(value) == '') {
+                                                    return 'No se puede dejar vacío';
+                                                }
+                                            }
+                                        });
+                                    });
+                                </script>";
         return $mensaje;
     }
     

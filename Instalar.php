@@ -334,9 +334,9 @@ class Instalar {
             $articulos = "CREATE TABLE `Articulos` (
                               `id` smallint(6) NOT NULL auto_increment COMMENT 'ordenable',
                               `descripcion` varchar(60) NOT NULL COMMENT 'ordenable,link/Articulo',
-                              `marca` varchar(20) default NULL COMMENT 'ordenable',
-                              `modelo` varchar(20) default NULL COMMENT 'ordenable',
-                              `cantidad` int(11) default NULL COMMENT 'ordenable',
+                              `marca` varchar(20) default NULL COMMENT 'ordenable,ajax/text',
+                              `modelo` varchar(20) default NULL COMMENT 'ordenable,ajax/text',
+                              `cantidad` int(11) default NULL COMMENT 'ordenable,ajax/number',
                               `imagen` varchar(45) default NULL COMMENT 'imagen',
                               PRIMARY KEY  (`id`)
                             ) ENGINE=InnoDB AUTO_INCREMENT=769 DEFAULT CHARSET=utf8;
@@ -352,9 +352,9 @@ class Instalar {
                               `id` int(10) unsigned NOT NULL auto_increment COMMENT 'ordenable',
                               `id_Articulo` smallint(6) NOT NULL COMMENT 'foreign(Articulos;id),ordenable',
                               `id_Ubicacion` smallint(5) unsigned NOT NULL COMMENT 'foreign(Ubicaciones;id),ordenable',
-                              `numserie` varchar(30) default NULL COMMENT 'ordenable',
-                              `cantidad` int(10) unsigned default NULL COMMENT 'ordenable',
-                              `fechaCompra` date NOT NULL COMMENT 'ordenable',
+                              `numserie` varchar(30) default NULL COMMENT 'ordenable,ajax/text',
+                              `cantidad` int(10) unsigned default NULL COMMENT 'ordenable,ajax/number',
+                              `fechaCompra` date NOT NULL COMMENT 'ordenable,ajax/combodate',
                               `imagen` varchar(45) default NULL COMMENT 'imagen',
                               PRIMARY KEY  (`id`),
                               KEY `id` (`id`),
@@ -366,9 +366,9 @@ class Instalar {
                             ";
             $usuarios = "CREATE TABLE `Usuarios` (
                               `id` int(10) unsigned NOT NULL auto_increment COMMENT 'ordenable',
-                              `nombre` varchar(16) NOT NULL default '',
-                              `clave` varchar(32) NOT NULL default '',
-                              `idSesion` varchar(20) NOT NULL default '',
+                              `nombre` varchar(16) NOT NULL default '' COMMENT 'ajax/text',
+                              `clave` varchar(32) NOT NULL default '' COMMENT 'ajax/text',
+                              `idSesion` varchar(20) NOT NULL default '' COMMENT 'ajax/text',
                               `alta` tinyint(1) NOT NULL default '0',
                               `modificacion` tinyint(1) NOT NULL default '0',
                               `borrado` tinyint(1) NOT NULL default '0',

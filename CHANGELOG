@@ -1,3 +1,7 @@
+
+-Añadida la biblioteca X-Edit
+-Añadida actualización Ajax en Mantenimiento
+
 Versión 1.082 09-04-2014
 -Ahora git tiene en cuenta los directorios tmp e img.data y no tiene en cuenta su contenido
 -Fix #30. Arreglado el botón de buscar que no enviaba los datos. Cambiado el texto por la lupa.
