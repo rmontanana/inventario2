@@ -196,6 +196,9 @@ class Mantenimiento {
                 if ($clave == "id") {
                     $id = $valor;
                 }
+                if ($this->campos[$clave]['Visible'] == "no") {
+                    continue;
+                }
                 // Comprueba si tiene que añadir el enlace de inventario
                 if (strstr($this->campos[$clave]['Comment'], "link")) {
                     $comen = explode(",", $this->campos[$clave]['Comment']);
@@ -533,7 +536,7 @@ class Mantenimiento {
             $def = simplexml_load_file($nombre);
             foreach ($def->Campos->Col as $columna) {
                 $this->campos[(string) $columna['Nombre']] = array("Field" => (string) $columna['Titulo'], "Comment" => (string) $columna['Varios'],
-                    "Type" => (string) $columna['Tipo'] . "(" . $columna['Ancho'] . ")", "Editable" => (string) $columna['Editable'], "Campo" => (string) $columna['Campo']);
+                    "Type" => (string) $columna['Tipo'] . "(" . $columna['Ancho'] . ")", "Editable" => (string) $columna['Editable'], "Campo" => (string) $columna['Campo'], "Visible" => (string) $columna['Visible']);
             }
             $this->comandoConsulta = $def->Consulta;
         } else {
@@ -560,6 +563,9 @@ class Mantenimiento {
         }
         $flecha = '<span class="glyphicon glyphicon-chevron-'.$sentidoFlecha.'"></span>';
         foreach ($this->campos as $clave => $datos) {
+            if ($this->campos[$clave]['Visible'] == "no") {
+                continue;
+            }
             $comen = explode(",", $datos["Comment"]);
             $ordenable = false;
             foreach ($comen as $co) {
@@ -790,7 +796,7 @@ class Mantenimiento {
         //url: 'ajax.php?tabla=". $this->tabla  . "',
         //url: '" . $this->montaURL() . "&tabla=" . $this->tabla "',
         $formato = $tipo == "combodate" ? 'data-format="YYYY-MM-DD" data-viewformat="DD/MM/YYYY"' : '';
-        $remoto = "";
+        $remoto = ""; $select2 = "";
         $titulo = $clave;
         if (strstr($tipo, "select")) {
             $datos = explode("-", $tipo);
@@ -801,6 +807,7 @@ class Mantenimiento {
             $valorDato = $datosFila[$indice];
             $valorSelect = 'data-value="'.$valorDato.'" ';
             $remoto = $valorSelect . ' data-sourceCache="true" data-sourceError="Error cargando datos" data-source="ajax.php?opc=get&tabla='.$tabla2.'"';
+            $select2 = 'select2: { dropdownAutoWidth: true }, ';
         }
             
         $mensaje = '<a href="#" title="Modifica '.$titulo.'" id="'.$clave.'" name="'.$clave.$num.'" data-type="'.$tipo.'" data-placement="right" '.$formato.' data-pk="'.$id.'" '.$remoto.' >' . $valor . '</a>
@@ -808,6 +815,7 @@ class Mantenimiento {
                                     $(function(){' . "
                                         $('[name=\"".$clave.$num."\"]').editable({
                                             url: 'ajax.php?opc=put&tabla=". $this->tabla  . "',
+                                            " . $select2 . "
                                             emptytext: 'Vacío',
                                             success: function(respuesta, newValue) {
                                                         if (respuesta.success === false) {
