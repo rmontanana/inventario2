@@ -100,6 +100,7 @@ class Configuracion {
         $personal = $this->datosConf['ESTILO'] == "personal" ? 'selected' : ' ';
         $bluecurve = $this->datosConf['ESTILO'] == "bluecurve" ? 'selected' : ' ';
         $cristal = $this->datosConf['ESTILO'] == "cristal" ? 'selected' : ' ';
+        $bootst = $this->datosConf['ESTILO'] == "bootstrap" ? 'selected' : ' ';
         $normal = $this->datosConf['PLANTILLA'] == "normal" ? 'selected' : ' ';
         $bootstrap = $this->datosConf['PLANTILLA'] == "bootstrap" ? 'selected' : ' ';
         $salida = '<center><div class="col-sm-4 col-md-6"><form name="configura" method="post">';
@@ -114,6 +115,7 @@ class Configuracion {
         $salida.='<tr><td  style="vertical-align:middle">Estilo</td><td><select name="ESTILO" class="form-control">';
         $salida.='<option value="personal" ' . $personal . '>personal</option>';
         $salida.='<option ' . $bluecurve . '>bluecurve</option>';
+        $salida.='<option ' . $bootst . '>bootstrap</option>';
         $salida.='<option ' . $cristal . '>cristal</option></select></td></tr>';
         $salida.='<tr><td style="vertical-align:middle">Color Lateral (bootstrap)</td><td style="vertical-align:middle"><select name="COLORLAT" id="COLORLAT" class="form-control">';
         foreach ($coloresLateral as $color => $codigo) {
