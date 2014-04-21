@@ -233,21 +233,31 @@ class Mantenimiento {
                 $salida.="<td>$valor</td>\n";
             }
             //Añade el icono de editar
+            $salida .= "<td>";
             if ($this->perfil['Modificacion']) {
-                //$salida.='<td><a href="index.php?' . $tabla . '&opc=editar&id=' . $id . "&pag=" . $pagina . $sufijoOrden . $sufijoEnlace .
+                //$salida.='<a href="index.php?' . $tabla . '&opc=editar&id=' . $id . "&pag=" . $pagina . $sufijoOrden . $sufijoEnlace .
                 $this->backupURL(); $this->datosURL['opc'] = "editar"; $this->datosURL['id'] = $id;
-                $salida.='<td><a href="' . $this->montaURL() .
-                        '"><img title="Editar" src="img/' . ESTILO . '/editar.png" alt="editar"></a>';
+                if (ESTILO == 'bootstrap') {
+                    $salida.='<a href="'.$this->montaURL() . '" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>';
+                } else {
+                    $salida.='<a href="' . $this->montaURL() .
+                            '"><img title="Editar" src="img/' . ESTILO . '/editar.png" alt="editar"></a>'; 
+                }  
                 $this->restoreURL();
             }
             //Añade el icono de eliminar
             if ($this->perfil['Borrado']) {
                 //$salida.='&nbsp;&nbsp;<a href="index.php?' . $tabla . '&opc=eliminar&id=' . $id . $sufijoEnlace .
                 $this->backupURL(); $this->datosURL['opc'] = "eliminar"; $this->datosURL['id'] = $id;
-                $salida.='&nbsp;&nbsp;<a href="' . $this->montaURL() .
-                        '"><img title="Eliminar" src="img/' . ESTILO . '/eliminar.png" alt="eliminar"></a></td></tr>' . "\n";
+                if (ESTILO == 'bootstrap') {
+                    $salida.='&nbsp;&nbsp;<a href="'. $this->montaURL() . '" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>';
+                } else {
+                    $salida.='&nbsp;&nbsp;<a href="' . $this->montaURL() .
+                            '"><img title="Eliminar" src="img/' . ESTILO . '/eliminar.png" alt="eliminar"></a>' . "\n";
+                } 
                 $this->restoreURL();
             }
+            $salida .= "</td></tr>";
         }
         $salida.="</tbody></table></center></p>";
         //Añade botones de comandos
@@ -261,23 +271,43 @@ class Mantenimiento {
             $this->datosURL['pag'] = $pagFwd;
             $fwd = $this->montaURL();
             $this->datosURL['pag'] = $pagRew;
-            $rew = $this->montaURL();
-            $anterior = '<a href="' . $anterior . "\"><img title=\"Pag. Anterior\" alt=\"anterior\" src=\"img/" . ESTILO . "/anterior.png\"></a>\n";
-            $siguiente = '<a href="' . $siguiente . "\"><img title=\"Pag. Siguiente\" alt=\"siguiente\" src=\"img/" . ESTILO . "/siguiente.png\"></a>\n";
-            $fwd = '<a href="' . $fwd . "\"><img title=\"+4 Pags.\" alt=\"mas4pags\" src=\"img/" . ESTILO . "/fwd.png\"></a>\n";
-            $rew = '<a href="' . $rew . "\"><img title=\"-4 Pags.\" alt=\"menos4pags\" src=\"img/" . ESTILO . "/rew.png\"></a>\n";
+            $rew = $this->montaURL();            
             $this->restoreURL();
             $this->datosURL['sentido'] = "asc";
             $az = $this->montaURL();
-            $az = '<a href="' . $az . '"><img alt="asc" title="Orden ascendente" src="img/' . ESTILO . '/ascendente.png"></a>';
+            //
+            //$az = '<a href="' . $az . '" title="Orden ascendente"><h1><span class="glyphicon glyphicon-sort-by-alphabet"></span></h1></a>';
             $this->datosURL['sentido'] = "desc";
             $za = $this->montaURL();
-            $za = '<a href="' . $za . '"><img alt="desc" title="Orden descendente" src="img/' . ESTILO . '/descendente.png"></a>';
+            //
+            //$za = '<a href="' . $za . '" title="Orden descendente"><h1><span class="glyphicon glyphicon-sort-by-alphabet-alt"></span></h1></a>';
+            if (ESTILO == 'bootstrap') {
+                $anterior = '<button type="button" class="btn btn-default btn-lg" title="Pag. anterior" onClick="location.href='."'$anterior'".'"><span class="glyphicon glyphicon-chevron-left"></span></button>';
+                $siguiente = '<button type="button" class="btn btn-default btn-lg" title="Pag. siguiente" onClick="location.href='."'$siguiente'".'"><span class="glyphicon glyphicon-chevron-right"></span></button>';
+                $fwd = '<button type="button" class="btn btn-default btn-lg" title="+4 páginas" onClick="location.href='."'$fwd'".'"><span class="glyphicon glyphicon-forward"></span></button>';
+                $rew = '<button type="button" class="btn btn-default btn-lg" title="-4 páginas" onClick="location.href='."'$rew'".'"><span class="glyphicon glyphicon-backward"></span></button>';
+                $az = '<button type="button" class="btn btn-default btn-lg" title="Orden ascendente" onClick="location.href='."'$az'".'"><span class="glyphicon glyphicon-sort-by-alphabet"></span></button>';
+                $za = '<button type="button" class="btn btn-default btn-lg" title="Orden descendente" onClick="location.href='."'$za'".'"><span class="glyphicon glyphicon-sort-by-alphabet-alt"></span></button>';  
+            } else {
+                $anterior = '<a href="' . $anterior . "\"><img title=\"Pag. Anterior\" alt=\"anterior\" src=\"img/" . ESTILO . "/anterior.png\"></a>\n";
+                $siguiente = '<a href="' . $siguiente . "\"><img title=\"Pag. Siguiente\" alt=\"siguiente\" src=\"img/" . ESTILO . "/siguiente.png\"></a>\n";
+                $fwd = '<a href="' . $fwd . "\"><img title=\"+4 Pags.\" alt=\"mas4pags\" src=\"img/" . ESTILO . "/fwd.png\"></a>\n";
+                $rew = '<a href="' . $rew . "\"><img title=\"-4 Pags.\" alt=\"menos4pags\" src=\"img/" . ESTILO . "/rew.png\"></a>\n";
+                $az = '<a href="' . $az . '"><img alt="asc" title="Orden ascendente" src="img/' . ESTILO . '/ascendente.png"></a>';
+                $za = '<a href="' . $za . '"><img alt="desc" title="Orden descendente" src="img/' . ESTILO . '/descendente.png"></a>';
+            }
             $this->restoreURL();
             if ($this->perfil['Informe']) {
                 $this->datosURL['opc'] = "informe";
                 $inf = $this->montaURL();
-                $informe = '<a href="' . $inf . '"><img src="img/' . ESTILO . '/informe.png" alt="informe" title="Informe pdf"></a>';
+                if (ESTILO == 'bootstrap') {
+                    $informe = '<button type="button" class="btn btn-default btn-lg" title="Informe de '.$this->tabla.'" onClick="location.href='."'$inf.'".'"><span class="glyphicon glyphicon-list-alt"></span></button>';
+                } else {
+                    $informe = '<a href="' . $inf . '"><img src="img/' . ESTILO . '/informe.png" alt="informe" title="Informe pdf"></a>'; 
+                }
+                //
+                
+                //$informe = '<a href="'.$inf.'" title="Informe de '.$this->tabla.'"><h1><span class="glyphicon glyphicon-list-alt"></span></h1></a>';
             } else {
                 $informe = "";
             }
@@ -285,8 +315,13 @@ class Mantenimiento {
         }
         if ($this->perfil['Alta']) {
             $this->datosURL['opc'] = 'nuevo';
-            $anadir = '<a href="' . $this->montaURL() . '">' .
+            if (ESTILO == 'bootstrap') {
+                $anadir = '<button type="button" class="btn btn-default btn-lg" title="Añade '.$this->tabla.'" onClick="location.href='."'".$this->montaURL()."'".'"><span class="glyphicon glyphicon-plus-sign"></span></button>';
+            } else {
+                $anadir = '<a href="' . $this->montaURL() . '">' .
                     '<img title="A&ntilde;adir registro" alt="nuevo" src="img/' . ESTILO . '/nuevo.png"></a>';
+            }            
+                    //$anadir = '<a href="'.$this->montaURL() . '"title="Añade '.$this->tabla.'"><h1><span class="glyphicon glyphicon-plus-sign"></span></h1></a>';
         } else {
             $anadir = "";
         }
@@ -763,14 +798,15 @@ class Mantenimiento {
         return $mensaje;
     }
 
-    protected function errorBD($comando, $texto = "", $tipo = "danger", $cabecera = "&iexcl;Atenci&oacute;n!")
+    protected function errorBD($comando, $texto = "")
     {
         if (!$texto) {
             $texto = "No pudo ejecutar correctamente el comando $comando error=" . $this->bdd->mensajeError();
         } else {
             $texto = "$texto error=" . $this->bdd->mensajeError();
         }
-        return $this->panelMensaje($texto, "danger", $cabecera="&iexcl;Error!");
+        $cabecera="&iexcl;Error!";
+        return $this->panelMensaje($texto, "danger", $cabecera);
     }
     
     private function panelMensaje($info, $tipo = "danger", $cabecera = "&iexcl;Atenci&oacute;n!") {
@@ -806,8 +842,7 @@ class Mantenimiento {
             $valorDato = $datosFila[$indice];
             $valorSelect = 'data-value="'.$valorDato.'" ';
             $remoto = $valorSelect . ' data-sourceCache="true" data-sourceError="Error cargando datos" data-source="Ajax.php?opc=get&tabla='.$tabla2.'"';
-        }
- 
+        } 
         $mensaje = '<a href="#" title="Modifica '.$titulo.'" id="'.$clave.'" name="'.$clave.$num.'" data-type="'.$tipo.'" data-min="1" data-placement="right" '.$formato.' data-pk="'.$id.'" '.$remoto.' >' . $valor . '</a>
                                 <script>
                                     $(function(){' . "
@@ -830,7 +865,6 @@ class Mantenimiento {
                                 </script>";
         return $mensaje;
     }
-    
 }
 
 ?>

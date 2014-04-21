@@ -1,3 +1,9 @@
+Versión 1.10 21-04-2014
+-Corregido error en el nombre del archivo de la clase ajax que estaba en minúsculas
+-Añadidos botones de acción tipo bootstrap en Mantenimiento y añadido a configuración en estilo
+-Informe de inventario de Artículo o Ubicación desde id y edición ajax de la descripción
+-Cambiado mensaje de usuario/clave incorrectos para poner un fondo de color rojo
+
 Versión 1.09 16-04-2014
 -Añadida la biblioteca X-Edit
 -Añadida actualización Ajax en Mantenimiento
