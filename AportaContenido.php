@@ -27,7 +27,7 @@ define('FORMULARIO_ACCESO', '<form name="formulario_acceso" action="index.php?re
         'Usuario<br><input type="text" name="usuario" value="" size="8" /><br><br>Clave<br><input type="password" name="clave" value="" size="8" />' .
         '<br><br><button type="submit" name="iniciar" class="btn btn-primary">Iniciar <span class="glyphicon glyphicon-log-in"></span></button></form>');
 define('MENSAJE_DEMO', 'Puede Iniciar sesi&oacute;n con<br>usuario <i><b>demo</b></i><br>contrase&ntilde;a <i>demo</i><br>');
-define('USUARIO_INCORRECTO', '<label class="error">Usuario y clave incorrectos!</label><br><br>');
+define('USUARIO_INCORRECTO', '<label class="bg-danger">Usuario y clave incorrectos!</label><br><br>');
 define('CREDITOS', '<div class="modal fade" tabindex="-1" id="creditos" role="dialog" aria-labelledby="modalCreditos" aria-hidden="true">
                       <div class="modal-dialog modal-lg">
                         <div class="modal-content">
