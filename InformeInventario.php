@@ -204,7 +204,7 @@ class InformeInventario {
             <label for='salida'>Salida del informe por:</label>";
         $salida.='<div class="radio"><label><input type="radio" name="salida" value="pantalla" checked><span class="glyphicon glyphicon-list-alt"></span> Pantalla</label></div>';
         $salida.='<div class="radio"><label><input type="radio" name="salida" value="csv"><span class="glyphicon glyphicon-cloud-download"></span> Archivo CSV</label></div>';
-        $salida.='<div class="radio"><label><input type="radio" name="salida" value="etiquetas"><span class="glyphicon glyphicon-qrcode"></span> Etiquetas</label></div>';
+        $salida.='<div class="radio"><label><input type="radio" name="salida" value="etiquetas"><span class="glyphicon glyphicon-qrcode"></span> Etiquetas (<a target="_new" href="http://www.apli.es/producto/ficha_producto.aspx?referencia=01275&stype=referencia&referenciaValue=01275&q=01275">Apli 1725</a>)</label></div>';
         $salida.="<br><br></fieldset><p>";
         $salida.='<p align="center"><button type=submit class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Aceptar</button></p><br></div>' . "\n";
         $salida.="<script>$('.selectpicker').selectpicker();</script>";
