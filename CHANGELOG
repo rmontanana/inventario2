@@ -1,3 +1,8 @@
+Versión 1.11 24-04-2014
+-Fix #34 Corregido que salga una etiqueta por cada elemento reflejado en cantidad.
+-Fix #33 Hay que hacer doble click para editar ajax
+-Fix #32 Añadido mensaje y enlace al tipo de etiquetas que utiliza y corregido mensaje de error de conexión a base de datos de SQL
+
 Versión 1.10 21-04-2014
 -Corregido error en el nombre del archivo de la clase ajax que estaba en minúsculas
 -Añadidos botones de acción tipo bootstrap en Mantenimiento y añadido a configuración en estilo
