@@ -190,7 +190,7 @@ class Mantenimiento {
         }
         //$salida.=$comando;
         while ($fila = $this->bdd->procesaResultado()) {
-            $salida.='<tr align="center" bottom="middle">';
+            $salida.='<tr bottom="middle">';
             foreach ($fila as $clave => $valor) {
                 if ($clave == "id") {
                     $id = $valor;
@@ -230,7 +230,15 @@ class Mantenimiento {
                     $cant++;
                     $valor = $this->campoAjax($id, $clave, $tipo, $valor, $cant, $fila);
                 }
-                $salida.="<td>$valor</td>\n";
+                $alineacion = '';
+                if (isset($this->campos[$clave]['Ajuste'])) {
+                    switch ($this->campos[$clave]['Ajuste']) {
+                        case 'D': $alineacion = 'align="right"'; break;
+                        case 'L': $alineacion = 'align="left"'; break;
+                        case 'C': $alineacion = 'align="center"'; break;
+                    }
+                }
+                $salida.="<td $alineacion >$valor</td>\n";
             }
             //Añade el icono de editar
             $salida .= "<td>";
@@ -570,7 +578,8 @@ class Mantenimiento {
             $def = simplexml_load_file($nombre);
             foreach ($def->Campos->Col as $columna) {
                 $this->campos[(string) $columna['Nombre']] = array("Field" => (string) $columna['Titulo'], "Comment" => (string) $columna['Varios'],
-                    "Type" => (string) $columna['Tipo'] . "(" . $columna['Ancho'] . ")", "Editable" => (string) $columna['Editable'], "Campo" => (string) $columna['Campo'], "Visible" => (string) $columna['Visible']);
+                    "Type" => (string) $columna['Tipo'] . "(" . $columna['Ancho'] . ")", "Editable" => (string) $columna['Editable'], 
+                    "Campo" => (string) $columna['Campo'], "Visible" => (string) $columna['Visible'], "Ajuste" => (string) $columna['Ajuste']);
             }
             $this->comandoConsulta = $def->Consulta;
         } else {

@@ -4,6 +4,7 @@ Versión 1.11 24-04-2014
 -Fix #32 Añadido mensaje y enlace al tipo de etiquetas que utiliza y corregido mensaje de error de conexión a base de datos de SQL
 -Añadido diálogo antes de realizar el inventario total.
 -Añadido cuadro para resaltar el nombre del centro en la pantalla inicial.
+-Cambiada la alineación de los campos en Mantenimiento para utilizar el atributo Ajuste
 
 Versión 1.10 21-04-2014
 -Corregido error en el nombre del archivo de la clase ajax que estaba en minúsculas
