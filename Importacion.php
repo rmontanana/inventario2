@@ -55,10 +55,10 @@ class Importacion {
 
     private function formulario() {
         $accion = "index.php?importacion&opc=importar";
-        $salida .= '<script type="text/javascript" src="css/bootstrap-filestyle.min.js"> </script>';
+        //$salida .= '<script type="text/javascript" src="css/bootstrap-filestyle.min.js"> </script>';
         $salida .='<div class="col-sm-6 col-md-6">';
         $salida .= '<form  enctype="multipart/form-data" name="importacion.form" method="post" action="' . $accion . '">' . "\n";
-        $salida .= "<fieldset style=\"width: 96%;\"><p><legend style=\"color: red;\"><b>Elige Archivo</b></legend>\n";
+        $salida .= "<fieldset style=\"width: 96%;\"><p><legend style=\"color: red;\"><b>Elige Archivo</b></legend></p>\n";
         //$salida .= '<input type="file" name="fichero" id="fichero" onChange="seleccionFichero(this);" class="filestyle" data-classButton="btn btn-primary">';
         //$salida .= '<input type="file" name="fichero" id="fichero" onChange="seleccionFichero(this);">';
         //$salida .= '<input type="file" class="filestyle" data-input="false">';
@@ -74,12 +74,11 @@ class Importacion {
                             <span class="fileinput-exists">Cambiar</span><input type="file" name="fichero" id="fichero" onChange="seleccionFichero(this);"></span>
                             <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Eliminar</a>
                         </div>
-                    </div>';
+                    </div></fieldset>';
         $salida .= '<p align="center"><button class="btn btn-primary" type=submit><span class="glyphicon glyphicon-cloud-upload"></span> Aceptar</button></p><br>' . "\n";
         $salida .= '</div>';
         $mensaje = 'Sólo se permiten archivos con extensión CSV';
-        $salida .= "<script type='text/javascript'>".'
-            //$(":file").filestyle({classButton: "btn btn-primary"});'."
+        $salida .= "<script type='text/javascript'>"."
 
                 function seleccionFichero(obj) {
                 var filePath = obj.value;

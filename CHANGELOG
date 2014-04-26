@@ -1,4 +1,4 @@
-Versión 1.11 24-04-2014
+Versión 1.11 26-04-2014
 -Fix #34 Corregido que salga una etiqueta por cada elemento reflejado en cantidad.
 -Fix #33 Hay que hacer doble click para editar ajax
 -Fix #32 Añadido mensaje y enlace al tipo de etiquetas que utiliza y corregido mensaje de error de conexión a base de datos de SQL
