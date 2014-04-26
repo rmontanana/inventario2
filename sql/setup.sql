@@ -22,8 +22,8 @@ DROP TABLE IF EXISTS `Articulos`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `Articulos` (
-  `id` smallint(6) NOT NULL auto_increment COMMENT 'ordenable',
-  `descripcion` varchar(60) NOT NULL COMMENT 'ordenable,link/Articulo',
+  `id` smallint(6) NOT NULL auto_increment COMMENT 'ordenable,link/Articulo',
+  `descripcion` varchar(60) NOT NULL COMMENT 'ordenable,ajax/text',
   `marca` varchar(20) default NULL COMMENT 'ordenable,ajax/text',
   `modelo` varchar(20) default NULL COMMENT 'ordenable,ajax/text',
   `cantidad` int(11) default NULL COMMENT 'ordenable,ajax/number',
@@ -66,8 +66,8 @@ DROP TABLE IF EXISTS `Ubicaciones`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `Ubicaciones` (
-  `id` smallint(5) unsigned NOT NULL auto_increment COMMENT 'ordenable',
-  `Descripcion` varchar(50) NOT NULL COMMENT 'ordenable,link/Ubicacion',
+  `id` smallint(5) unsigned NOT NULL auto_increment COMMENT 'ordenable,link/Ubicacion',
+  `Descripcion` varchar(50) NOT NULL COMMENT 'ordenable,ajax/text',
   `imagen` varchar(45) DEFAULT NULL COMMENT 'imagen',
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=184 DEFAULT CHARSET=utf8;

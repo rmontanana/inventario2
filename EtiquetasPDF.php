@@ -83,52 +83,55 @@ class EtiquetasPDF {
         $aplicacion = $url[1];
         $protocolo = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443 ? "https://" : "http://";
         $enlace = $protocolo . $_SERVER['SERVER_NAME'] . "/" . $aplicacion . "/index.php?elementos&opc=editar&id=";
-        while($tupla = $this->bdd->procesaResultado()) {            
-            if ($i % 2) {
-                //Columna 2
-                $etiq1 = 136;
-                $etiq2 = 105;
-            } else {
-                //Columna 1
-                $etiq1 = 30;
-                $etiq2 = 1;
-                $fila++;
-            }
-            if ($i % 14 == 0) {
-                if (!$primero) {
-                    $this->pdf->AddPage();
-                    $fila = 0;
+        while($tupla = $this->bdd->procesaResultado()) {
+            for ($j = 0; $j < $tupla['cantidad']; $j++) {
+                //Hay que generar tantas etiquetas como ponga la cantidad de cada elemento
+                if ($i % 2) {
+                    //Columna 2
+                    $etiq1 = 136;
+                    $etiq2 = 105;
+                } else {
+                    //Columna 1
+                    $etiq1 = 30;
+                    $etiq2 = 1;
+                    $fila++;
                 }
-                $primero = false;
+                if ($i % 14 == 0) {
+                    if (!$primero) {
+                        $this->pdf->AddPage();
+                        $fila = 0;
+                    }
+                    $primero = false;
+                }
+                $py = 6 + 41 * $fila;
+                $enlace2=$enlace.$tupla['idEl'];
+                $fichero = "tmp/etiq".rand(1000,9999).".png";
+                QRcode::png($enlace2, $fichero);
+                $this->pdf->image($fichero, $etiq2, $py, 30, 30);
+                unlink($fichero);
+                $this->pdf->setxy($etiq1, $py);
+                $this->pdf->Cell(30, 10, utf8_decode($tupla['articulo']));
+                $py+=$tamLinea;
+                $this->pdf->setxy($etiq1, $py);
+                $this->pdf->Cell(30, 10, utf8_decode($tupla['marca']));
+                $py+=$tamLinea;
+                $this->pdf->setxy($etiq1, $py);
+                $this->pdf->Cell(30, 10, utf8_decode($tupla['modelo']));
+                $py+=$tamLinea;
+                $this->pdf->setxy($etiq1, $py);
+                $this->pdf->Cell(30, 10, utf8_decode($tupla['numserie']));
+                $py+=$tamLinea;
+                $this->pdf->setxy($etiq1, $py);
+                $this->pdf->Cell(30, 10, $tupla['fechaCompra']);
+                $py+=$tamLinea-1;
+                $this->pdf->setxy($etiq2, $py);
+                $this->pdf->Cell(30, 10, utf8_decode($tupla['ubicacion']));
+                $py+=$tamLinea-1;
+                $this->pdf->setxy($etiq2, $py);
+                $cadena = "idElemento=" . $tupla['idEl'] . " / idArticulo=" . $tupla['idArt'] . " / idUbicacion=" . $tupla['idUbic'];           
+                $this->pdf->Cell(30, 10, $cadena);
+                $i++;
             }
-            $py = 6 + 41 * $fila;
-            $enlace2=$enlace.$tupla['idEl'];
-            $fichero = "tmp/etiq".rand(1000,9999).".png";
-            QRcode::png($enlace2, $fichero);
-            $this->pdf->image($fichero, $etiq2, $py, 30, 30);
-            unlink($fichero);
-            $this->pdf->setxy($etiq1, $py);
-            $this->pdf->Cell(30, 10, utf8_decode($tupla['articulo']));
-            $py+=$tamLinea;
-            $this->pdf->setxy($etiq1, $py);
-            $this->pdf->Cell(30, 10, utf8_decode($tupla['marca']));
-            $py+=$tamLinea;
-            $this->pdf->setxy($etiq1, $py);
-            $this->pdf->Cell(30, 10, utf8_decode($tupla['modelo']));
-            $py+=$tamLinea;
-            $this->pdf->setxy($etiq1, $py);
-            $this->pdf->Cell(30, 10, utf8_decode($tupla['numserie']));
-            $py+=$tamLinea;
-            $this->pdf->setxy($etiq1, $py);
-            $this->pdf->Cell(30, 10, $tupla['fechaCompra']);
-            $py+=$tamLinea-1;
-            $this->pdf->setxy($etiq2, $py);
-            $this->pdf->Cell(30, 10, utf8_decode($tupla['ubicacion']));
-            $py+=$tamLinea-1;
-            $this->pdf->setxy($etiq2, $py);
-            $cadena = "idElemento=" . $tupla['idEl'] . " / idArticulo=" . $tupla['idArt'] . " / idUbicacion=" . $tupla['idUbic'];           
-            $this->pdf->Cell(30, 10, $cadena);
-            $i++;
         }
         //$this->pdf->MultiCell(0,30,var_export($filas,true));
     }
