@@ -35,6 +35,7 @@ class InformeInventario {
             case 'Ubicacion':return $this->formularioUbicacion();
             case 'listarUbicacion':return $this->listarUbicacion();
             case 'listarArticulo':return $this->listarArticulo();
+            case 'listarTotal': return $this->listarTotal();
             case 'Articulo':return $this->formularioArticulo();
             case 'Total':return $this->inventarioTotal();
             case 'descuadres': return $this->inventarioDescuadres();
@@ -204,7 +205,7 @@ class InformeInventario {
             <label for='salida'>Salida del informe por:</label>";
         $salida.='<div class="radio"><label><input type="radio" name="salida" value="pantalla" checked><span class="glyphicon glyphicon-list-alt"></span> Pantalla</label></div>';
         $salida.='<div class="radio"><label><input type="radio" name="salida" value="csv"><span class="glyphicon glyphicon-cloud-download"></span> Archivo CSV</label></div>';
-        $salida.='<div class="radio"><label><input type="radio" name="salida" value="etiquetas"><span class="glyphicon glyphicon-qrcode"></span> Etiquetas</label></div>';
+        $salida.='<div class="radio"><label><input type="radio" name="salida" value="etiquetas"><span class="glyphicon glyphicon-qrcode"></span> Etiquetas (<a target="_new" href="http://www.apli.es/producto/ficha_producto.aspx?referencia=01275&stype=referencia&referenciaValue=01275&q=01275">Apli 1725</a>)</label></div>';
         $salida.="<br><br></fieldset><p>";
         $salida.='<p align="center"><button type=submit class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Aceptar</button></p><br></div>' . "\n";
         $salida.="<script>$('.selectpicker').selectpicker();</script>";
@@ -223,8 +224,25 @@ class InformeInventario {
         $accion = "index.php?informeInventario&opc=listarArticulo";
         return $this->formulario($accion, 'Art&iacute;culo', $this->listaArticulos());
     }
-
+    
     private function inventarioTotal()
+    {
+        return $this->dialogo();
+    }
+
+    private function dialogo()
+    {
+        $dialogo = '<div class="container col-5"><div class="jumbotron">
+                      <h1>Inventario Total</h1>
+                      <p>¿Desea obtener el inventario de todo el centro?</p>
+                      <p><a class="btn btn-primary btn-lg" role="button" onClick="location.href=' . "'index.php'" . '"><span class="glyphicon glyphicon-arrow-left"></span> Volver</a>
+                         <a class="btn btn-success btn-lg" role="button" onClick="location.href=' . "'index.php?informeInventario&opc=listarTotal'" . '">
+                             <span class="glyphicon glyphicon-cloud-download"></span> Continuar</a></p>
+                    </div></div>';
+        return $dialogo;
+    }
+    
+    private function listarTotal()
     {
         $fichero = "xml/inventarioUbicacion.xml";
         $salida = "tmp/inventarioUbicacion.xml";

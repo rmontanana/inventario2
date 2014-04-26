@@ -66,7 +66,7 @@ class Sql {
         $this->bdd = @new mysqli($servidor,$usuario,$clave,$baseDatos);
         if (mysqli_connect_errno()) {
             $this->mensajeError='<h1>Fallo al conectar con el servidor MySQL.</h1>';
-            $this->mensajeError.="Servidor [".$servidor ."] usuario=[".$usuario."] clave [".$clave."] base [".$baseDatos."]";
+            $this->mensajeError.="Servidor [".$servidor ."] base de datos [".$baseDatos."]";
             $this->error=true;
             $this->estado=false;
         } else {

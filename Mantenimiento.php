@@ -189,8 +189,9 @@ class Mantenimiento {
             }
         }
         //$salida.=$comando;
+        //$salida.=var_export($this->campos,true);
         while ($fila = $this->bdd->procesaResultado()) {
-            $salida.='<tr align="center" bottom="middle">';
+            $salida.='<tr bottom="middle">';
             foreach ($fila as $clave => $valor) {
                 if ($clave == "id") {
                     $id = $valor;
@@ -230,10 +231,19 @@ class Mantenimiento {
                     $cant++;
                     $valor = $this->campoAjax($id, $clave, $tipo, $valor, $cant, $fila);
                 }
-                $salida.="<td>$valor</td>\n";
+                $alineacion = '';
+                if (isset($this->campos[$clave]['Ajuste'])) {
+                    switch ($this->campos[$clave]['Ajuste']) {
+                        case 'D': $alineacion = 'align="right"'; break;
+                        case 'L': $alineacion = 'align="left"'; break;
+                        case 'C': $alineacion = 'align="center"'; break;
+                    }
+                }
+                $salida.="<td $alineacion >$valor</td>\n";
             }
+            //Añade los botones de acciones
+            $salida .= '<td align="center">';
             //Añade el icono de editar
-            $salida .= "<td>";
             if ($this->perfil['Modificacion']) {
                 //$salida.='<a href="index.php?' . $tabla . '&opc=editar&id=' . $id . "&pag=" . $pagina . $sufijoOrden . $sufijoEnlace .
                 $this->backupURL(); $this->datosURL['opc'] = "editar"; $this->datosURL['id'] = $id;
@@ -570,7 +580,8 @@ class Mantenimiento {
             $def = simplexml_load_file($nombre);
             foreach ($def->Campos->Col as $columna) {
                 $this->campos[(string) $columna['Nombre']] = array("Field" => (string) $columna['Titulo'], "Comment" => (string) $columna['Varios'],
-                    "Type" => (string) $columna['Tipo'] . "(" . $columna['Ancho'] . ")", "Editable" => (string) $columna['Editable'], "Campo" => (string) $columna['Campo'], "Visible" => (string) $columna['Visible']);
+                    "Type" => (string) $columna['Tipo'] . "(" . $columna['Ancho'] . ")", "Editable" => (string) $columna['Editable'], 
+                    "Campo" => (string) $columna['Campo'], "Visible" => (string) $columna['Visible'], "Ajuste" => (string) $columna['Ajuste']);
             }
             $this->comandoConsulta = $def->Consulta;
         } else {
@@ -581,6 +592,15 @@ class Mantenimiento {
                 $this->campos[$datos[$i]["Field"]] = $this->campos[$datos[$i]["Field"]][0];
                 $this->campos[$datos[$i]["Field"]]["Campo"] = $datos[$i]["Field"];
                 $this->campos[$datos[$i]["Field"]]["Editable"] = "si";
+                if (strstr($datos[$i]["Type"],"int")) {
+                    $ajuste = "D";
+                } else if (strstr($datos[$i]["Type"],"char")) {
+                    $ajuste = "L";
+                }
+                if (strstr($datos[$i]["Comment"],"imagen")) {
+                    $ajuste = "C";
+                }
+                $this->campos[$datos[$i]["Field"]]["Ajuste"] = $ajuste;
             }
             $this->comandoConsulta = "select SQL_CALC_FOUND_ROWS * from " . $this->tabla . " {buscar} {orden} limit {inferior},{superior}";
         }
@@ -843,13 +863,16 @@ class Mantenimiento {
             $valorSelect = 'data-value="'.$valorDato.'" ';
             $remoto = $valorSelect . ' data-sourceCache="true" data-sourceError="Error cargando datos" data-source="Ajax.php?opc=get&tabla='.$tabla2.'"';
         } 
-        $mensaje = '<a href="#" title="Modifica '.$titulo.'" id="'.$clave.'" name="'.$clave.$num.'" data-type="'.$tipo.'" data-min="1" data-placement="right" '.$formato.' data-pk="'.$id.'" '.$remoto.' >' . $valor . '</a>
+        $mensaje = '<a href="#" data-toggle="dblclick" data-title="Modifica '.$titulo.'" id="'.$clave.'" name="'.$clave.$num.'" data-type="'.$tipo.
+                         '" data-min="1" data-placement="top" '.$formato.' data-pk="'.$id.'" '.$remoto.' >'.
+                   '<div title="doble click para editar">' . $valor . '</div></a>
                                 <script>
                                     $(function(){' . "
                                         $('[name=\"".$clave.$num."\"]').editable({
                                             url: 'Ajax.php?opc=put&tabla=". $this->tabla  . "',
-
                                             emptytext: 'Vacío',
+                                            title: 'lll',
+                                            mode: 'popup',
                                             success: function(respuesta, newValue) {
                                                         if (respuesta.success === false) {
                                                             return respuesta.msj; //msj will be shown in editable form

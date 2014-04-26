@@ -237,8 +237,9 @@ class AportaContenido {
                     case 'principal': // contenido inicial
 
                         $creditos = "$('#creditos').modal({keyboard: false});";
+                        $centro = '<div class="well well-sm">' . CENTRO . '</div>';
                         return $mensaje . '<br><br><center><img src="img/logo.png" alt="' . PROGRAMA . '" onClick="' . $creditos . '" >' .
-                                '<br><br><label onClick="' . $creditos . '">' . CENTRO . '</label></center><br><br>' . CREDITOS;
+                                '<br><br><label onClick="' . $creditos . '">' . $centro . '</label></center><br><br>' . CREDITOS;
                     case 'articulos':
                     case 'ubicaciones':
                     case 'test':
