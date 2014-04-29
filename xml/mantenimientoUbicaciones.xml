@@ -6,7 +6,7 @@
         {buscar} {orden} limit {inferior},{superior};    
     </Consulta>
     <Campos>
-        <Col Campo="id" Nombre="id" Ancho="5" Ajuste="D" Titulo="id" Tipo="smallint(6)" Varios="ordenable" Visible="si"/>
+        <Col Campo="id" Nombre="id" Ancho="5" Ajuste="D" Titulo="id" Tipo="smallint(6)" Varios="ordenable,link/Ubicacion" Visible="si"/>
         <Col Campo="Descripcion" Nombre="Descripcion" Ancho="50" Ajuste="L" Titulo="Descripción" Visible="si" Varios="ordenable,ajax/text" Editable="si"/>
         <Col Campo="imagen" Nombre="imagen" Ancho="10" Ajuste="C" Titulo="Imagen" Tipo="imagen" Visible="si" Varios="imagen" Editable="si"/>
         <Col Campo="numero" Nombre="numero" Ancho="10" Ajuste="D" Titulo="Nº Elementos" Varios="ordenable" Editable="no" Visible="si"/>
