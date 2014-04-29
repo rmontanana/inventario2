@@ -2,7 +2,11 @@
 <Informe>
 	<Titulo Texto="Informe de Artículos" />
 	<Datos>
-		<Consulta>select * from Articulos where descripcion like '%{filtro}%' order by {orden};</Consulta>
+		<Consulta>
+                    select A.id as id,A.descripcion as descripcion, A.marca as marca, A.modelo as modelo, A.cantidad as cantidad,
+                    (select count(E.id) from Elementos E where E.id_Articulo=A.id) as Numero from Articulos A
+                    where A.descripcion like '%{filtro}%' order by {orden};
+                </Consulta>
 	</Datos>
 	<Pagina Orientacion="P" Formato="A4">
 		<Cabecera>Relación Artículos</Cabecera>
@@ -10,8 +14,9 @@
 			<Col Nombre="id" Ancho="10" Ajuste="D" Titulo="id"/>
 			<Col Nombre="descripcion" Ancho="70" Ajuste="I" Titulo="Descripción"/>
 			<Col Nombre="marca" Ancho="40" Ajuste="I" Titulo="Marca"/>
-			<Col Nombre="modelo" Ancho="50" Ajuste="I" Titulo="Modelo"/>
-			<Col Nombre="cantidad" Ancho="20" Ajuste="D" Titulo="cantidad"/>
+			<Col Nombre="modelo" Ancho="40" Ajuste="I" Titulo="Modelo"/>
+			<Col Nombre="cantidad" Ancho="20" Ajuste="D" Titulo="Cantidad"/>
+                        <Col Nombre="Numero" Ancho="15" Ajuste="D" Titulo="NºElem"/>
 		</Cuerpo>
 	</Pagina>
 </Informe>

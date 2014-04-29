@@ -161,7 +161,6 @@ class Mantenimiento {
         $salida = $this->cargaComplementos();
         //Introduce un botón para hacer búsquedas y el número de la página
         $salida.= $this->enlaceBusqueda($pagSigte);
-        $salida.= $cabecera;
         //Consulta paginada de todas las tuplas
         $comando = str_replace('{inferior}', $pagina * NUMFILAS, $comando);
         $comando = str_replace('{superior}', NUMFILAS, $comando);
@@ -185,8 +184,10 @@ class Mantenimiento {
                 $this->datosURL['pag'] = $totalPags;
                 header('Location: ' . $this->montaURL());
             } else {
-                $salida = "<p align=\"center\"><center><h2>No hay registros</h2></center></p><br>";
+                $salida .= '<br><br><div class="alert alert-danger">No hay registros</div>';
             }
+        } else {
+            $salida.= $cabecera; 
         }
         //$salida.=$comando;
         //$salida.=var_export($this->campos,true);
@@ -581,7 +582,8 @@ class Mantenimiento {
             foreach ($def->Campos->Col as $columna) {
                 $this->campos[(string) $columna['Nombre']] = array("Field" => (string) $columna['Titulo'], "Comment" => (string) $columna['Varios'],
                     "Type" => (string) $columna['Tipo'] . "(" . $columna['Ancho'] . ")", "Editable" => (string) $columna['Editable'], 
-                    "Campo" => (string) $columna['Campo'], "Visible" => (string) $columna['Visible'], "Ajuste" => (string) $columna['Ajuste']);
+                    "Campo" => (string) $columna['Campo'], "Visible" => (string) $columna['Visible'], "Ajuste" => (string) $columna['Ajuste'],
+                    "Titulo" => (string) $columna['Titulo']);
             }
             $this->comandoConsulta = $def->Consulta;
         } else {
@@ -632,18 +634,20 @@ class Mantenimiento {
                 }
             }
             $clave2 = $clave;
-            $clave = str_ireplace("descripcion", "Descripci&oacute;n", $clave);
+            /*$clave = str_ireplace("descripcion", "Descripci&oacute;n", $clave);
             $clave = str_ireplace("ubicacion", "Ubicaci&oacute;n", $clave);
-            $clave = str_ireplace("articulo", "Art&iacute;culo", $clave);
+            $clave = str_ireplace("articulo", "Art&iacute;culo", $clave);*/
             $ordenActual = $this->datosURL['orden'];
             if ($ordenable) {
                 $this->backupURL();
                 $this->datosURL['orden'] = $clave2;
                 $resFlecha = $clave2 == $ordenActual ? $flecha : '';
-                $salida.="<th><b><a title=\"Establece orden por $clave \" href=\"". $this->montaURL() . "\"> " . ucfirst($clave) . $resFlecha . " </a></b></th>\n";
+                $salida.="<th><b><a title=\"Establece orden por $clave \" href=\"". $this->montaURL() . "\"> " . $datos["Titulo"] . $resFlecha . " </a></b></th>\n";
+                //$salida.="<th><b><a title=\"Establece orden por $clave \" href=\"". $this->montaURL() . "\"> " . ucfirst($clave) . $resFlecha . " </a></b></th>\n";
                 $this->restoreURL();
             } else {
-                $salida.='<th><b>' . ucfirst($clave) . '</b></th>' . "\n";
+                $salida.='<th><b>' . $datos["Titulo"] . '</b></th>' . "\n";
+                //$salida.='<th><b>' . ucfirst($clave) . '</b></th>' . "\n";
             }
         }
 
@@ -675,6 +679,7 @@ class Mantenimiento {
         $accion = $this->montaURL();
         $salida.='<div class="col-sm-8"><form name="mantenimiento.form" enctype="multipart/form-data" class="form-horizontal" role="form" method="post" action="' . $accion . '">' . "\n";
         $salida.="<fieldset style=\"width: 96%;\"><p><legend style=\"color: red;\"><b>$tipo</b></legend>\n";
+        //$salida.= var_export($datos,true);
         foreach ($this->campos as $clave => $valor) {
             if ($valor["Editable"] == "no") {
                 //Se salta los campos que no deben aparecer
@@ -684,7 +689,8 @@ class Mantenimiento {
             $salida .='<div class="form-group">';
             $campo = $valor['Campo'];
             $campos.="$campo&";
-            $salida.='<label class="col-sm-2 control-label" for="' . $campo . '">' . ucfirst($clave) . "</label> ";
+            $salida.='<label class="col-sm-2 control-label" for="' . $campo . '">' . $valor['Titulo'] . "</label> ";
+            //$salida.='<label class="col-sm-2 control-label" for="' . $campo . '">' . ucfirst($clave) . "</label> ";
             $salida.='<div class="col-sm-5">';
             //Se asegura que el id no se pueda modificar.
             $modoEfectivo = $clave == 'id' ? "readonly" : $modo;
