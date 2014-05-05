@@ -33,12 +33,13 @@ define('PROGRAMA', 'Gesti&oacute;n de Inventario.');
 define('CENTRO', 'I.E.S.O. Pascual Serrano');
 define('NUMFILAS', '17'); // Número de registros a mostrar en las pantallas de consulta iniciales
 define('PAUSA', '2'); //Nº segundos de pausa para mostrar mensaje id insertado
-define('ESTILO', 'personal'); //Estilo de los iconos de edición (personal, personal, personal)
+define('ESTILO', 'bootstrap'); //Estilo de los iconos de edición (bootstrap, bootstrap, bootstrap)
 define('PLANTILLA', 'bootstrap'); //Estilo de la plantilla y recursos a utilizar
 define('COLORLAT', '#a4bdfc'); //Color de la barra de menú lateral
 define('COLORFON', '#ffb878'); //Color del fondo de la pantalla
 define('MYSQLDUMP', '/usr/local/bin/mysqldump'); //camino a mysqldump
 define('GZIP', '/usr/bin/gzip'); //Camino a gzip
 define('IMAGEDATA', 'img.data'); //Directorio donde se almacenarán las imágenes
-define('INSTALADO', 'sí') //Indicador que permite ejecutar instalar.php
+define('TMP', './tmp'); //Directorio para archivos temporales
+define('INSTALADO', 'sí'); //Indicador que permite ejecutar instalar.php
 ?>

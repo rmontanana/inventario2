@@ -25,7 +25,7 @@ class Configuracion {
     private $confAnterior = "inc/configuracion.ant";
     private $datosConf;
     //Campos del fichero de configuración que se van a editar.
-    private $lista = array('SERVIDOR', 'PUERTO', 'BASEDATOS', 'BASEDATOSTEST', 'USUARIO', 'CLAVE', 'CENTRO', 'NUMFILAS', 'ESTILO', 'PLANTILLA', 'COLORLAT', 'COLORFON', 'MYSQLDUMP', 'GZIP');
+    private $lista = array('SERVIDOR', 'PUERTO', 'BASEDATOS', 'BASEDATOSTEST', 'USUARIO', 'CLAVE', 'CENTRO', 'NUMFILAS', 'ESTILO', 'PLANTILLA', 'COLORLAT', 'COLORFON', 'MYSQLDUMP', 'GZIP', 'TMP');
     private $campos;
     
     public function __construct()
@@ -52,6 +52,11 @@ class Configuracion {
         list($valor, $resto) = explode(")", $valor);
         list($resto, $clave) = explode("(", $clave);
         $valor = trim($valor);
+    }
+    
+    private function creaTitulo($titulo, $ayuda)
+    {
+        return '<td style="vertical-align:middle"><a class="dato" href="#" data-placement="right" data-content="'.$ayuda.'">'.$titulo.'</a></td>';
     }
     
     public function ejecuta() {      
@@ -107,17 +112,17 @@ class Configuracion {
         //$salida.='<p align="center"><table border=1 class="tablaDatos"><tbody>';
         $salida.='<p align="center"><table border=2 class="table table-hover"><tbody>';
         $salida.='<th colspan=2 class="info"><center><b>Preferencias</b></center></th>';
-        $salida.='<tr><td>Nombre del Centro</td><td><input type="text" name="CENTRO" value="' . $this->datosConf['CENTRO'] . '" size="30" /></td></tr>';
-        $salida.='<tr><td>N&uacute;mero de filas</td><td><input type="text" name="NUMFILAS" value="' . $this->datosConf['NUMFILAS'] . '" size="3" /></td></tr>';
-        $salida.='<tr><td  style="vertical-align:middle">Plantilla</td><td><select name="PLANTILLA" class="form-control">';
+        $salida.='<tr>'.$this->creaTitulo("Nombre del Centro","Nombre que aparecerá en los informes y en la página principal de la aplicación").'<td><input type="text" name="CENTRO" value="' . $this->datosConf['CENTRO'] . '" size="30" /></td></tr>';
+        $salida.='<tr>'.$this->creaTitulo("Número de filas","Número de filas que aparecerán en la pantalla de consulta de los maestros. Valor entre 10 y 25.").'<td><input type="number" max="25" min="10" name="NUMFILAS" value="' . $this->datosConf['NUMFILAS'] . '" size="3" /></td></tr>';
+        $salida.='<tr>'.$this->creaTitulo("Plantilla","Plantilla html utilizada para mostrar el contenido de la aplicación.").'<td><select name="PLANTILLA" class="form-control">';
         $salida.='<option value="normal" ' . $normal . '>normal</option>';
         $salida.='<option ' . $bootstrap . '>bootstrap</option></select></td></tr>';
-        $salida.='<tr><td  style="vertical-align:middle">Estilo</td><td><select name="ESTILO" class="form-control">';
+        $salida.='<tr>'.$this->creaTitulo("Estilo","Estilo de los botones de control en los mantenimientos de los maestros").'<td><select name="ESTILO" class="form-control">';
         $salida.='<option value="personal" ' . $personal . '>personal</option>';
         $salida.='<option ' . $bluecurve . '>bluecurve</option>';
         $salida.='<option ' . $bootst . '>bootstrap</option>';
         $salida.='<option ' . $cristal . '>cristal</option></select></td></tr>';
-        $salida.='<tr><td style="vertical-align:middle">Color Lateral (bootstrap)</td><td style="vertical-align:middle"><select name="COLORLAT" id="COLORLAT" class="form-control">';
+        $salida.='<tr>'.$this->creaTitulo("Color Lateral","Color que se aplicará a la parte izquierda de la aplicación donde aparece el menú").'<td style="vertical-align:middle"><select name="COLORLAT" id="COLORLAT" class="form-control">';
         foreach ($coloresLateral as $color => $codigo) {
             $selec = "";
             if (trim($this->datosConf['COLORLAT']) == $codigo) {
@@ -126,7 +131,7 @@ class Configuracion {
             $salida.='<option value="' . $codigo . '" ' . $selec . ' >' . $color . '</option>';
         }
         $salida.='</select></td></tr>';
-        $salida.='<tr><td style="vertical-align:middle">Color Fondo (bootstrap)</td><td style="vertical-align:middle"><select name="COLORFON" id="COLORFON" class="form-control">';
+        $salida.='<tr>'.$this->creaTitulo("Color Fondo","Color que aparecerá como fondo en todas las pantallas de la aplicación").'<td style="vertical-align:middle"><select name="COLORFON" id="COLORFON" class="form-control">';
         foreach ($coloresFondo as $color => $codigo) {
             $selec = "";
             if (trim($this->datosConf['COLORFON']) == $codigo) {
@@ -135,15 +140,16 @@ class Configuracion {
             $salida.='<option value="' . $codigo . '" ' . $selec . ' >' . $color . '</option>';
         }
         $salida.='</select></td></tr>';
+        $salida.='<tr>'.$this->creaTitulo("Directorio tmp","Directorio donde se almacenarán los archivos temporales de la aplicación y también los archivos e informes que genera").'<td><input type="text" name="TMP" value="' . $this->datosConf['TMP'] . '" size="30" /></td></tr>';
         $salida.='<th colspan=2 class="danger"><center><b>Base de datos</b></center></th>';
-        $salida.='<tr><td>Servidor</td><td><input type="text" name="SERVIDOR" value="' . $this->datosConf['SERVIDOR'] . '" size="30" /></td></tr>';
-        $salida.='<tr><td>Puerto</td><td><input type="text" name="PUERTO" value="' . $this->datosConf['PUERTO'] . '" size="30" /></td></tr>';
-        $salida.='<tr><td>Base de datos</td><td><input type="text" name="BASEDATOS" value="' . $this->datosConf['BASEDATOS'] . '" size="30" /></td></tr>';
-        $salida.='<tr><td>Base de datos Tests</td><td><input type="text" name="BASEDATOSTEST" value="' . $this->datosConf['BASEDATOSTEST'] . '" size="30" /></td></tr>';
-        $salida.='<tr><td>Usuario</td><td><input type="text" name="USUARIO" value="' . $this->datosConf['USUARIO'] . '" size="30" /></td></tr>';
-        $salida.='<tr><td>Clave</td><td><input type="text" name="CLAVE" value="' . $this->datosConf['CLAVE'] . '" size="30" /></td></tr>';
-        $salida.='<tr><td>mysqldump</td><td><input type="text" name="MYSQLDUMP" value="' . $this->datosConf['MYSQLDUMP'] . '" size="30" /></td></tr>';
-        $salida.='<tr><td>gzip</td><td><input type="text" name="GZIP" value="' . $this->datosConf['GZIP'] . '" size="30" /></td></tr>';
+        $salida.='<tr>'.$this->creaTitulo("Servidor","Nombre o dirección IP del servidor MySQL").'<td><input type="text" name="SERVIDOR" value="' . $this->datosConf['SERVIDOR'] . '" size="30" /></td></tr>';
+        $salida.='<tr>'.$this->creaTitulo("Puerto","Número de puerto donde el servidor admite conexiones MySQL").'<td><input type="text" name="PUERTO" value="' . $this->datosConf['PUERTO'] . '" size="30" /></td></tr>';
+        $salida.='<tr>'.$this->creaTitulo("Base de datos","Nombre de la base de datos donde se almacenarán los datos de la aplicación").'<td><input type="text" name="BASEDATOS" value="' . $this->datosConf['BASEDATOS'] . '" size="30" /></td></tr>';
+        $salida.='<tr>'.$this->creaTitulo("Base de datos Tests","Nombre de la base de datos donde se almacenarán los datos de prueba de la aplicación").'<td><input type="text" name="BASEDATOSTEST" value="' . $this->datosConf['BASEDATOSTEST'] . '" size="30" /></td></tr>';
+        $salida.='<tr>'.$this->creaTitulo("Usuario","Usuario con permisos de lectura/escritura en la base de datos").'<td><input type="text" name="USUARIO" value="' . $this->datosConf['USUARIO'] . '" size="30" /></td></tr>';
+        $salida.='<tr>'.$this->creaTitulo("Clave","Contraseña del usuario con permisos sobre la base de datos").'<td><input type="text" name="CLAVE" value="' . $this->datosConf['CLAVE'] . '" size="30" /></td></tr>';
+        $salida.='<tr>'.$this->creaTitulo("mysqldump","Ruta completa a la utilidad mysqldump. Este programa es necesario para que se puedan hacer las copias de seguridad de la aplicación").'<td><input type="text" name="MYSQLDUMP" value="' . $this->datosConf['MYSQLDUMP'] . '" size="30" /></td></tr>';
+        $salida.='<tr>'.$this->creaTitulo("gzip","Ruta completa a la utilidad gzip. Este programa es necesario para que se puedan comprimir las copias de seguridad de la aplicación").'<td><input type="text" name="GZIP" value="' . $this->datosConf['GZIP'] . '" size="30" /></td></tr>';
         $salida.='<tr align=center><td colspan=2><button type="submit" class="btn btn-primary" name="aceptar"><span class="glyphicon glyphicon-ok"></span> Aceptar</td></tr></p>';
         $salida.='</form></div></center>';
         $salida.="<script>
@@ -157,6 +163,7 @@ class Configuracion {
                             });
                             $('select[name=" . '"COLORLAT"' . "]').simplecolorpicker({theme: 'glyphicons'});
                             $('select[name=" . '"COLORFON"' . "]').simplecolorpicker({theme: 'glyphicons'});
+                            $('.dato').popover({trigger: 'hover'});
                         });
                     </script>";
         return $salida;

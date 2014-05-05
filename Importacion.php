@@ -44,7 +44,7 @@ class Importacion {
     }
 
     private function importarFichero() {
-        $uploadfile = "tmp/" . basename($_FILES['fichero']['name']);
+        $uploadfile = TMP."/" . basename($_FILES['fichero']['name']);
         if (!move_uploaded_file($_FILES['fichero']['tmp_name'], $uploadfile)) {
             die('No se pudo subir el fichero ' . $_FILES['userfile']['tmp_name']);
         }
