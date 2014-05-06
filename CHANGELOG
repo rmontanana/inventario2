@@ -1,3 +1,12 @@
+Versión 1.12 06-05-2014
+-Mantenimiento muestra el 'Titulo' del campo tanto en Consulta como en el formulario de edición
+-Muestra cuadro de búsqueda y mensaje correcto cuando no se encuentra la cadena de búsqueda en Mantenimiento
+-Añadidos mensajes de ayuda en los campos de configuración
+-Añadida la columna de cantidad ubicada en mantenimiento de artículos
+-Fix #35. Cambiados los informes de Articulos y Ubicaciones para recoger el campo Nº de elementos
+-Fix #35. Añadido el campo Nº de elementos en el mantenimiento de Articulos y Ubicaciones a través de archivo xml
+-Fix #31. Añadido el directorio temporal en el archivo de configuración
+
 Versión 1.11b 26-04-2014
 -Cambiada la referencia de etiquetas Apli
 

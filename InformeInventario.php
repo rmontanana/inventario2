@@ -54,7 +54,7 @@ class InformeInventario {
     private function devuelveInforme($informe)
     {
         $letras = "abcefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-        $nombre = "tmp/informe" . substr(str_shuffle($letras), 0, 10) . ".pdf";
+        $nombre = TMP."/informe" . substr(str_shuffle($letras), 0, 10) . ".pdf";
         $informe->guardaArchivo($nombre);
         return '<div class="container">
                     <!--<a href="' . $nombre . '" target="_blank"><span class="glyphicon glyphicon-cloud-download" style="font-size:1.5em;"></span>Descargar Informe</a>--> 
@@ -69,15 +69,15 @@ class InformeInventario {
         switch ($salidaInforme) {
             case "pantalla":
                 $fichero = "xml/inventarioUbicacion.xml";
-                $salida = "tmp/inventarioUbicacion.xml";
+                $salida = TMP."/inventarioUbicacion.xml";
                 break;
             case "csv":
                 $fichero = "xml/inventarioUbicacionCSV.xml";
-                $salida = "tmp/inventarioUbicacionCSV.xml";
+                $salida = TMP."/inventarioUbicacionCSV.xml";
                 break;
             case "etiquetas":
                 $fichero = "xml/inventarioUbicacionEtiquetas.xml";
-                $salida = "tmp/inventarioUbicacionEtiquetas.xml";
+                $salida = TMP."/inventarioUbicacionEtiquetas.xml";
                 break;
         }
         $plantilla = file_get_contents($fichero) or die('Fallo en la apertura de la plantilla ' . $fichero);
@@ -99,7 +99,7 @@ class InformeInventario {
                 return $this->devuelveInforme($informe);
             case "csv":
                 //Genera una hoja de cálculo en formato csv
-                $nombre = "tmp/Ubicacion" . strftime("%Y%m%d") . rand(100, 999) . ".csv";
+                $nombre = TMP."/Ubicacion" . strftime("%Y%m%d") . rand(100, 999) . ".csv";
                 $hoja = new Csv($this->bdd);
                 $hoja->crea($nombre);
                 $hoja->ejecutaConsulta($salida);
@@ -119,15 +119,15 @@ class InformeInventario {
         switch ($salidaInforme) {
             case "pantalla":
                 $fichero = "xml/inventarioArticulo.xml";
-                $salida = "tmp/inventarioArticulo.xml";
+                $salida = TMP."/inventarioArticulo.xml";
                 break;
             case "csv":
                 $fichero = "xml/inventarioArticuloCSV.xml";
-                $salida = "tmp/inventarioArticuloCSV.xml";
+                $salida = TMP."/inventarioArticuloCSV.xml";
                 break;
             case "etiquetas":
                 $fichero = "xml/inventarioArticuloEtiquetas.xml";
-                $salida = "tmp/inventarioArticuloEtiquetas.xml";
+                $salida = TMP."/inventarioArticuloEtiquetas.xml";
                 break;
         }
         $plantilla = file_get_contents($fichero) or die('Fallo en la apertura de la plantilla ' . $fichero);
@@ -151,7 +151,7 @@ class InformeInventario {
                 return $this->devuelveInforme($informe);
             case "csv":
                 //Genera una hoja de cálculo en formato csv
-                $nombre = "tmp/Articulo" . strftime("%Y%m%d") . rand(100, 999) . ".csv";
+                $nombre = TMP."/Articulo" . strftime("%Y%m%d") . rand(100, 999) . ".csv";
                 $hoja = new Csv($this->bdd);
                 $hoja->crea($nombre);
                 $hoja->ejecutaConsulta($salida);
@@ -237,7 +237,7 @@ class InformeInventario {
                       <p>¿Desea obtener el inventario de todo el centro?</p>
                       <p><a class="btn btn-primary btn-lg" role="button" onClick="location.href=' . "'index.php'" . '"><span class="glyphicon glyphicon-arrow-left"></span> Volver</a>
                          <a class="btn btn-success btn-lg" role="button" onClick="location.href=' . "'index.php?informeInventario&opc=listarTotal'" . '">
-                             <span class="glyphicon glyphicon-cloud-download"></span> Continuar</a></p>
+                             <span class="glyphicon glyphicon-list-alt"></span> Continuar</a></p>
                     </div></div>';
         return $dialogo;
     }
@@ -245,7 +245,7 @@ class InformeInventario {
     private function listarTotal()
     {
         $fichero = "xml/inventarioUbicacion.xml";
-        $salida = "tmp/inventarioUbicacion.xml";
+        $salida = TMP."/inventarioUbicacion.xml";
         $comando = "select * from Ubicaciones ;";
         $resultado = $this->bdd->ejecuta($comando);
         if (!$resultado) {

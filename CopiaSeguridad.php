@@ -53,7 +53,7 @@ class CopiaSeguridad {
     }
     private function copiaBaseDatos() 
     {
-        $archivo_sql = "tmp/baseDatos" . BASEDATOS . ".sql";
+        $archivo_sql = TMP."/baseDatos" . BASEDATOS . ".sql";
         $baseDatosComprimida = $archivo_sql . ".gz";
         $this->baseDatos = $baseDatosComprimida;
         if (file_exists($baseDatosComprimida)) {
@@ -78,7 +78,7 @@ class CopiaSeguridad {
     }
     private function copiaImagenes()
     {
-        $copiaImagenes = "tmp/Imagenes.tbz";
+        $copiaImagenes = TMP."/Imagenes.tbz";
         $this->imagenes = $copiaImagenes;
         if (file_exists($copiaImagenes)) {
             unlink($copiaImagenes);
@@ -98,7 +98,7 @@ class CopiaSeguridad {
     private function empaqueta()
     { 
          // Empaqueta los dos archivos en el que va a devolver
-        $nombreCopia = "tmp/Copia" . BASEDATOS . strftime("%Y%m%d%H%M") . ".tar";
+        $nombreCopia = TMP."/Copia" . BASEDATOS . strftime("%Y%m%d%H%M") . ".tar";
         if (file_exists($nombreCopia)) {
             unlink($nombreCopia);
         }

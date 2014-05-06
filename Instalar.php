@@ -31,8 +31,7 @@ define('NUMPASOS', 3);
 define('MINBYTES', 4096000); // post_max_size y max_upload van con esto
 define('CADENAMINBYTES', '4M');
 define('CONFIGURACION', 'inc/configuracion.inc');
-define('CONFIGTMP', 'tmp/config.tmp');
-define('TMP', './tmp');
+define('CONFIGTMP', TMP.'/config.tmp');
 define('INC', './inc');
 
 $instalar = new Instalar();

@@ -162,8 +162,6 @@ class AportaContenido {
     public function __call($metodo, $parametros)
     {
         switch ($metodo) { // Dependiendo del método invocado
-            case 'titulo': // devolvemos el título
-                return PROGRAMA . " v" . VERSION;
             case 'usuario':
                 if ($this->registrado)
                     return "Usuario=$this->usuario";
@@ -249,7 +247,7 @@ class AportaContenido {
                             if (!$this->pefil['Informe']) {
                                 $this->procesaURL();
                                 $fichero = 'xml/informe' . ucfirst($opcion) . '.xml';
-                                $salida = 'tmp/informe' . ucfirst($opcion) . '.xml';
+                                $salida = TMP.'/informe' . ucfirst($opcion) . '.xml';
                                 //Establece los posibles parámetros del listado.
                                 $orden = $this->datosURL['orden'];
                                 $sentido = $this->datosURL['sentido'] == "asc" ? ' ' : ' desc ';
@@ -279,7 +277,7 @@ class AportaContenido {
                                 if (!$this->pefil['Informe']) {
                                     $this->procesaURL();
                                     $fichero = 'xml/informe' . ucfirst($opcion) . '.xml';
-                                    $salida = 'tmp/informe' . ucfirst($opcion) . '.xml';
+                                    $salida = TMP.'/informe' . ucfirst($opcion) . '.xml';
                                     //Establece los posibles parámetros del listado.
                                     $orden = $this->datosURL['orden'];
                                     $sentido = $this->datosURL['sentido'] == "asc" ? ' ' : ' desc ';
@@ -380,7 +378,7 @@ class AportaContenido {
     private function devuelveInforme($informe)
     {
         $letras = "abcefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-        $nombre = "tmp/informe" . substr(str_shuffle($letras), 0, 10) . ".pdf";
+        $nombre = TMP."/informe" . substr(str_shuffle($letras), 0, 10) . ".pdf";
         $informe->guardaArchivo($nombre);
         return '<div class="container">
                     <!--<a href="' . $nombre . '" target="_blank"><span class="glyphicon glyphicon-cloud-download" style="font-size:1.5em;"></span>Descargar Informe</a>--> 

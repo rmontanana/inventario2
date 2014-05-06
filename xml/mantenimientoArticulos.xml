@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<Mantenimiento>
+    <Titulo>Mantenimiento de Artículos</Titulo>
+    <Consulta>
+        select SQL_CALC_FOUND_ROWS A.id as id,A.descripcion as descripcion, A.marca as marca, A.modelo as modelo, A.cantidad as cantidad,
+         (select sum(E.cantidad) from Elementos E where E.id_Articulo=A.id) as cantubi,
+         (select count(E.id) from Elementos E where E.id_Articulo=A.id) as numero,A.imagen as imagen from Articulos A
+         {buscar} {orden} limit {inferior},{superior};    
+    </Consulta>
+    <Campos>
+        <Col Campo="id" Nombre="id" Ancho="5" Ajuste="D" Titulo="id" Tipo="smallint(6)" Varios="ordenable,link/Articulo" Visible="si"/>
+        <Col Campo="descripcion" Nombre="descripcion" Ancho="50" Ajuste="L" Titulo="Descripción" Visible="si" Varios="ordenable,ajax/text" Editable="si"/>
+        <Col Campo="marca" Nombre="marca" Ancho="40" Ajuste="L" Titulo="Marca" Varios="ordenable,ajax/text" Editable="si" Visible="si"/>
+        <Col Campo="modelo" Nombre="modelo" Ancho="40" Ajuste="L" Titulo="Modelo" Varios="ordenable,ajax/text" Editable="si" Visible="si"/>
+        <Col Campo="cantidad" Nombre="cantidad" Ancho="15" Ajuste="D" Titulo="Cantidad"  Tipo="Int(11)" Visible="si" Editable="si" Varios="ordenable,ajax/number"/>
+        <Col Campo="cantubi" Nombre="cantubi" Ancho="15" Ajuste="D" Titulo="Cant. ubicada" Editable="no" Varios="ordenable" Visible="si"/>
+        <Col Campo="numero" Nombre="numero" Ancho="15" Ajuste="D" Titulo="Nº Elementos" Editable="no" Varios="ordenable" Visible="si"/>
+        <Col Campo="imagen" Nombre="imagen" Ancho="10" Ajuste="C" Titulo="Imagen" Visible="si" Tipo="imagen" Varios="imagen" Editable="si"/>
+    </Campos>
+</Mantenimiento>

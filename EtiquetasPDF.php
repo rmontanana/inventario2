@@ -1,4 +1,3 @@
-
 <?php
 
 /**
@@ -37,7 +36,7 @@ class EtiquetasPDF {
     private $docu;
     private $pdf;
     private $def;
-    private $nombreFichero = "tmp/informeEtiquetas.pdf";
+    private $nombreFichero;
 
     /**
      * El constructor recibe como argumento el nombre del archivo XML con la definición, encargándose de recuperarla y guardar toda la información localmente
@@ -52,6 +51,7 @@ class EtiquetasPDF {
         if (!$registrado) {
             return 'Debe registrarse para acceder a este apartado';
         }
+        $this->nombreFichero = TMP."/informeEtiquetas.pdf";
         // Recuperamos la definición del informe
         $this->def = simplexml_load_file($definicion);
         $this->bdd = $bdd;
@@ -105,7 +105,7 @@ class EtiquetasPDF {
                 }
                 $py = 6 + 41 * $fila;
                 $enlace2=$enlace.$tupla['idEl'];
-                $fichero = "tmp/etiq".rand(1000,9999).".png";
+                $fichero = TMP."/etiq".rand(1000,9999).".png";
                 QRcode::png($enlace2, $fichero);
                 $this->pdf->image($fichero, $etiq2, $py, 30, 30);
                 unlink($fichero);
@@ -155,7 +155,7 @@ class EtiquetasPDF {
         return $cabecera;
     }
 
-    public function guardaArchivo($nombre = "tmp/Informe.pdf")
+    public function guardaArchivo($nombre)
     {
         $fichero = fopen($nombre, "w");
         fwrite($fichero, $this->getCabecera());

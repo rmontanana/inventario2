@@ -1,4 +1,3 @@
-
 <?php
 
 /**
@@ -94,11 +93,13 @@ class InformePDF {
     public function getCabecera() {
         $cabecera = "Content-type: application/pdf";
         $cabecera = $cabecera . "Content-length: " . strlen($this->docu);
-        $cabecera = $cabecera . "Content-Disposition: inline; filename=tmp/Informe.pdf";
+        $cabecera = $cabecera . "Content-Disposition: inline; filename=".TMP."/Informe.pdf";
         return $cabecera;
     }
 
-    public function guardaArchivo($nombre = "tmp/Informe.pdf") {
+    public function guardaArchivo($nombre) {
+        if (!isset($nombre))
+            $nombre = TMP . "/Informe.pdf";
         $fichero = fopen($nombre, "w");
         fwrite($fichero, $this->getCabecera());
         fwrite($fichero, $this->getContenido(), strlen($this->getContenido()));
@@ -109,7 +110,7 @@ class InformePDF {
         header("Content-type: application/pdf");
         $longitud = strlen($this->docu);
         header("Content-length: $longitud");
-        header("Content-Disposition: inline; filename=tmp/Informe.pdf");
+        header("Content-Disposition: inline; filename=".TMP."/Informe.pdf");
     }
 
     public function imprimeInforme() {

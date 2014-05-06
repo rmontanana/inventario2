@@ -2,13 +2,16 @@
 <Informe>
 	<Titulo Texto="Informe de Ubicaciones" />
 	<Datos>
-		<Consulta>select * from Ubicaciones where descripcion like '%{filtro}%' order by {orden};</Consulta>
+		<Consulta>select U.id as id, U.Descripcion as Descripcion,(select count(E.id) from Elementos E where E.id_Ubicacion=U.id) as Numero 
+                          from Ubicaciones U where U.descripcion like '%{filtro}%' order by {orden};
+                </Consulta>
 	</Datos>
 	<Pagina Orientacion="P" Formato="A4">
 		<Cabecera>Relación de Ubicaciones</Cabecera>
 		<Cuerpo>
 			<Col Nombre="id" Ancho="10" Ajuste="D" Titulo="id"/>
 			<Col Nombre="Descripcion" Ancho="80" Ajuste="I" Titulo="Descripción"/>
+                        <Col Nombre="Numero" Ancho="15" Ajuste="D" Titulo="Nº Elem"/>
 		</Cuerpo>
 	</Pagina>
 </Informe>
