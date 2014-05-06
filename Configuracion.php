@@ -142,8 +142,8 @@ class Configuracion {
         $salida.='</select></td></tr>';
         $salida.='<tr>'.$this->creaTitulo("Directorio tmp","Directorio donde se almacenarán los archivos temporales de la aplicación y también los archivos e informes que genera").'<td><input type="text" name="TMP" value="' . $this->datosConf['TMP'] . '" size="30" /></td></tr>';
         $salida.='<th colspan=2 class="danger"><center><b>Base de datos</b></center></th>';
-        $salida.='<tr>'.$this->creaTitulo("Servidor","Nombre o dirección IP del servidor MySQL").'<td><input type="text" name="SERVIDOR" value="' . $this->datosConf['SERVIDOR'] . '" size="30" /></td></tr>';
-        $salida.='<tr>'.$this->creaTitulo("Puerto","Número de puerto donde el servidor admite conexiones MySQL").'<td><input type="text" name="PUERTO" value="' . $this->datosConf['PUERTO'] . '" size="30" /></td></tr>';
+        $salida.='<tr>'.$this->creaTitulo("Servidor","Nombre o dirección IP del servidor MySQL. Normalmente localhost").'<td><input type="text" name="SERVIDOR" value="' . $this->datosConf['SERVIDOR'] . '" size="30" /></td></tr>';
+        $salida.='<tr>'.$this->creaTitulo("Puerto","Número de puerto donde el servidor admite conexiones MySQL. Normalmente 3306").'<td><input type="text" name="PUERTO" value="' . $this->datosConf['PUERTO'] . '" size="30" /></td></tr>';
         $salida.='<tr>'.$this->creaTitulo("Base de datos","Nombre de la base de datos donde se almacenarán los datos de la aplicación").'<td><input type="text" name="BASEDATOS" value="' . $this->datosConf['BASEDATOS'] . '" size="30" /></td></tr>';
         $salida.='<tr>'.$this->creaTitulo("Base de datos Tests","Nombre de la base de datos donde se almacenarán los datos de prueba de la aplicación").'<td><input type="text" name="BASEDATOSTEST" value="' . $this->datosConf['BASEDATOSTEST'] . '" size="30" /></td></tr>';
         $salida.='<tr>'.$this->creaTitulo("Usuario","Usuario con permisos de lectura/escritura en la base de datos").'<td><input type="text" name="USUARIO" value="' . $this->datosConf['USUARIO'] . '" size="30" /></td></tr>';
