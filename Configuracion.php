@@ -149,7 +149,9 @@ class Configuracion {
         $salida.='<tr>'.$this->creaTitulo("Clave","Contraseña del usuario con permisos sobre la base de datos").'<td><input type="text" name="CLAVE" value="' . $this->datosConf['CLAVE'] . '" maxlength="35" size="35" /></td></tr>';
         $salida.='<tr>'.$this->creaTitulo("mysqldump","Ruta completa a la utilidad mysqldump. Este programa es necesario para que se puedan hacer las copias de seguridad de la aplicación").'<td><input type="text" name="MYSQLDUMP" value="' . $this->datosConf['MYSQLDUMP'] . '" maxlength="35" size="35" /></td></tr>';
         $salida.='<tr>'.$this->creaTitulo("gzip","Ruta completa a la utilidad gzip. Este programa es necesario para que se puedan comprimir las copias de seguridad de la aplicación").'<td><input type="text" name="GZIP" value="' . $this->datosConf['GZIP'] . '" maxlength="35" size="35" /></td></tr>';
-        $salida.='<tr align=center><td colspan=2><button type="submit" class="btn btn-primary" name="aceptar"><span class="glyphicon glyphicon-ok"></span> Aceptar</td></tr></p>';
+        $salida.='<tr align=center><td colspan=2>
+            <a class="btn btn-info" role="button" onClick="location.href=' . "'index.php'" . '"><span class="glyphicon glyphicon-arrow-left"></span> Volver</a>
+            <button type="submit" class="btn btn-primary" name="aceptar"><span class="glyphicon glyphicon-ok"></span> Aceptar</td></tr></p>';
         $salida.='</form></div></center>';
         $salida.="<script>
                         $(document).ready(function() {

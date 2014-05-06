@@ -1,3 +1,5 @@
+-Corregido el nombre de la clase base en Pdf_mysql para que no haya problemas en sistemas que diferencian mayúsculas/minúsculas
+-Añadido el botón volver en Configuración
 Fix #36. Añadido límite caracteres en los campos de texto a 35 caracteres en Configuración. Añadido el número de columnas en resoluciones pequeñas y grandes en Configuración.
 
 Versión 1.12 06-05-2014
