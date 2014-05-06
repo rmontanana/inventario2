@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @package Inventario
  * @copyright Copyright (c) 2008, Ricardo Montañana Gómez
@@ -108,11 +107,11 @@ class Configuracion {
         $bootst = $this->datosConf['ESTILO'] == "bootstrap" ? 'selected' : ' ';
         $normal = $this->datosConf['PLANTILLA'] == "normal" ? 'selected' : ' ';
         $bootstrap = $this->datosConf['PLANTILLA'] == "bootstrap" ? 'selected' : ' ';
-        $salida = '<center><div class="col-sm-4 col-md-6"><form name="configura" method="post">';
+        $salida = '<center><div class="col-sm-4 col-md-8"><form name="configura" method="post">';
         //$salida.='<p align="center"><table border=1 class="tablaDatos"><tbody>';
         $salida.='<p align="center"><table border=2 class="table table-hover"><tbody>';
         $salida.='<th colspan=2 class="info"><center><b>Preferencias</b></center></th>';
-        $salida.='<tr>'.$this->creaTitulo("Nombre del Centro","Nombre que aparecerá en los informes y en la página principal de la aplicación").'<td><input type="text" name="CENTRO" value="' . $this->datosConf['CENTRO'] . '" size="30" /></td></tr>';
+        $salida.='<tr>'.$this->creaTitulo("Nombre del Centro","Nombre que aparecerá en los informes y en la página principal de la aplicación").'<td><input type="text" name="CENTRO" value="' . $this->datosConf['CENTRO'] . '" maxlength="35" size="35" /></td></tr>';
         $salida.='<tr>'.$this->creaTitulo("Número de filas","Número de filas que aparecerán en la pantalla de consulta de los maestros. Valor entre 10 y 25.").'<td><input type="number" max="25" min="10" name="NUMFILAS" value="' . $this->datosConf['NUMFILAS'] . '" size="3" /></td></tr>';
         $salida.='<tr>'.$this->creaTitulo("Plantilla","Plantilla html utilizada para mostrar el contenido de la aplicación.").'<td><select name="PLANTILLA" class="form-control">';
         $salida.='<option value="normal" ' . $normal . '>normal</option>';
@@ -140,16 +139,16 @@ class Configuracion {
             $salida.='<option value="' . $codigo . '" ' . $selec . ' >' . $color . '</option>';
         }
         $salida.='</select></td></tr>';
-        $salida.='<tr>'.$this->creaTitulo("Directorio tmp","Directorio donde se almacenarán los archivos temporales de la aplicación y también los archivos e informes que genera").'<td><input type="text" name="TMP" value="' . $this->datosConf['TMP'] . '" size="30" /></td></tr>';
+        $salida.='<tr>'.$this->creaTitulo("Directorio tmp","Directorio donde se almacenarán los archivos temporales de la aplicación y también los archivos e informes que genera").'<td><input type="text" name="TMP" value="' . $this->datosConf['TMP'] . '" maxlength="35" size="35" /></td></tr>';
         $salida.='<th colspan=2 class="danger"><center><b>Base de datos</b></center></th>';
-        $salida.='<tr>'.$this->creaTitulo("Servidor","Nombre o dirección IP del servidor MySQL. Normalmente localhost").'<td><input type="text" name="SERVIDOR" value="' . $this->datosConf['SERVIDOR'] . '" size="30" /></td></tr>';
-        $salida.='<tr>'.$this->creaTitulo("Puerto","Número de puerto donde el servidor admite conexiones MySQL. Normalmente 3306").'<td><input type="text" name="PUERTO" value="' . $this->datosConf['PUERTO'] . '" size="30" /></td></tr>';
-        $salida.='<tr>'.$this->creaTitulo("Base de datos","Nombre de la base de datos donde se almacenarán los datos de la aplicación").'<td><input type="text" name="BASEDATOS" value="' . $this->datosConf['BASEDATOS'] . '" size="30" /></td></tr>';
-        $salida.='<tr>'.$this->creaTitulo("Base de datos Tests","Nombre de la base de datos donde se almacenarán los datos de prueba de la aplicación").'<td><input type="text" name="BASEDATOSTEST" value="' . $this->datosConf['BASEDATOSTEST'] . '" size="30" /></td></tr>';
-        $salida.='<tr>'.$this->creaTitulo("Usuario","Usuario con permisos de lectura/escritura en la base de datos").'<td><input type="text" name="USUARIO" value="' . $this->datosConf['USUARIO'] . '" size="30" /></td></tr>';
-        $salida.='<tr>'.$this->creaTitulo("Clave","Contraseña del usuario con permisos sobre la base de datos").'<td><input type="text" name="CLAVE" value="' . $this->datosConf['CLAVE'] . '" size="30" /></td></tr>';
-        $salida.='<tr>'.$this->creaTitulo("mysqldump","Ruta completa a la utilidad mysqldump. Este programa es necesario para que se puedan hacer las copias de seguridad de la aplicación").'<td><input type="text" name="MYSQLDUMP" value="' . $this->datosConf['MYSQLDUMP'] . '" size="30" /></td></tr>';
-        $salida.='<tr>'.$this->creaTitulo("gzip","Ruta completa a la utilidad gzip. Este programa es necesario para que se puedan comprimir las copias de seguridad de la aplicación").'<td><input type="text" name="GZIP" value="' . $this->datosConf['GZIP'] . '" size="30" /></td></tr>';
+        $salida.='<tr>'.$this->creaTitulo("Servidor","Nombre o dirección IP del servidor MySQL. Normalmente localhost").'<td><input type="text" name="SERVIDOR" value="' . $this->datosConf['SERVIDOR'] . '" maxlength="35" size="35" /></td></tr>';
+        $salida.='<tr>'.$this->creaTitulo("Puerto","Número de puerto donde el servidor admite conexiones MySQL. Normalmente 3306").'<td><input type="text" name="PUERTO" value="' . $this->datosConf['PUERTO'] . '" maxlength="35" size="35" /></td></tr>';
+        $salida.='<tr>'.$this->creaTitulo("Base de datos","Nombre de la base de datos donde se almacenarán los datos de la aplicación").'<td><input type="text" name="BASEDATOS" value="' . $this->datosConf['BASEDATOS'] . '" maxlength="35" size="35" /></td></tr>';
+        $salida.='<tr>'.$this->creaTitulo("Base de datos Tests","Nombre de la base de datos donde se almacenarán los datos de prueba de la aplicación").'<td><input type="text" name="BASEDATOSTEST" value="' . $this->datosConf['BASEDATOSTEST'] . '" maxlength="35" size="35" /></td></tr>';
+        $salida.='<tr>'.$this->creaTitulo("Usuario","Usuario con permisos de lectura/escritura en la base de datos").'<td><input type="text" name="USUARIO" value="' . $this->datosConf['USUARIO'] . '" maxlength="35" size="35" /></td></tr>';
+        $salida.='<tr>'.$this->creaTitulo("Clave","Contraseña del usuario con permisos sobre la base de datos").'<td><input type="text" name="CLAVE" value="' . $this->datosConf['CLAVE'] . '" maxlength="35" size="35" /></td></tr>';
+        $salida.='<tr>'.$this->creaTitulo("mysqldump","Ruta completa a la utilidad mysqldump. Este programa es necesario para que se puedan hacer las copias de seguridad de la aplicación").'<td><input type="text" name="MYSQLDUMP" value="' . $this->datosConf['MYSQLDUMP'] . '" maxlength="35" size="35" /></td></tr>';
+        $salida.='<tr>'.$this->creaTitulo("gzip","Ruta completa a la utilidad gzip. Este programa es necesario para que se puedan comprimir las copias de seguridad de la aplicación").'<td><input type="text" name="GZIP" value="' . $this->datosConf['GZIP'] . '" maxlength="35" size="35" /></td></tr>';
         $salida.='<tr align=center><td colspan=2><button type="submit" class="btn btn-primary" name="aceptar"><span class="glyphicon glyphicon-ok"></span> Aceptar</td></tr></p>';
         $salida.='</form></div></center>';
         $salida.="<script>
@@ -168,7 +167,5 @@ class Configuracion {
                     </script>";
         return $salida;
     }
-
 }
-
 ?>
