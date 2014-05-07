@@ -37,7 +37,7 @@ define('CREDITOS', '<div class="modal fade" tabindex="-1" id="creditos" role="di
                             </div>
                             <div class="modal-body">
                                 <div class="jumbotron">
-                                    <img src="img/logo.png" class="img-responsive img-rounded" style="float:left"> 
+                                    <img src="img/qrlogo.png" class="img-responsive img-rounded" style="float:left"> 
                                     <h1>Inventario2</h1>
                                     <p> Aplicación para controlar el inventario de un centro educativo.</p>
                                     <p>En la aplicación se hace uso de los siguientes módulos y/o bibliotecas</p>
@@ -236,7 +236,7 @@ class AportaContenido {
 
                         $creditos = "$('#creditos').modal({keyboard: false});";
                         $centro = '<div class="well well-sm">' . CENTRO . '</div>';
-                        return $mensaje . '<br><br><center><img src="img/logo.png" alt="' . PROGRAMA . '" onClick="' . $creditos . '" >' .
+                        return $mensaje . '<br><br><center><img src="img/qrlogo.png" alt="' . PROGRAMA . '" onClick="' . $creditos . '" >' .
                                 '<br><br><label onClick="' . $creditos . '">' . $centro . '</label></center><br><br>' . CREDITOS;
                     case 'articulos':
                     case 'ubicaciones':
