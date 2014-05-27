@@ -251,8 +251,10 @@ class AportaContenido {
                         $creditos = "$('#creditos').modal({keyboard: false});";
                         $centro = '<div class="well well-sm">' . CENTRO . '</div>';
                         $tabla = $this->creaTablaAcercaDe();
+                        $rama_texto = trim(substr(file_get_contents('.git/HEAD'), 16));
+                        $rama = ($rama_texto != 'master' ? '<br><button class="btn btn-warning btn-xs" type="button"onClick="' . $creditos . '"><span class="glyphicon glyphicon-cog"></span> '.$rama_texto.'</button></center>':'');
                         return $mensaje . '<br><br><center><img src="img/qrlogo.png" alt="' . PROGRAMA . '" onClick="' . $creditos . '" >' .
-                                '<br><br><label onClick="' . $creditos . '">' . $centro . '</label></center><br><br>' . CREDITOS_CABECERA . $tabla . CREDITOS_PIE;
+                                '<br><br><label onClick="' . $creditos . '">' . $centro . '</label>' . $rama . CREDITOS_CABECERA . $tabla . CREDITOS_PIE;
                     case 'articulos':
                     case 'ubicaciones':
                     case 'test':
