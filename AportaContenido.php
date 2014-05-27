@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @package Inventario
  * @copyright Copyright (c) 2008, Ricardo Montañana Gómez
@@ -28,7 +27,7 @@ define('FORMULARIO_ACCESO', '<form name="formulario_acceso" action="index.php?re
         '<br><br><button type="submit" name="iniciar" class="btn btn-primary">Iniciar <span class="glyphicon glyphicon-log-in"></span></button></form>');
 define('MENSAJE_DEMO', 'Puede Iniciar sesi&oacute;n con<br>usuario <i><b>demo</b></i><br>contrase&ntilde;a <i>demo</i><br>');
 define('USUARIO_INCORRECTO', '<label class="bg-danger">Usuario y clave incorrectos!</label><br><br>');
-define('CREDITOS', '<div class="modal fade" tabindex="-1" id="creditos" role="dialog" aria-labelledby="modalCreditos" aria-hidden="true">
+define('CREDITOS_CABECERA', '<div class="modal fade" tabindex="-1" id="creditos" role="dialog" aria-labelledby="modalCreditos" aria-hidden="true">
                       <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -40,23 +39,9 @@ define('CREDITOS', '<div class="modal fade" tabindex="-1" id="creditos" role="di
                                     <img src="img/qrlogo.png" class="img-responsive img-rounded" style="float:left"> 
                                     <h1>Inventario2</h1>
                                     <p> Aplicación para controlar el inventario de un centro educativo.</p>
-                                    <p>En la aplicación se hace uso de los siguientes módulos y/o bibliotecas</p>
-                                    <table class="table table-condensed">
-                                     <thead><tr><th>Biblioteca/Módulo</th><th>Licencia</th></tr></thead>
-                                     <tbody>
-                                      <tr><td><a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a></td><td><a target="_blank" href="https://github.com/twbs/bootstrap/blob/master/LICENSE">MIT</a></td>
-                                      <tr><td><a href="http://www.fpdf.org/" target="_blank">FPDF</a></td><td>Libre</td>
-                                      <tr><td><a href="http://phpqrcode.sourceforge.net/" target="_blank">PHP QR Code Enconder</a></td><td><a target="_blank" href="http://www.gnu.org/licenses/lgpl-3.0.txt">LGPL</a></td>
-                                      <tr><td><a href="http://stefangabos.ro/php-libraries/zebra-image/" target="_blank">Zebra_Image</a></td><td><a target="_blank" href="http://www.gnu.org/licenses/lgpl-3.0.txt">LGPL</a></td>
-                                      <tr><td><a href="http://jasny.github.io/bootstrap/" target="_blank">Jasny Bootstrap</a></td><td><a target="_blank" href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></td>
-                                      <tr><td><a href="http://1000hz.github.io/bootstrap-validator/" target="_blank">Bootstrap Validator</a></td><td><a target="_blank" href="https://github.com/1000hz/bootstrap-validator/blob/master/LICENSE">MIT</a></td>
-                                      <tr><td><a href="https://github.com/tkrotoff/jquery-simplecolorpicker" target="_blank">jquery-simplecolorpicker</a></td><td><a target="_blank" href="https://github.com/tkrotoff/jquery-simplecolorpicker/blob/master/LICENSE.txt">MIT</a></td>
-                                      <tr><td><a href="http://eonasdan.github.io/bootstrap-datetimepicker/" target="_blank">Bootstrap datetimepicker</a></td><td><a target="_blank" href="https://github.com/Eonasdan/bootstrap-datetimepicker/blob/master/src/js/bootstrap-datetimepicker.js">MIT</a></td>
-                                      <tr><td><a href="http://silviomoreto.github.io/bootstrap-select/" target="_blank">Bootstrap-select</a></td><td><a target="_blank" href="https://github.com/silviomoreto/bootstrap-select">MIT</a></td>
-                                      <tr><td><a href="https://github.com/vitalets/x-editable" target="_blank">X-editable</a></td><td><a target="_blank" href="https://github.com/vitalets/x-editable/blob/master/LICENSE-MIT">MIT</a></td>
-                                     </tbody>
-                                    </table>
-                                    <p><h5>Copyright &copy; 2008-2014 Ricardo Montañana Gómez</h4>
+                                    <p>En la aplicación se hace uso de los siguientes módulos y/o bibliotecas</p>');
+                                    
+define('CREDITOS_PIE', '                <p><h5>Copyright &copy; 2008-2014 Ricardo Montañana Gómez</h4>
                                     <h5><small>Esta aplicación se distribuye con licencia <a target="_blank" href="http://www.gnu.org/licenses/gpl-3.0.html">GPLv3 </a></small></h5></p>
                                 </div>
                             </div>
@@ -126,6 +111,35 @@ class AportaContenido {
         $this->usuario = $usuario;
         $this->perfil = $perfil;
         $this->opcionActual = $opcion;
+    }
+    
+    /**
+     * Devuelve una tabla HTML con el contenido de las bibliotecas/módulos utilizadas en la aplicación
+     * Si el perfil del usuario es de Configuración devuelve también las versiones de las bibliotecas
+     * @return string 
+     */
+    public function creaTablaAcercaDe()
+    {
+
+        $poner = $this->perfil['Config'];
+        $tabla = '<table class="table table-condensed">';
+        $tabla .='<thead><tr><th>Biblioteca/Módulo</th>'.($poner?'<th>Versión</th>':'').'<th>Licencia</th></tr></thead>';
+        $tabla .='<tbody>';
+        $tabla .='<tr><td><a href="http://jquery.com/" target="_blank">jquery</a></td>'.($poner?'<td>2.1.0</td>':'').'<td><a target="_blank" href="https://jquery.org/license/">MIT</a></td>';
+        $tabla .='<tr><td><a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a></td>'.($poner?'<td>3.1.1</td>':'').'<td><a target="_blank" href="https://github.com/twbs/bootstrap/blob/master/LICENSE">MIT</a></td>';
+        $tabla .='<tr><td><a href="http://www.fpdf.org/" target="_blank">FPDF</a></td>'.($poner?'<td>1.7</td>':'').'<td>Libre</td>';
+        $tabla .='<tr><td><a href="http://phpqrcode.sourceforge.net/" target="_blank">PHP QR Code Enconder</a></td>'.($poner?'<td>1.1.4</td>':'').'<td><a target="_blank" href="http://www.gnu.org/licenses/lgpl-3.0.txt">LGPL</a></td>';
+        $tabla .='<tr><td><a href="http://stefangabos.ro/php-libraries/zebra-image/" target="_blank">Zebra_Image</a></td>'.($poner?'<td>2.2.3</td>':'').'<td><a target="_blank" href="http://www.gnu.org/licenses/lgpl-3.0.txt">LGPL</a></td>';
+        $tabla .='<tr><td><a href="http://jasny.github.io/bootstrap/" target="_blank">Jasny Bootstrap</a></td>'.($poner?'<td>3.1.0</td>':'').'<td><a target="_blank" href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></td>';
+        $tabla .='<tr><td><a href="http://1000hz.github.io/bootstrap-validator/" target="_blank">Bootstrap Validator</a></td>'.($poner?'<td>0.2.1</td>':'').'<td><a target="_blank" href="https://github.com/1000hz/bootstrap-validator/blob/master/LICENSE">MIT</a></td>';
+        $tabla .='<tr><td><a href="https://github.com/tkrotoff/jquery-simplecolorpicker" target="_blank">jquery-simplecolorpicker</a></td>'.($poner?'<td>0.3.0</td>':'').'<td><a target="_blank" href="https://github.com/tkrotoff/jquery-simplecolorpicker/blob/master/LICENSE.txt">MIT</a></td>';
+        $tabla .='<tr><td><a href="http://eonasdan.github.io/bootstrap-datetimepicker/" target="_blank">Bootstrap datetimepicker</a></td>'.($poner?'<td>2.1.32</td>':'').'<td><a target="_blank" href="https://github.com/Eonasdan/bootstrap-datetimepicker/blob/master/src/js/bootstrap-datetimepicker.js">MIT</a></td>';
+        $tabla .='<tr><td><a href="http://silviomoreto.github.io/bootstrap-select/" target="_blank">Bootstrap-select</a></td>'.($poner?'<td>1.5.4</td>':'').'<td><a target="_blank" href="https://github.com/silviomoreto/bootstrap-select">MIT</a></td>';
+        $tabla .='<tr><td><a href="https://github.com/vitalets/x-editable" target="_blank">X-editable</a></td>'.($poner?'<td>1.5.1</td>':'').'<td><a target="_blank" href="https://github.com/vitalets/x-editable/blob/master/LICENSE-MIT">MIT</a></td>';
+        $tabla .='<tr><td><a href="http://momentjs.com/" target="_blank">Moment.js</a></td>'.($poner?'<td>2.5.1</td>':'').'<td><a target="_blank" href="https://github.com/moment/moment/blob/develop/LICENSE">MIT</a></td>';
+        $tabla .='</tbody>';
+        $tabla .='</table>';
+        return $tabla;
     }
 
     /**
@@ -236,8 +250,9 @@ class AportaContenido {
 
                         $creditos = "$('#creditos').modal({keyboard: false});";
                         $centro = '<div class="well well-sm">' . CENTRO . '</div>';
+                        $tabla = $this->creaTablaAcercaDe();
                         return $mensaje . '<br><br><center><img src="img/qrlogo.png" alt="' . PROGRAMA . '" onClick="' . $creditos . '" >' .
-                                '<br><br><label onClick="' . $creditos . '">' . $centro . '</label></center><br><br>' . CREDITOS;
+                                '<br><br><label onClick="' . $creditos . '">' . $centro . '</label></center><br><br>' . CREDITOS_CABECERA . $tabla . CREDITOS_PIE;
                     case 'articulos':
                     case 'ubicaciones':
                     case 'test':
@@ -397,5 +412,4 @@ class AportaContenido {
         return $panel;
     }
 }
-
 ?>
