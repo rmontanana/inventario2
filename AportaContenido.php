@@ -41,7 +41,7 @@ define('CREDITOS_CABECERA', '<div class="modal fade" tabindex="-1" id="creditos"
                                     <p> Aplicación para controlar el inventario de un centro educativo.</p>
                                     <p>En la aplicación se hace uso de los siguientes módulos y/o bibliotecas</p>');
                                     
-define('CREDITOS_PIE', '                <p><h5>Copyright &copy; 2008-2014 Ricardo Montañana Gómez</h4>
+define('CREDITOS_PIE', '                <p><h5>Copyright &copy; 2008-2014 Ricardo Montañana Gómez</h5>
                                     <h5><small>Esta aplicación se distribuye con licencia <a target="_blank" href="http://www.gnu.org/licenses/gpl-3.0.html">GPLv3 </a></small></h5></p>
                                 </div>
                             </div>
