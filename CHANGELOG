@@ -1,3 +1,4 @@
+Versión 1.14 01-06-2014
 -Añadido icono de acceso a la documentación en la barra superior
 -Corregido cierre etiqueta h5 en pie de créditos
 -Añade la rama git en la pantalla de inicio en caso de que no sea la rama master, con un botón que al pulsarlo salen los créditos
