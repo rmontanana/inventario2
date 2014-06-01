@@ -1,3 +1,12 @@
+Versión 1.14 01-06-2014
+-Añadido icono de acceso a la documentación en la barra superior
+-Corregido cierre etiqueta h5 en pie de créditos
+-Añade la rama git en la pantalla de inicio en caso de que no sea la rama master, con un botón que al pulsarlo salen los créditos
+-Fix #39. Devuelve la versión de las bibliotecas/módulos utilizados en la aplicación si el usuario tiene perfil de Configuración, en caso contrario tan sólo el listado de bibliotecas y su licencia.
+-Corregido el nombre de la clase base en Pdf_mysql para que no haya problemas en sistemas que diferencian mayúsculas/minúsculas
+-Añadido el botón volver en Configuración
+-Fix #36. Añadido límite caracteres en los campos de texto a 35 caracteres en Configuración. Añadido el número de columnas en resoluciones pequeñas y grandes en Configuración.
+
 Versión 1.12 06-05-2014
 -Mantenimiento muestra el 'Titulo' del campo tanto en Consulta como en el formulario de edición
 -Muestra cuadro de búsqueda y mensaje correcto cuando no se encuentra la cadena de búsqueda en Mantenimiento

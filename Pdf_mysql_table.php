@@ -20,7 +20,7 @@
  *  
  */
 
-class Pdf_mysql_table extends Fpdf
+class Pdf_mysql_table extends FPDF
 {
     /**
      * Modificado por Ricardo Montañana 05/2008 para añadir la posibilidad de cálculo de totales

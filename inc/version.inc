@@ -23,5 +23,5 @@
  */
 
 define('AUTOR', 'Ricardo Montañana Gómez');
-define('VERSION', '1.12');
+define('VERSION', '1.14');
 ?>

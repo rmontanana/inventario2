@@ -423,7 +423,7 @@ class Mantenimiento {
                         $valor = "null";
                     }
                 } else {
-                    $valor = $_POST[$campo] == "" ? "null" : '"' . $_POST[$campo] . '"';
+                    $valor = $_POST[$campo] == "" ? "null" : '"' . $this->bdd->filtra($_POST[$campo]) . '"';
                 }
             }
             $comando.="$coma " . $valor;
@@ -504,7 +504,7 @@ class Mantenimiento {
                     if (strlen(trim($_POST[$campo])) == 0) {
                         $comando.="$coma $campo=null";
                     } else {
-                        $comando.=$coma . ' ' . $campo . '="' . $_POST[$campo] . '"';
+                        $comando.=$coma . ' ' . $campo . '="' . $this->bdd->filtra($_POST[$campo]) . '"';
                     }
                 }
             }
