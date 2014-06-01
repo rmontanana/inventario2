@@ -194,7 +194,10 @@ class AportaContenido {
                 $campo = '<input type="hidden" name="fechaCabecera" id="fechaCabecera" value="' . $this->fechaActual("%d/%m/%Y") . '">';
                 $etiqueta = '<label for="fechaCabecera" onClick="$(' . "'#fechaCabecera'" . ").data('DateTimePicker').show();" . '">' . $this->fechaActual() . '</label>';
                 return $etiqueta . $campo . $script;
-            case 'aplicacion': return PROGRAMA . " v" . VERSION;
+            case 'aplicacion': 
+                $nombre = explode(" ", PROGRAMA);
+                $nombre = $nombre[2];
+                return $nombre . " v" . VERSION;
             case 'menu': // el menú
                 if ($this->registrado) {
                     return $this->miMenu->insertaMenu();
