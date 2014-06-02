@@ -13,6 +13,10 @@ Utiliza:
 *MySQL v. 5.1.x
 *Apache
 
+[Manual de Usuario](http://rmontanana.gitbooks.io/inventario2/)
+
+[Instalación de ejemplo](http://inventario2.rmontanana.es)
+
 ##Instalación
 Para instalar la aplicación basta con seguir estos pasos:
 ###1. Copiar los archivos en una ubicación a la que tenga acceso el usuario con el que se ejecuta el servidor Apache (apache, _www, etc.).

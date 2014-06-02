@@ -194,7 +194,10 @@ class AportaContenido {
                 $campo = '<input type="hidden" name="fechaCabecera" id="fechaCabecera" value="' . $this->fechaActual("%d/%m/%Y") . '">';
                 $etiqueta = '<label for="fechaCabecera" onClick="$(' . "'#fechaCabecera'" . ").data('DateTimePicker').show();" . '">' . $this->fechaActual() . '</label>';
                 return $etiqueta . $campo . $script;
-            case 'aplicacion': return PROGRAMA . " v" . VERSION;
+            case 'aplicacion': 
+                $nombre = explode(" ", PROGRAMA);
+                $nombre = $nombre[2];
+                return $nombre . " v" . VERSION;
             case 'menu': // el menú
                 if ($this->registrado) {
                     return $this->miMenu->insertaMenu();
@@ -254,7 +257,7 @@ class AportaContenido {
                         $rama_texto = trim(substr(file_get_contents('.git/HEAD'), 16));
                         $rama = ($rama_texto != 'master' ? '<br><button class="btn btn-warning btn-xs" type="button"onClick="' . $creditos . '"><span class="glyphicon glyphicon-cog"></span> '.$rama_texto.'</button></center>':'');
                         return $mensaje . '<br><br><center><img src="img/qrlogo.png" alt="' . PROGRAMA . '" onClick="' . $creditos . '" >' .
-                                '<br><br><label onClick="' . $creditos . '">' . $centro . '</label>' . $rama . CREDITOS_CABECERA . $tabla . CREDITOS_PIE;
+                                '<br><br><label onClick="' . $creditos . '">' . $centro . '</label>' . $rama . '</center>' . CREDITOS_CABECERA . $tabla . CREDITOS_PIE;
                     case 'articulos':
                     case 'ubicaciones':
                     case 'test':

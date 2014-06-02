@@ -61,7 +61,7 @@ class Pdf_mysql_table extends FPDF
         //Titulo
         $fecha=strftime("%d-%b-%Y %H:%M");
         $this->SetFont('Arial','',8);
-        $this->Cell(0,4,html_entity_decode(CENTRO . " " . PROGRAMA . VERSION,ENT_COMPAT | ENT_HTML401,'ISO-8859-1'),0,1,'L');
+        $this->Cell(0,4,html_entity_decode(CENTRO . " " . PROGRAMA . " v" . VERSION,ENT_COMPAT | ENT_HTML401,'ISO-8859-1'),0,1,'L');
         $this->SetFont('Arial','',18);
         $this->Cell(0,6,utf8_decode($this->titulo),0,1,'C');
         $this->SetFont('Arial','',8);
