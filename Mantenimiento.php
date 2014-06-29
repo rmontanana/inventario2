@@ -92,7 +92,10 @@ class Mantenimiento {
         $sentido = "&sentido=" . $this->datosURL['sentido'];
         $pag = "&pag=" . $this->datosURL['pag'];
         //Ahora los datos opcionales
-        $buscar = isset($this->cadenaBusqueda) ? "&buscar=$this->cadenaBusqueda" : null;
+        //$buscar = isset($this->cadenaBusqueda) ? '&buscar="'.$this->cadenaBusqueda.'"' : null;
+        //$buscar = isset($this->cadenaBusqueda) ? "&buscar='$this->cadenaBusqueda'" : null;
+        //$buscar = isset($this->cadenaBusqueda) ? "&buscar=$this->cadenaBusqueda" : null;
+        $buscar = isset($this->cadenaBusqueda) ? "&buscar=" . urlencode($this->cadenaBusqueda) : null;
         $id = isset($this->datosURL['id']) ? "&id=" . $this->datosURL['id'] : null;
         $enlace = $this->url . $opc . $orden . $sentido . $pag . $buscar . $id;
         return $enlace;
@@ -152,7 +155,7 @@ class Mantenimiento {
         $cabecera = $this->cabeceraTabla();
         //Trata con la cadena de búsqueda si viene del post debe quedarse con ella sino con la del get y si no está definida => vacía
         if (isset($this->cadenaBusqueda) && strlen($this->cadenaBusqueda)) {
-            $sufijo = " where $this->campoBusca like '%" . $this->bdd->filtra($this->cadenaBusqueda) . "%'";
+            $sufijo = " where $this->campoBusca like '%" . $this->bdd->filtra(urldecode($this->cadenaBusqueda)) . "%'";
             $comando = str_replace('{buscar}', $sufijo, $this->comandoConsulta);
         } else {
             $comando = str_replace('{buscar}', '', $this->comandoConsulta);
