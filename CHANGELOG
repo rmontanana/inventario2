@@ -1,3 +1,9 @@
+Versión 1.15 28-06-2014
+-Crear la opción de clonar registro en Mantenimiento.
+-Crear iconos de clonado en todos los estilos.
+-Corregido determinaAccion en Imagen para aceptar el clonado
+-Corregido codificación/decodificación de la cadena de búsqueda en la URL
+
 Versión 1.14.1 02-06-2014
 -Añadidos enlaces a manual y a aplicación de ejemplo en readme.md
 -Arreglado que los créditos salgan centrados en lugar de alineados a la derecha
