@@ -3,7 +3,7 @@
 	<Titulo Texto="{Descripcion}" id="{id}"/>
 	<Datos>
 		<Consulta>
-			select A.id as id, A.Descripcion as articulo, A.Marca as marca, A.Modelo as modelo, E.id as idEl, U.id as idUbic,U.Descripcion as ubicacion,E.numserie as numserie, 
+			select A.id as idArt, A.Descripcion as articulo, A.Marca as marca, A.Modelo as modelo, E.id as idEl, U.id as idUbic,U.Descripcion as ubicacion,E.numserie as numserie, 
                                 E.fechaCompra as fechaCompra,E.Cantidad as cantidad, E.Cantidad as cantReal, 'N' as Baja
 				from Elementos E, Articulos A, Ubicaciones U where A.id=E.id_Articulo and U.id=E.id_Ubicacion
 				and A.id='{id}' order by U.Descripcion,numserie;

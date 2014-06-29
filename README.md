@@ -30,7 +30,8 @@ Para instalar la aplicación basta con seguir estos pasos:
 ###2. Crear un directorio temporal y dar derechos de escritura a los ficheros de configuración.
     
     mkdir tmp
-    chown apache tmp
+    mkdir img.data
+    chown apache tmp img.data
     chown apache inc/configuracion.inc
     chown apache inc
     

@@ -29,6 +29,7 @@ class Imagen {
     public $archivoComprimido;
     private $extension;
     private $dirData;
+    public $archivoCopiado;
     
     public function __construct()
     {
@@ -39,7 +40,7 @@ class Imagen {
     {
         if (isset($_POST[$campo]) && $_POST[$campo] == "") {
             return HAYQUEBORRAR; //Hay que borrar el archivo de imagen
-        } elseif ($_FILES[$campo]['error'] == 0) {
+        } elseif (isset($_FILES[$campo]['error']) && $_FILES[$campo]['error'] == 0) {
             return HAYQUEGRABAR; //Hay que guardar el archivo de imagen enviado
         } else {
             return NOHACERNADA; //No hay que hacer nada
@@ -110,6 +111,18 @@ class Imagen {
                 unlink ($archivo);
             }
         }
+    }
+    public function copiaImagenId($valorImagen, $tabla, $id, &$mensaje)
+    {
+        $extension = strrchr($valorImagen, ".");
+        $nombre = $this->dirData . "/" . $tabla . "_" . $id . $extension;
+        if (!@copy($valorImagen, $nombre)) {
+            $errors= error_get_last();
+            $mensaje = "No pudo copiar el archivo "  . $valorImagen . " en " . $nombre . " Error = [" . $errors['message'] . "]";
+            return false;
+        }
+        $this->archivoCopiado = $nombre;
+        return true;
     }
     
     public function mueveImagenId($tabla, $id, &$mensaje)
