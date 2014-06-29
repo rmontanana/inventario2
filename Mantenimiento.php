@@ -23,6 +23,7 @@
 define('EDICION', 'Edici&oacute;n');
 define('BORRADO', '<i>Borrado</i>');
 define('ANADIR', 'Inserci&oacute;n');
+define('CLONAR', 'Clonar');
 
 class Mantenimiento {
 
@@ -109,10 +110,15 @@ class Mantenimiento {
             case 'insertar':return $this->insertar();
             case 'modificar':return $this->modificar();
             case 'borrar':return $this->borrar();
+            case 'clonar': return $this->muestra(CLONAR);
             default: return "La clase Mantenimiento No entiende lo solicitado [" . $this->datosURL['opc'] . "]";
         }
     }
 
+    private function clonar()
+    {
+    
+    }
     protected function obtieneClavesForaneas()
     {
         $salida = null;
@@ -244,6 +250,18 @@ class Mantenimiento {
             }
             //Añade los botones de acciones
             $salida .= '<td align="center">';
+            //Añade el icono de clonar
+            if ($this->perfil['Alta']) {
+                //$salida.='<a href="index.php?' . $tabla . '&opc=editar&id=' . $id . "&pag=" . $pagina . $sufijoOrden . $sufijoEnlace .
+                $this->backupURL(); $this->datosURL['opc'] = "clonar"; $this->datosURL['id'] = $id;
+                if (ESTILO == 'bootstrap') {
+                    $salida.='<a href="'.$this->montaURL() . '" title="Clonar"><span class="glyphicon glyphicon-copyright-mark"></span></a>&nbsp;&nbsp;';
+                } else {
+                    $salida.='<a href="' . $this->montaURL() .
+                            '"><img title="Clonar" src="img/' . ESTILO . '/clonar.png" alt="clonar"></a>&nbsp;&nbsp;'; 
+                }  
+                $this->restoreURL();
+            }
             //Añade el icono de editar
             if ($this->perfil['Modificacion']) {
                 //$salida.='<a href="index.php?' . $tabla . '&opc=editar&id=' . $id . "&pag=" . $pagina . $sufijoOrden . $sufijoEnlace .
@@ -327,7 +345,7 @@ class Mantenimiento {
         if ($this->perfil['Alta']) {
             $this->datosURL['opc'] = 'nuevo';
             if (ESTILO == 'bootstrap') {
-                $anadir = '<button type="button" class="btn btn-default btn-lg" title="Añade '.$this->tabla.'" onClick="location.href='."'".$this->montaURL()."'".'"><span class="glyphicon glyphicon-plus-sign"></span></button>';
+                $anadir = '<button type="button" class="btn btn-default btn-lg" title="Añade '.$this->tabla.'" onClick="location.href='."'".$this->montaURL()."'".'"><span class="glyphicon glyphicon-plus-sign"></span></button>';                
             } else {
                 $anadir = '<a href="' . $this->montaURL() . '">' .
                     '<img title="A&ntilde;adir registro" alt="nuevo" src="img/' . ESTILO . '/nuevo.png"></a>';
@@ -412,7 +430,7 @@ class Mantenimiento {
                     //procesa el envío de la imagen
                     $imagen = new Imagen();
                     $accion = $imagen->determinaAccion($campo);
-                    if ($accion != NOHACERNADA) {
+                    if ($accion != NOHACERNADA) { // && $_POST['tipoOperacion'] != CLONAR) {
                         $mensaje = "";
                         if (!$imagen->procesaEnvio($campo, $mensaje)) {
                             return $this->panelMensaje($mensaje, "danger", "ERROR PROCESANDO IMAGEN");
@@ -420,7 +438,16 @@ class Mantenimiento {
                         $hayImagen = true;
                         $campoImagen = $campo;
                     } else {
-                        $valor = "null";
+                        //Comprobamos si hay clonación y hay imagen a clonar.
+                        $valor = $_POST[$campo];
+                        if ($_POST['tipoOperacion'] == CLONAR && file_exists($valor)) {
+                            $hayImagen = true;
+                            $campoImagen = $campo;
+                            $valorImagen = $valor;
+                            $valor = "null";
+                        } else {
+                            $valor = "null";
+                        }
                     }
                 } else {
                     $valor = $_POST[$campo] == "" ? "null" : '"' . $this->bdd->filtra($_POST[$campo]) . '"';
@@ -434,11 +461,22 @@ class Mantenimiento {
         }
         $id = $this->bdd->ultimoId();
         if ($hayImagen) {
+            $mensaje = " ";
             //Tiene que recuperar el id del registro insertado y actualizar el archivo de imagen
-            if (!$imagen->mueveImagenId($this->tabla, $id, $mensaje)) {
-                return $this->panelMensaje($mensaje, "danger", "ERROR COMPRIMIENDO IMAGEN");
+            if ($_POST['tipoOperacion'] == CLONAR) {
+                //Tiene que copiar el archivo original.
+                if (!$imagen->copiaImagenId($valorImagen, $this->tabla, $id, $mensaje)) {
+                    return $this->panelMensaje($mensaje, "danger", "ERROR COPIANDO IMAGEN");
+                }
+                $archivoImagen = $imagen->archivoCopiado;
+            } else {
+                //Crea el archivo de imagen
+                if (!$imagen->mueveImagenId($this->tabla, $id, $mensaje)) {
+                    return $this->panelMensaje($mensaje, "danger", "ERROR COMPRIMIENDO IMAGEN");
+                }
+                $archivoImagen = $imagen->archivoComprimido;
             }
-            $comando = "update " . $this->tabla . " set " . $campoImagen . "='" . $imagen->archivoComprimido . "' where id='" . $id ."';";
+            $comando = "update " . $this->tabla . " set " . $campoImagen . "='" . $archivoImagen . "' where id='" . $id ."';";
             if (!$this->bdd->ejecuta($comando)) {
                 return $this->errorBD($comando);
             }
@@ -657,7 +695,7 @@ class Mantenimiento {
 
     /**
      * 
-     * @param string $tipo ANADIR,EDICION,BORRADO
+     * @param string $tipo ANADIR,EDICION,BORRADO,CLONAR
      * @param array $datos Vector con los datos del registro
      * @return array lista de campos y formulario de entrada
      */
@@ -666,6 +704,7 @@ class Mantenimiento {
         $modo = $tipo == BORRADO ? "readonly" : "";
         $nfechas = 0;
         switch ($tipo) {
+            case CLONAR:
             case ANADIR:
                 $this->datosURL['opc'] = "insertar"; $this->datosURL['id'] = null;
                 break;
@@ -695,7 +734,7 @@ class Mantenimiento {
             //Se asegura que el id no se pueda modificar.
             $modoEfectivo = $clave == 'id' ? "readonly" : $modo;
             $valorDato = $datos == null ? "" : $datos[$campo];
-            if ($clave == 'id' && $tipo == ANADIR) {
+            if ($clave == 'id' && ($tipo == ANADIR || $tipo == CLONAR)) {
                 $valorDato = null;
             }
             if (!isset($this->foraneas[$valor['Campo']])) {
@@ -744,6 +783,10 @@ class Mantenimiento {
                     continue;
                 }
                 if (stristr($this->campos[$campo]['Comment'], "imagen")) {
+                    /*if ($tipo == CLONAR) {
+                        // De momento no deja clonar las imágenes
+                        $valorDato = null;
+                    }*/
                     $salida .= $this->creaCampoImagen($campo, $valorDato, $tipo);
                     continue;
                 }
@@ -762,6 +805,8 @@ class Mantenimiento {
         }
         //genera un campo oculto con la lista de campos a modificar.
         $salida .= '<input name="listacampos" type="hidden" value="' . $campos . "\">\n";
+        //genera un campo oculto con el tipo de operación asociado al formulario
+        $salida .= '<input name="tipoOperacion" type="hidden" value="' . $tipo . "\">\n";
         $salida .= "</fieldset><p>";
         $salida .= '<center>';
         $this->datosURL['opc'] = 'inicial';
