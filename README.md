@@ -15,7 +15,7 @@ Utiliza:
 
 [Manual de Usuario](http://rmontanana.gitbooks.io/inventario2/)
 
-[Instalación de ejemplo](http://inventario2.rmontanana.es]
+[Instalación de ejemplo](http://inventario2.rmontanana.es)
 
 [Estadísticas del proyecto](https://www.ohloh.net/p/inventario2)
 
