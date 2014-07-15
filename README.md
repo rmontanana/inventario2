@@ -12,7 +12,7 @@ Utiliza:
 *PHP v. 5.3.x
 *MySQL v. 5.1.x
 *Apache
-
+[![Project Stats](https://www.ohloh.net/p/inventario2/widgets/project_thin_badge.gif)](https://www.ohloh.net/p/inventario2)
 [Manual de Usuario](http://rmontanana.gitbooks.io/inventario2/)
 
 [Instalación de ejemplo](http://inventario2.rmontanana.es)
