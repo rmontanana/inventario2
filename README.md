@@ -1,4 +1,4 @@
-# Inventario de Centro Educativo
+# Inventario de Centro Educativo [![Project Stats](https://www.ohloh.net/p/inventario2/widgets/project_thin_badge.gif)](https://www.ohloh.net/p/inventario2)
 Copyright (c) 2008-2014, Ricardo Montañana Gómez
 
 Inventario2 is free software: you can redistribute it and/or modify 
@@ -16,6 +16,8 @@ Utiliza:
 [Manual de Usuario](http://rmontanana.gitbooks.io/inventario2/)
 
 [Instalación de ejemplo](http://inventario2.rmontanana.es)
+
+[Estadísticas del proyecto](https://www.ohloh.net/p/inventario2)
 
 ##Instalación
 Para instalar la aplicación basta con seguir estos pasos:
