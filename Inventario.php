@@ -42,7 +42,7 @@ class Inventario {
         $this->opcActual = $_SERVER['QUERY_STRING'] == '' ? 'principal' : $_SERVER['QUERY_STRING'];
         //Si el programa no está instalado, llama al instalador.
         if (INSTALADO == "no") {
-            header('location: instalar.php');
+            header('location: Instalar.php');
             return;
         }
         // Iniciamos una sesión
