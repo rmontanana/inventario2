@@ -55,6 +55,7 @@ class Importacion {
 
     private function formulario() {
         $accion = "index.php?importacion&opc=importar";
+        $salida = "";
         //$salida .= '<script type="text/javascript" src="css/bootstrap-filestyle.min.js"> </script>';
         $salida .='<div class="col-sm-6 col-md-6">';
         $salida .= '<form  enctype="multipart/form-data" name="importacion.form" method="post" action="' . $accion . '">' . "\n";

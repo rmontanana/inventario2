@@ -23,10 +23,6 @@ class CopiaSeguridad {
     private $baseDatos;
     private $imagenes;
     
-    public function __construct()
-    {
-        $opcion = $_GET['opc'];
-    }
     public function creaCopia()
     {
         if (!$this->copiaBaseDatos()) {
