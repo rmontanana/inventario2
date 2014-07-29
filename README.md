@@ -75,4 +75,4 @@ Contenido mínimo del fichero /etc/my.cnf
     collation-server = utf8_spanish_ci
 
     [client]
-    default-character-set=utf8
+    default-character-set=utf8 
