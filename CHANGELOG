@@ -1,3 +1,6 @@
+Versión 1.16 28-07-2014
+-Fix #41. Arregla las llamadas a Instalar.php que se hacían desde Inventario.php y desde Instalar.php
+
 Versión 1.15 29-06-2014
 -Crear la opción de clonar registro en Mantenimiento.
 -Crear iconos de clonado en todos los estilos.

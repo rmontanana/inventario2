@@ -149,7 +149,7 @@ class Instalar {
         
         // Final del paso
         $info .='</ul>';
-        $info .= $this->validaPaso0() ? $this->retornaBoton(false, "instalar.php?paso=1") : $this->retornaBoton(true, "instalar.php");
+        $info .= $this->validaPaso0() ? $this->retornaBoton(false, "Instalar.php?paso=1") : $this->retornaBoton(true, "Instalar.php");
         $panel = $this->panelMensaje($info, 'primary', 'PASO 1: Configuración del servidor y la aplicación');
         return $panel;
     }
@@ -284,7 +284,7 @@ class Instalar {
                 return $this->paso2();
         }
         
-        $info  = '<form method="post" name="conf" action="instalar.php?paso=1">';
+        $info  = '<form method="post" name="conf" action="Instalar.php?paso=1">';
         $info .= '<ul class="list-group">';
         $info .= '<li class="list-group-item list-group-item-info">Datos de configuración</li>';
         $info .= '<li class="list-group-item">Servidor <input type="text" name="SERVIDOR" class="form-control" placeholder="Nombre del servidor o dirección IP" value="'. $datos['SERVIDOR'] .'"></li>';
@@ -293,8 +293,8 @@ class Instalar {
         $info .= '<li class="list-group-item">Usuario <input type="text" name="USUARIO" class="form-control" placeholder="Usuario" value="'. $datos['USUARIO'] .'"></li>';
         $info .= '<li class="list-group-item">Contraseña <input type="text" name="CLAVE" class="form-control" placeholder="Contraseña" value="'. $datos['CLAVE'] .'"></li>';
         $info .= '</ul>';
-        $info .= $this->botonVolver("instalar.php");
-        $info .= $this->validaPaso1() ? $this->retornaBoton(false, "instalar.php?paso=1", false) : $this->retornaBoton(true, "instalar.php?paso=1", false);
+        $info .= $this->botonVolver("Instalar.php");
+        $info .= $this->validaPaso1() ? $this->retornaBoton(false, "Instalar.php?paso=1", false) : $this->retornaBoton(true, "Instalar.php?paso=1", false);
         $info .= '</form>';
         $panel = $this->panelMensaje($info, 'primary', 'PASO 2: Configuración de la Base de Datos.');
         return $panel;
@@ -415,7 +415,7 @@ class Instalar {
         }
         
         $info = '      
-        <form data-toggle="validator" role="form" class="form-horizontal" method="post" action="instalar.php?paso=2">
+        <form data-toggle="validator" role="form" class="form-horizontal" method="post" action="Instalar.php?paso=2">
                 <div class="form-group">
                     <label for="usuario" class="control-label col-sm-2">Usuario</label>
                     <div class="form-group col-sm-10">
@@ -435,7 +435,7 @@ class Instalar {
                 </div>
 
                 <div class="form-group col-sm-12">
-                ' . $this->botonVolver("instalar.php?paso=1") . '
+                ' . $this->botonVolver("Instalar.php?paso=1") . '
                     <button type="submit" class="btn btn-primary pull-right btn-lg" disabled="disabled">Crear base de datos y usuario <span class="glyphicon glyphicon-arrow-right"></button>
                 </div>
             </div>
