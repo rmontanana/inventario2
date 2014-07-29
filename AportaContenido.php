@@ -210,7 +210,11 @@ class AportaContenido {
                     return $salida;
                 }
             case 'opcion':
-                list($opcion, $parametro) = explode("&", $this->opcionActual);
+                if (strstr($this->opcionActual, "&")) {
+                    list($opcion, $parametro) = explode("&", $this->opcionActual);
+                } else {
+                    $opcion = $this->opcionActual; $parametro = "";
+                }
                 switch ($opcion) {
                     case 'bienvenido':
                         return "Men&uacute; Principal";
@@ -244,13 +248,17 @@ class AportaContenido {
 //                if (!$this->registrado) {
 //                    return $this->mensajeRegistro();
 //                }
-                list($opcion, $parametro) = explode("&", $this->opcionActual);
+                if (strstr($this->opcionActual, "&")) {
+                    list($opcion, $parametro) = explode("&", $this->opcionActual);
+                } else {
+                    $opcion = $this->opcionActual; $parametro = "";
+                }
                 switch ($opcion) {
                     case 'bienvenido':
                         $mensaje = '<div class="alert alert-success">';
                         $mensaje .= 'Bienvenid@ ' . $this->usuario . '</div>';
                     case 'principal': // contenido inicial
-
+                        $mensaje = "";
                         $creditos = "$('#creditos').modal({keyboard: false});";
                         $centro = '<div class="well well-sm">' . CENTRO . '</div>';
                         $tabla = $this->creaTablaAcercaDe();
@@ -264,7 +272,7 @@ class AportaContenido {
                     case 'elementos':
                         $this->cargaDatosURL();
                         if ($this->datosURL['opc'] == "informe") {
-                            if (!$this->pefil['Informe']) {
+                            if ($this->perfil['Informe']) {
                                 $this->procesaURL();
                                 $fichero = 'xml/informe' . ucfirst($opcion) . '.xml';
                                 $salida = TMP.'/informe' . ucfirst($opcion) . '.xml';
@@ -343,7 +351,7 @@ class AportaContenido {
                     case 'copiaseg':
                         if ($this->perfil['Config']) {
                             $copia = new CopiaSeguridad();
-                            if ($_GET['confirmado'] == "1") {
+                            if (isset($_GET['confirmado']) && $_GET['confirmado'] == "1") {
                                 if (!$copia->creaCopia()) {
                                     $tipo = "danger";
                                     $cabecera = "ERROR";

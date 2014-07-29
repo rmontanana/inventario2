@@ -82,7 +82,7 @@ class Configuracion {
                 fwrite($fsalida, $registro);
             }
         }
-        $salida.=$this->formulario();
+        $salida = $this->formulario();
         if ($grabar) {
             $salida.='<div class="alert alert-success">Configuraci&oacute;n guardada correctamente</div>';
             fclose($fsalida);
