@@ -1,3 +1,6 @@
+Version 1.17 29-07-2014
+-Eliminados los mensajes de aviso de php en todos los archivos php
+
 Versión 1.16 28-07-2014
 -Fix #41. Arregla las llamadas a Instalar.php que se hacían desde Inventario.php y desde Instalar.php
 

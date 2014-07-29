@@ -76,7 +76,8 @@ class Csv {
      * Constructor de la clase. 
      * @param BaseDatos $baseDatos Manejador de la base de datos
      */
-    public function __construct($baseDatos) {
+    public function __construct($baseDatos)
+    {
         $this->bdd = $baseDatos;
     }
 
@@ -84,7 +85,8 @@ class Csv {
      * Crea un fichero csv con el nombre especificado
      * @param String $fichero Nombre del fichero
      */
-    public function crea($fichero) {
+    public function crea($fichero)
+    {
         $this->nombre = $fichero;
         $this->fichero = fopen($this->nombre, "w") or die("No puedo abrir " . $this->nombre . " para escritura.");
     }
@@ -93,15 +95,18 @@ class Csv {
      * 
      * @param array $datos escribe la línea en el archivo
      */
-    public function escribeLinea($datos) {
+    public function escribeLinea($datos)
+    {
         fputcsv($this->fichero, $datos, ',', '"') or die("No puedo escribir en el fichero csv");
     }
 
-    public function __destruct() {
+    public function __destruct()
+    {
         $this->cierra();
     }
 
-    public function cierra() {
+    public function cierra()
+    {
         fclose($this->fichero) or die("No puedo cerrar el archivo csv");
     }
 
@@ -109,7 +114,8 @@ class Csv {
      * 
      * @param String $fichero Archivo xml que contiene la definición de la consulta
      */
-    public function ejecutaConsulta($fichero) {
+    public function ejecutaConsulta($fichero)
+    {
         $consulta = simplexml_load_file($fichero) or die("No puedo cargar el fichero xml " . $fichero . " al csv");
         // Escribe la cabecera del fichero
         $this->escribeLinea(array($consulta->Pagina->Cabecera, $consulta->Titulo['id'], $consulta->Titulo['Texto']));
@@ -132,7 +138,8 @@ class Csv {
      * 
      * @param String $ficheroCSV Nombre del archivo csv
      */
-    public function cargaCSV($ficheroCSV) {
+    public function cargaCSV($ficheroCSV)
+    {
         $this->nombre = $ficheroCSV;
         $this->fichero = fopen($this->nombre, "r") or die('No puedo abrir el archivo ' . $this->nombre . " para lectura.");
         list($archivo, $idCabecera, $cabecera) = fgetcsv($this->fichero);
@@ -149,7 +156,8 @@ class Csv {
      * Muestra un resumen de los datos del fichero csv cargado por pantalla
      * 
      */
-    public function resumen() {
+    public function resumen()
+    {
         //$mensaje .=
         $mensaje = "<center><h1>Archivo [inventario" . $this->cabecera[0] . "]</h1>";
         $mensaje .= "<h2>id=[" . $this->cabecera[1] . "] Descripci&oacute;n=[" . $this->cabecera[2] . "]</h2><br>";
@@ -211,12 +219,14 @@ class Csv {
      * @param $array línea de datos del fichero csv para comprobar las cantidades si se han modificado o no 
      * @return string
      */
-    private function compruebaCantidades($i) {
-        $ultimo = count($datos);
+    private function compruebaCantidades($i)
+    {
+        //$ultimo = count($datos);
         return $this->datosFichero[$i][$this->cantidadReal] - $this->datosFichero[$i][$this->cantidad];
     }
 
-    private function panelMensaje($info, $tipo = "danger", $cabecera = "&iexcl;Atenci&oacute;n!") {
+    private function panelMensaje($info, $tipo = "danger", $cabecera = "&iexcl;Atenci&oacute;n!")
+    {
         $mensaje = '<div class="panel panel-' . $tipo . '"><div class="panel-heading">';
         $mensaje .= '<h3 class="panel-title">' . $cabecera . '</h3></div>';
         $mensaje .= '<div class="panel-body">';
@@ -226,36 +236,40 @@ class Csv {
         return $mensaje;
     }
 
-    private function escribeLog($comando) {
-        $fp = fopen($this->nombre.".log", "a");
-        $linea = strftime("%Y/%m/%d")."|".$this->nombre."|".$comando;
+    private function escribeLog($comando)
+    {
+        $fp = fopen($this->nombre . ".log", "a");
+        $linea = strftime("%Y/%m/%d") . "|" . $this->nombre . "|" . $comando;
         fputs($fp, $linea . "\n");
         fclose($fp);
     }
 
-    private function bajaElemento($i) {
+    private function bajaElemento($i)
+    {
         $id = $this->datosFichero[$i][$this->idElemento];
         $comando = 'delete from Elementos where id="' . $id . '";';
         $this->escribeLog($comando);
         if (!$this->bdd->ejecuta($comando)) {
-            throw new Exception("Baja-".$this->bdd->mensajeError, $this->bdd->error);
+            throw new Exception("Baja-" . $this->bdd->mensajeError, $this->bdd->error);
         }
     }
 
-    private function modificaElemento($i) {
+    private function modificaElemento($i)
+    {
         $id = $this->datosFichero[$i][$this->idElemento];
         $comando = 'update Elementos set Cantidad=' . $this->datosFichero[$i][$this->cantidadReal] . ' where id="' . $id . '";';
         $this->escribeLog($comando);
-                if (!$this->bdd->ejecuta($comando)) {
-            throw new Exception("Modifica-".$this->bdd->mensajeError, $this->bdd->error);
+        if (!$this->bdd->ejecuta($comando)) {
+            throw new Exception("Modifica-" . $this->bdd->mensajeError, $this->bdd->error);
         }
     }
 
-    private function altaElemento($i) {
+    private function altaElemento($i)
+    {
         if ($this->cabecera[0] == "Articulo") {
             $idUbicacion = $this->datosFichero[$i][$this->idUbicacion];
             $idArticulo = $this->cabecera[1];
-            $comando = 'select id from Ubicaciones where Descripcion="'.$this->datosFichero[$i][$this->desUbicacion].'";';
+            $comando = 'select id from Ubicaciones where Descripcion="' . $this->datosFichero[$i][$this->desUbicacion] . '";';
         } else {
             $idUbicacion = $this->cabecera[1];
             $idArticulo = $this->datosFichero[$i][$this->idArticulo];
@@ -265,11 +279,12 @@ class Csv {
         $comando .= '",' . $this->datosFichero[$i][$this->cantidadReal] . ',"' . $this->datosFichero[$i][$this->fechaCompra] . '");';
         $this->escribeLog($comando);
         if (!$this->bdd->ejecuta($comando)) {
-            throw new Exception("Alta-".$this->bdd->mensajeError, $this->bdd->error);
+            throw new Exception("Alta-" . $this->bdd->mensajeError, $this->bdd->error);
         }
     }
 
-    private function cargaIndices($campos) {
+    private function cargaIndices($campos)
+    {
         for ($i = 0; $i < count($campos); $i++) {
             switch ($campos[$i]) {
                 case "Cant. Real": $this->cantidadReal = $i;
@@ -295,7 +310,8 @@ class Csv {
     /**
      * Procesa contra la base de datos todas las acciones del archivo
      */
-    public function ejecutaFichero() {
+    public function ejecutaFichero()
+    {
         $this->cargaIndices($this->datosFichero[0]);
         //Realiza una transacción para que no se ejecute parcialmente una actualización
         try {
@@ -322,7 +338,7 @@ class Csv {
             }
             $mensaje = "Se han procesado correctamente $acciones acciones en la Base de Datos.";
             $this->bdd->confirmaTransaccion();
-            return $this->panelMensaje($mensaje,"success", "Informaci&oacute;n");
+            return $this->panelMensaje($mensaje, "success", "Informaci&oacute;n");
         } catch (Exception $e) {
             $this->bdd->abortaTransaccion();
             $mensaje = "Se ha producido el error [" . $e->getMessage() . "]<br>NO se ha realizado ning&uacute;n cambio en la Base de Datos.";
@@ -330,7 +346,8 @@ class Csv {
         }
     }
 
-    private function ejecutaFichero2() {
+    private function ejecutaFichero2()
+    {
         echo '<script>visualizaProgreso();</script>';
         for ($i = 1; $i < 80; $i++) {
             //sleep(1);

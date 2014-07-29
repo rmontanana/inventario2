@@ -111,7 +111,8 @@ class Pdf_mysql_table extends FPDF
             if ($this->procesandoTotales) {
                 $this->SetFont('Arial','B',12);
             }
-            $this->Cell($col['w'],5,utf8_decode($data[$col['f']]),1,0,$alin,$fill);
+            $dato = isset($data[$col['f']]) ? $data[$col['f']] : "";
+            $this->Cell($col['w'],5,utf8_decode($dato),1,0,$alin,$fill);
             //$this->Cell($col['w'],5,utf8_decode($data[$col['f']]),1,0,$alin,$fill);
             //$this->Cell($col['w'],5,utf8_decode($data['proveedor']),1,0,$alin,$fill);
             //$this->Write(5,"nombre=".$col['f'].",titulo=".$col['c'].",ancho=".$col['w'].",alin=".$col['a']);
@@ -119,7 +120,10 @@ class Pdf_mysql_table extends FPDF
             //print_r($data);
             //print_r($this->aCols);
             if ($col['t']=='S' && !$this->procesandoTotales) {
-                $this->totales[$col['f']]+=$data[$col['f']];
+                if (isset($this->totales[$col['f']])) 
+                    $this->totales[$col['f']] += $data[$col['f']];
+                else
+                    $this->totales[$col['f']] = $data[$col['f']];
             }
             
         }

@@ -200,6 +200,7 @@ class Mantenimiento {
         }
         //$salida.=$comando;
         //$salida.=var_export($this->campos,true);
+        $cant = 0;
         while ($fila = $this->bdd->procesaResultado()) {
             $salida.='<tr bottom="middle">';
             foreach ($fila as $clave => $valor) {
@@ -218,7 +219,7 @@ class Mantenimiento {
                             $datoEnlace = $tmpco[1];
                         }
                     }
-                    $this->campoBusca = $dato[1];
+                    $this->campoBusca = isset($dato[1]) ? $dato[1] : "";
                     $valor = '<a title="Inventario de ' . $valor . '" $target="_blank" href="index.php?informeInventario&opc=listar' . $datoEnlace . '&id=' . $id . '">' . $valor;
                 }
                 if (strstr($this->campos[$clave]['Comment'], "imagen") && isset($valor)) {
@@ -344,6 +345,8 @@ class Mantenimiento {
                 $informe = "";
             }
             $this->restoreURL();
+        } else {
+            $anterior = $rew = $az = $informe = $za = $siguiente = $fwd = "";
         }
         if ($this->perfil['Alta']) {
             $this->datosURL['opc'] = 'nuevo';
@@ -357,8 +360,8 @@ class Mantenimiento {
         } else {
             $anadir = "";
         }
-        $salida.='<p align="center">' .
-                "$rew&nbsp&nbsp$anterior&nbsp&nbsp$az&nbsp&nbsp$anadir&nbsp&nbsp$informe&nbsp&nbsp$za&nbsp&nbsp$siguiente&nbsp&nbsp$fwd</p>";
+        $salida .= '<p align="center">' .
+                    "$rew&nbsp&nbsp$anterior&nbsp&nbsp$az&nbsp&nbsp$anadir&nbsp&nbsp$informe&nbsp&nbsp$za&nbsp&nbsp$siguiente&nbsp&nbsp$fwd</p>";        
         return $salida;
     }
 
@@ -422,14 +425,14 @@ class Mantenimiento {
             } else {
                 $coma = ",";
             }
-            if ($this->campos[$campo]['Type'] == 'Boolean(1)') {
+            if (isset($this->campos[$campo]['Type']) && $this->campos[$campo]['Type'] == 'Boolean(1)') {
                 $valor = "";
                 if (empty($_POST[$campo])) {
                     $valor = "0";
                 }
                 $valor = $_POST[$campo] == "on" ? '1' : $valor;
             } else {
-                if (stristr($this->campos[$campo]['Comment'], "imagen")) {
+                if (isset($this->campos[$campo]['Comment']) && stristr($this->campos[$campo]['Comment'], "imagen")) {
                     //procesa el envío de la imagen
                     $imagen = new Imagen();
                     $accion = $imagen->determinaAccion($campo);
@@ -442,7 +445,11 @@ class Mantenimiento {
                         $campoImagen = $campo;
                     } else {
                         //Comprobamos si hay clonación y hay imagen a clonar.
-                        $valor = $_POST[$campo];
+                        if (isset($_POST[$campo])) {
+                            $valor = $_POST[$campo];
+                        } else {
+                            $valor = "";
+                        }
                         if ($_POST['tipoOperacion'] == CLONAR && file_exists($valor)) {
                             $hayImagen = true;
                             $campoImagen = $campo;
@@ -719,9 +726,10 @@ class Mantenimiento {
                 break;
         }
         $accion = $this->montaURL();
-        $salida.='<div class="col-sm-8"><form name="mantenimiento.form" enctype="multipart/form-data" class="form-horizontal" role="form" method="post" action="' . $accion . '">' . "\n";
-        $salida.="<fieldset style=\"width: 96%;\"><p><legend style=\"color: red;\"><b>$tipo</b></legend>\n";
+        $salida = '<div class="col-sm-8"><form name="mantenimiento.form" enctype="multipart/form-data" class="form-horizontal" role="form" method="post" action="' . $accion . '">' . "\n";
+        $salida .= "<fieldset style=\"width: 96%;\"><p><legend style=\"color: red;\"><b>$tipo</b></legend>\n";
         //$salida.= var_export($datos,true);
+        $campos = "";
         foreach ($this->campos as $clave => $valor) {
             if ($valor["Editable"] == "no") {
                 //Se salta los campos que no deben aparecer
@@ -860,7 +868,7 @@ class Mantenimiento {
     
     private function creaModal($valor, $id)
     {
-        $mensaje .= '
+        $mensaje = '
                 <div id="mensajeModal'.$id.'" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                 <div class="modal-dialog text-center">
                 <div class="modal-content text-center">
