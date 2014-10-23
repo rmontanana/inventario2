@@ -258,7 +258,9 @@ class AportaContenido {
                         $mensaje = '<div class="alert alert-success">';
                         $mensaje .= 'Bienvenid@ ' . $this->usuario . '</div>';
                     case 'principal': // contenido inicial
-                        $mensaje = "";
+                        if (!isset($mensaje)) {
+                            $mensaje = "";
+                        }
                         $creditos = "$('#creditos').modal({keyboard: false});";
                         $centro = '<div class="well well-sm">' . CENTRO . '</div>';
                         $tabla = $this->creaTablaAcercaDe();
