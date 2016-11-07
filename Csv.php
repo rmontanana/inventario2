@@ -70,6 +70,7 @@ class Csv {
     private $cantidadReal;
     private $nSerie;
 
+
     /**
       // El constructor necesita saber cuál es la opción actual
       /**
