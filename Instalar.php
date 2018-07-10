@@ -1,8 +1,8 @@
 <?php
 /**
  * Programa de instalación que genera el entorno de ejecución
- * tanto el fichero de configuración como la base de datos
- * @package Inventario
+ * tanto el fichero de configuración como la base de datos.
+ *
  * @copyright Copyright (c) 2008, Ricardo Montañana Gómez
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
  * This file is part of Inventario.
@@ -18,11 +18,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Inventario.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 //Se incluyen los módulos necesarios
-function __autoload($class_name) {
-    require_once $class_name . '.php';
+function __autoload($class_name)
+{
+    require_once $class_name.'.php';
 }
 
 require_once 'inc/configuracion.inc';
@@ -37,22 +37,24 @@ define('INC', './inc');
 $instalar = new Instalar();
 if ($instalar->error) {
     echo $instalar->panelError();
+
     return;
 }
 echo $instalar->ejecuta();
 
-class Instalar {
+class Instalar
+{
     private $contenido;
     private $plant;
     public $error;
-    public $error_msj; 
-    
+    public $error_msj;
+
     public function __construct()
     {
         //Selecciona la plantilla a utilizar
-        $this->plant='plant/';
-        $this->plant.=PLANTILLA;
-        $this->plant.='.html';
+        $this->plant = 'plant/';
+        $this->plant .= PLANTILLA;
+        $this->plant .= '.html';
         $this->error = false;
         $this->eror_msj = '';
         if (INSTALADO != 'no') {
@@ -64,34 +66,38 @@ class Instalar {
             $this->error_msj = "El indicador de instalación tiene 'no' pero la base de datos " . BASEDATOS . " contiene la tabla Articulos.";
         }*/
     }
-    
+
     private function existenDatos()
     {
         //Comprueba si existe la tabla Articulos
         $sql = new Sql(SERVIDOR, USUARIO, CLAVE, BASEDATOS);
-        if ($sql->error())
+        if ($sql->error()) {
             return false;
+        }
         $sql->ejecuta('select * from Articulos;');
-        if ($sql->error())
+        if ($sql->error()) {
             return false;
+        }
+
         return true;
     }
-    
+
     public function ejecuta()
     {
         $paso = isset($_GET['paso']) ? $_GET['paso'] : 0;
         $paso = $paso > NUMPASOS ? '0' : $paso;
-        $i=0;
+        $i = 0;
         //Si quiere ir a un determinado paso se asegura que estén completos los anteriores
         for ($i = 0; $i < $paso; $i++) {
-            $funcion = "validaPaso" . $i;
+            $funcion = 'validaPaso'.$i;
             if (!$this->$funcion()) {
                 break;
             }
         }
-        $funcion = "paso" . $i;
+        $funcion = 'paso'.$i;
         $this->contenido = $this->$funcion();
         $salida = new Distribucion($this->plant, $this);
+
         return $salida->procesaPlantilla();
     }
 
@@ -102,100 +108,107 @@ class Instalar {
         $info .= '<li class="list-group-item list-group-item-info">Configuración de PHP (php.ini)</li>';
         // display_errors
         $displayErr = ini_get('display_errors');
-        $displayErr = $displayErr == "1" || $displayErr == "on" ? "on" : "off";
-        $mensaje = $displayErr == "off" ? $this->retornaLabel(false,'Se debe deshabilitar la impresión de errores') :
-                                          $this->retornaLabel(true, 'Se debe deshabilitar la impresión de errores', "warning");
+        $displayErr = $displayErr == '1' || $displayErr == 'on' ? 'on' : 'off';
+        $mensaje = $displayErr == 'off' ? $this->retornaLabel(false, 'Se debe deshabilitar la impresión de errores') :
+                                          $this->retornaLabel(true, 'Se debe deshabilitar la impresión de errores', 'warning');
         $info .= $this->retornaElemento($mensaje, 'display_errors', $displayErr);
         // post_max_size
         $postMax = ini_get('post_max_size');
-        $mensaje = $this->retornaBytes($postMax) >= MINBYTES ? $this->retornaLabel(false, 'Mínimo: ' . CADENAMINBYTES) :
-                                                               $this->retornaLabel(true, 'Mínimo: ' . CADENAMINBYTES);
+        $mensaje = $this->retornaBytes($postMax) >= MINBYTES ? $this->retornaLabel(false, 'Mínimo: '.CADENAMINBYTES) :
+                                                               $this->retornaLabel(true, 'Mínimo: '.CADENAMINBYTES);
         $info .= $this->retornaElemento($mensaje, 'post_max_size', $postMax);
         // upload_max_filesize
         $uploadMax = ini_get('upload_max_filesize');
-        $mensaje = $this->retornaBytes($uploadMax) >= MINBYTES ? $this->retornaLabel(false, 'Mínimo: ' . CADENAMINBYTES) : 
-                                                                 $this->retornaLabel(true, 'Mínimo: ' . CADENAMINBYTES);
+        $mensaje = $this->retornaBytes($uploadMax) >= MINBYTES ? $this->retornaLabel(false, 'Mínimo: '.CADENAMINBYTES) :
+                                                                 $this->retornaLabel(true, 'Mínimo: '.CADENAMINBYTES);
         $info .= $this->retornaElemento($mensaje, 'upload_max_filesize', $uploadMax);
         // mysqli
         $mysql = extension_loaded('mysqli');
-        $mysql = $mysql ? "on" : "off";
+        $mysql = $mysql ? 'on' : 'off';
         $mensaje = $mysql ? $this->retornaLabel(false, 'Tiene que estar cargada la extensión MySQLi para poder funcionar') :
                             $this->retornaLabel(true, 'Tiene que estar cargada la extensión MySQLi para poder funcionar');
         $info .= $this->retornaElemento($mensaje, 'extensión MySQLi', $mysql);
         $info .= '<li class="list-group-item list-group-item-info">Configuración de la Aplicación</li>';
         // img.dat
-        $mensaje = is_writable(IMAGEDATA) ? $this->retornaLabel(false, "Se debe poder escribir en el directorio " . IMAGEDATA) : 
-                                      $this->retornaLabel(true, "Se debe poder escribir en el directorio " . IMAGEDATA);
-        $valor = is_writable(IMAGEDATA) ? "Sí" : "No";
-        $info .= $this->retornaElemento($mensaje, 'Se puede escribir en ' . IMAGEDATA, $valor);      
-        
+        $mensaje = is_writable(IMAGEDATA) ? $this->retornaLabel(false, 'Se debe poder escribir en el directorio '.IMAGEDATA) :
+                                      $this->retornaLabel(true, 'Se debe poder escribir en el directorio '.IMAGEDATA);
+        $valor = is_writable(IMAGEDATA) ? 'Sí' : 'No';
+        $info .= $this->retornaElemento($mensaje, 'Se puede escribir en '.IMAGEDATA, $valor);
+
         // tmp
-        $mensaje = is_writable(TMP) ? $this->retornaLabel(false, "Se debe poder escribir en el directorio " . TMP) : 
-                                      $this->retornaLabel(true, "Se debe poder escribir en el directorio " . TMP);
-        $valor = is_writable(TMP) ? "Sí" : "No";
-        $info .= $this->retornaElemento($mensaje, 'Se puede escribir en ' . TMP, $valor);
-        
+        $mensaje = is_writable(TMP) ? $this->retornaLabel(false, 'Se debe poder escribir en el directorio '.TMP) :
+                                      $this->retornaLabel(true, 'Se debe poder escribir en el directorio '.TMP);
+        $valor = is_writable(TMP) ? 'Sí' : 'No';
+        $info .= $this->retornaElemento($mensaje, 'Se puede escribir en '.TMP, $valor);
+
         // inc
-        $mensaje = is_writable(INC) ? $this->retornaLabel(false, "Se debe poder escribir en el directorio " . INC) : 
-                                      $this->retornaLabel(true, "Se debe poder escribir en el directorio " . INC);
-        $valor = is_writable(INC) ? "Sí" : "No";
-        $info .= $this->retornaElemento($mensaje, 'Se puede escribir en ' . INC, $valor);
-        
+        $mensaje = is_writable(INC) ? $this->retornaLabel(false, 'Se debe poder escribir en el directorio '.INC) :
+                                      $this->retornaLabel(true, 'Se debe poder escribir en el directorio '.INC);
+        $valor = is_writable(INC) ? 'Sí' : 'No';
+        $info .= $this->retornaElemento($mensaje, 'Se puede escribir en '.INC, $valor);
+
         // configuracion.inc
-        $mensaje = is_writable(CONFIGURACION) ? $this->retornaLabel(false, "Se debe poder escribir en el fichero de configuración ". CONFIGURACION) :
-                                                $this->retornaLabel(true, "Se debe poder escribir en el fichero de configuración ". CONFIGURACION);
-        $valor = is_writable(CONFIGURACION) ? "Sí" : "No";
-        $info .= $this->retornaElemento($mensaje, 'Se puede escribir en ' . CONFIGURACION, $valor);
-        
+        $mensaje = is_writable(CONFIGURACION) ? $this->retornaLabel(false, 'Se debe poder escribir en el fichero de configuración '.CONFIGURACION) :
+                                                $this->retornaLabel(true, 'Se debe poder escribir en el fichero de configuración '.CONFIGURACION);
+        $valor = is_writable(CONFIGURACION) ? 'Sí' : 'No';
+        $info .= $this->retornaElemento($mensaje, 'Se puede escribir en '.CONFIGURACION, $valor);
+
         // Final del paso
-        $info .='</ul>';
-        $info .= $this->validaPaso0() ? $this->retornaBoton(false, "Instalar.php?paso=1") : $this->retornaBoton(true, "Instalar.php");
+        $info .= '</ul>';
+        $info .= $this->validaPaso0() ? $this->retornaBoton(false, 'Instalar.php?paso=1') : $this->retornaBoton(true, 'Instalar.php');
         $panel = $this->panelMensaje($info, 'primary', 'PASO 1: Configuración del servidor y la aplicación');
+
         return $panel;
     }
+
     private function retornaElemento($validacion, $mensaje, $valor)
     {
         $info = '<li class="list-group-item">';
-        $info .= $validacion . ' ' . $mensaje . ': <span class="badge">' . $valor . '</span>';
+        $info .= $validacion.' '.$mensaje.': <span class="badge">'.$valor.'</span>';
         $info .= '</li>';
+
         return $info;
     }
-    
+
     private function retornaBoton($error, $paso, $javascript = true)
     {
-        $anadido = $javascript ? 'onclick="location.href=' . "'" . $paso . "'". '"' : '';
+        $anadido = $javascript ? 'onclick="location.href='."'".$paso."'".'"' : '';
         if (!$error) {
-            return '<button ' . $anadido . ' type="submit" class="btn btn-success btn-lg pull-right">Continuar <span class="glyphicon glyphicon-arrow-right"></span></button>';
+            return '<button '.$anadido.' type="submit" class="btn btn-success btn-lg pull-right">Continuar <span class="glyphicon glyphicon-arrow-right"></span></button>';
         } else {
-            return '<button ' . $anadido . ' type="submit" class="btn btn-danger btn-lg pull-right">Comprobar de nuevo <span class="glyphicon glyphicon-repeat"></span></button>';
+            return '<button '.$anadido.' type="submit" class="btn btn-danger btn-lg pull-right">Comprobar de nuevo <span class="glyphicon glyphicon-repeat"></span></button>';
         }
     }
-    
+
     private function botonVolver($enlace)
     {
-        $boton = '<button type="button" onClick="location.href=' . "'$enlace'" . '" class="btn btn-success btn-lg pull-left">Paso anterior <span class="glyphicon glyphicon-arrow-left"></span></button>';
+        $boton = '<button type="button" onClick="location.href='."'$enlace'".'" class="btn btn-success btn-lg pull-left">Paso anterior <span class="glyphicon glyphicon-arrow-left"></span></button>';
+
         return $boton;
     }
-    
-    private function retornaLabel($error, $mensaje, $tipo = "danger")
+
+    private function retornaLabel($error, $mensaje, $tipo = 'danger')
     {
         if ($error) {
-            $nombre1 = $tipo; $nombre2 = "remove";
+            $nombre1 = $tipo;
+            $nombre2 = 'remove';
         } else {
-            $nombre1 = "success"; $nombre2 = "ok";
+            $nombre1 = 'success';
+            $nombre2 = 'ok';
         }
-        $mensaje = '<a href="#" data-placement="right" data-toggle="popover" data-content="' . $mensaje . 
-                   '"><span class="label label-' . $nombre1 . '"><span class="glyphicon glyphicon-' . $nombre2 . 
+        $mensaje = '<a href="#" data-placement="right" data-toggle="popover" data-content="'.$mensaje.
+                   '"><span class="label label-'.$nombre1.'"><span class="glyphicon glyphicon-'.$nombre2.
                    '"></span></a>';
-        $mensaje .='<script>$(function () { $("[data-toggle=\'popover\']").popover(); });</script>';
+        $mensaje .= '<script>$(function () { $("[data-toggle=\'popover\']").popover(); });</script>';
+
         return $mensaje;
     }
-    
-    private function retornaBytes($val) 
+
+    private function retornaBytes($val)
     {
         $val = trim($val);
-        $last = strtolower($val[strlen($val)-1]);
-        switch($last) {
+        $last = strtolower($val[strlen($val) - 1]);
+        switch ($last) {
             // El modificador 'G' está disponble desde PHP 5.1.0
             case 'g':
                 $val *= 1024;
@@ -204,12 +217,13 @@ class Instalar {
             case 'k':
                 $val *= 1024;
         }
+
         return $val;
     }
-    
+
     private function validaPaso0()
     {
-        $validar = true; 
+        $validar = true;
         $postMax = ini_get('post_max_size');
         $uploadMax = ini_get('upload_max_filesize');
         $mysql = extension_loaded('mysqli');
@@ -217,33 +231,41 @@ class Instalar {
         $escInc = is_writable(INC);
         $escTMP = is_writable(TMP);
         $escIMG = is_writable(IMAGEDATA);
-        if ($this->retornaBytes($postMax) < MINBYTES) 
+        if ($this->retornaBytes($postMax) < MINBYTES) {
             $validar = false;
-        if ($this->retornaBytes($uploadMax) < MINBYTES)
+        }
+        if ($this->retornaBytes($uploadMax) < MINBYTES) {
             $validar = false;
-        if (!$mysql) 
+        }
+        if (!$mysql) {
             $validar = false;
-        if (!$escConfig) 
+        }
+        if (!$escConfig) {
             $validar = false;
-        if (!$escTMP)
+        }
+        if (!$escTMP) {
             $validar = false;
-        if (!$escIMG)
+        }
+        if (!$escIMG) {
             $validar = false;
-        if (!$escInc)
+        }
+        if (!$escInc) {
             $validar = false;
+        }
+
         return $validar;
     }
-    
+
     private function actualizaConfiguracion($grabar, $campos, &$datos)
     {
         $conf = new Configuracion();
         $fichero = $conf->obtieneFichero();
         $datosFichero = explode("\n", $fichero);
         if ($grabar) {
-            $fsalida = @fopen(CONFIGTMP, "wb");
+            $fsalida = @fopen(CONFIGTMP, 'wb');
         }
         foreach ($datosFichero as $linea) {
-            if (stripos($linea, "DEFINE") !== false) {
+            if (stripos($linea, 'DEFINE') !== false) {
                 $conf->obtieneDatos($linea, $clave, $valor);
                 if (stripos($campos, $clave) !== false) {
                     if ($grabar) {
@@ -253,7 +275,7 @@ class Instalar {
                 }
                 $datos[$clave] = $valor;
             }
-            $registro = substr($linea, 0, 2) == "?>" ? $linea : $linea . "\n";
+            $registro = substr($linea, 0, 2) == '?>' ? $linea : $linea."\n";
             if ($grabar) {
                 fwrite($fsalida, $registro);
             }
@@ -261,10 +283,10 @@ class Instalar {
         if ($grabar) {
             fclose($fsalida);
             unlink(CONFIGURACION);
-            rename(CONFIGTMP, CONFIGURACION);        
+            rename(CONFIGTMP, CONFIGURACION);
         }
     }
-    
+
     // Cuestiones de la base de datos
     private function paso1()
     {
@@ -276,35 +298,37 @@ class Instalar {
                 $datos[$clave] = $valor;
             }
         } else {
-            $datos = array();
+            $datos = [];
         }
         $this->actualizaConfiguracion($grabar, $campos, $datos);
         if ($grabar && $this->validaPaso1()) {
-                //Pasa al paso siguiente
-                return $this->paso2();
+            //Pasa al paso siguiente
+            return $this->paso2();
         }
-        
-        $info  = '<form method="post" name="conf" action="Instalar.php?paso=1">';
+
+        $info = '<form method="post" name="conf" action="Instalar.php?paso=1">';
         $info .= '<ul class="list-group">';
         $info .= '<li class="list-group-item list-group-item-info">Datos de configuración</li>';
-        $info .= '<li class="list-group-item">Servidor <input type="text" name="SERVIDOR" class="form-control" placeholder="Nombre del servidor o dirección IP" value="'. $datos['SERVIDOR'] .'"></li>';
-        $info .= '<li class="list-group-item">Puerto <input type="text" name="PUERTO" class="form-control" placeholder="Puerto de conexión" value="'. $datos['PUERTO'] .'"></li>';
-        $info .= '<li class="list-group-item">Base de Datos <input type="text" name="BASEDATOS" class="form-control" placeholder="Nombre de la Base de Datos" value="'. $datos['BASEDATOS'] .'"></li>';
-        $info .= '<li class="list-group-item">Usuario <input type="text" name="USUARIO" class="form-control" placeholder="Usuario" value="'. $datos['USUARIO'] .'"></li>';
-        $info .= '<li class="list-group-item">Contraseña <input type="text" name="CLAVE" class="form-control" placeholder="Contraseña" value="'. $datos['CLAVE'] .'"></li>';
+        $info .= '<li class="list-group-item">Servidor <input type="text" name="SERVIDOR" class="form-control" placeholder="Nombre del servidor o dirección IP" value="'.$datos['SERVIDOR'].'"></li>';
+        $info .= '<li class="list-group-item">Puerto <input type="text" name="PUERTO" class="form-control" placeholder="Puerto de conexión" value="'.$datos['PUERTO'].'"></li>';
+        $info .= '<li class="list-group-item">Base de Datos <input type="text" name="BASEDATOS" class="form-control" placeholder="Nombre de la Base de Datos" value="'.$datos['BASEDATOS'].'"></li>';
+        $info .= '<li class="list-group-item">Usuario <input type="text" name="USUARIO" class="form-control" placeholder="Usuario" value="'.$datos['USUARIO'].'"></li>';
+        $info .= '<li class="list-group-item">Contraseña <input type="text" name="CLAVE" class="form-control" placeholder="Contraseña" value="'.$datos['CLAVE'].'"></li>';
         $info .= '</ul>';
-        $info .= $this->botonVolver("Instalar.php");
-        $info .= $this->validaPaso1() ? $this->retornaBoton(false, "Instalar.php?paso=1", false) : $this->retornaBoton(true, "Instalar.php?paso=1", false);
+        $info .= $this->botonVolver('Instalar.php');
+        $info .= $this->validaPaso1() ? $this->retornaBoton(false, 'Instalar.php?paso=1', false) : $this->retornaBoton(true, 'Instalar.php?paso=1', false);
         $info .= '</form>';
         $panel = $this->panelMensaje($info, 'primary', 'PASO 2: Configuración de la Base de Datos.');
+
         return $panel;
     }
-    
+
     private function validaPaso1()
     {
         $sql = new Sql(SERVIDOR, USUARIO, CLAVE, '');
-        if ($sql->error())
+        if ($sql->error()) {
             return false;
+        }
         $sql = new Sql(SERVIDOR, USUARIO, CLAVE, BASEDATOS);
         if ($sql->error()) {
             return false;
@@ -319,17 +343,18 @@ class Instalar {
         if ($sql->error()) {
             return false;
         }
-        return true; 
+
+        return true;
     }
-    
+
     // Usuario administrador
     private function paso2()
     {
         if (isset($_POST['usuario'])) {
             //ha enviado el formulario.
             //Crea la base de datos
-            $borra_database = "DROP DATABASE " . BASEDATOS . " ;";
-            $database = "CREATE DATABASE " . BASEDATOS . " DEFAULT CHARACTER SET utf8;";
+            $borra_database = 'DROP DATABASE '.BASEDATOS.' ;';
+            $database = 'CREATE DATABASE '.BASEDATOS.' DEFAULT CHARACTER SET utf8;';
             $articulos = "CREATE TABLE `Articulos` (
                               `id` smallint(6) NOT NULL auto_increment COMMENT 'ordenable,link/Articulo',
                               `descripcion` varchar(60) NOT NULL COMMENT 'ordenable,ajax/text',
@@ -379,41 +404,42 @@ class Instalar {
                               KEY `nombre` (`nombre`)
                             ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
                             ";
-            $letras = "abcefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+            $letras = 'abcefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
             $sesion = substr(str_shuffle($letras), 0, 8);
             $usuario = $_POST['usuario'];
             $clave = $_POST['clave'];
             $administrador = "insert into Usuarios values (null,'$usuario','$clave','$sesion','1','1','1','1','1','1','1');";
-            
+
             @mysqli_query($borra_database);
             @mysqli_query($database);
             $sql = new Sql(SERVIDOR, USUARIO, CLAVE, BASEDATOS);
             $sql->ejecuta($ubicaciones);
             if ($sql->error()) {
-                return $this->panelMensaje($sql->mensajeError(), "danger", "ERROR");
+                return $this->panelMensaje($sql->mensajeError(), 'danger', 'ERROR');
             }
             $sql->ejecuta($articulos);
             if ($sql->error()) {
-                return $this->panelMensaje($sql->mensajeError(), "danger", "ERROR");
+                return $this->panelMensaje($sql->mensajeError(), 'danger', 'ERROR');
             }
             $sql->ejecuta($elementos);
             if ($sql->error()) {
-                return $this->panelMensaje($sql->mensajeError(), "danger", "ERROR");
+                return $this->panelMensaje($sql->mensajeError(), 'danger', 'ERROR');
             }
             $sql->ejecuta($usuarios);
             if ($sql->error()) {
-                return $this->panelMensaje($sql->mensajeError(), "danger", "ERROR");
+                return $this->panelMensaje($sql->mensajeError(), 'danger', 'ERROR');
             }
             $sql->ejecuta($administrador);
-                        if ($sql->error()) {
-                return $this->panelMensaje($sql->mensajeError(), "danger", "ERROR");
+            if ($sql->error()) {
+                return $this->panelMensaje($sql->mensajeError(), 'danger', 'ERROR');
             }
-            $campos="INSTALADO";
-            $datos['INSTALADO'] = "sí";
+            $campos = 'INSTALADO';
+            $datos['INSTALADO'] = 'sí';
             $this->actualizaConfiguracion(true, $campos, $datos);
+
             return $this->resumen();
         }
-        
+
         $info = '      
         <form data-toggle="validator" role="form" class="form-horizontal" method="post" action="Instalar.php?paso=2">
                 <div class="form-group">
@@ -435,69 +461,74 @@ class Instalar {
                 </div>
 
                 <div class="form-group col-sm-12">
-                ' . $this->botonVolver("Instalar.php?paso=1") . '
+                '.$this->botonVolver('Instalar.php?paso=1').'
                     <button type="submit" class="btn btn-primary pull-right btn-lg" disabled="disabled">Crear base de datos y usuario <span class="glyphicon glyphicon-arrow-right"></button>
                 </div>
             </div>
         </form>
         <script type="text/javascript" src="./css/validator.min.js"></script>';
         $panel = $this->panelMensaje($info, 'primary', 'PASO 3: Creación de la base de datos y el usuario administrador.');
-        return $panel;        
+
+        return $panel;
     }
-    
+
     private function validaPaso2()
     {
         //La validación de este paso se hace con la del formulario en javascript
         return true;
     }
-    
-    public function panelMensaje($info, $tipo = "info", $cabecera = "&iexcl;Atenci&oacute;n!") {
-        $mensaje = '<div class="panel panel-' . $tipo . ' col-sm-6"><div class="panel-heading">';
-        $mensaje .= '<h3 class="panel-title">' . $cabecera . '</h3></div>';
+
+    public function panelMensaje($info, $tipo = 'info', $cabecera = '&iexcl;Atenci&oacute;n!')
+    {
+        $mensaje = '<div class="panel panel-'.$tipo.' col-sm-6"><div class="panel-heading">';
+        $mensaje .= '<h3 class="panel-title">'.$cabecera.'</h3></div>';
         $mensaje .= '<div class="panel-body">';
         $mensaje .= $info;
         $mensaje .= '</div>';
         $mensaje .= '</div>';
+
         return $mensaje;
     }
-    
+
     public function contenido()
     {
         return $this->contenido;
     }
-    
+
     public function menu()
     {
         return '';
     }
-    
+
     public function opcion()
     {
         return 'INSTALACI&Oacute;N';
     }
-    
+
     public function control()
     {
         return '';
     }
-    
+
     public function aplicacion()
     {
-        return PROGRAMA . ' v' . VERSION;
+        return PROGRAMA.' v'.VERSION;
     }
-    
+
     public function usuario()
     {
         return '';
     }
-    
+
     public function fecha()
     {
         $idioma = 'es_ES';
-        $formato = "%d-%b-%y";
+        $formato = '%d-%b-%y';
         setlocale(LC_TIME, $idioma);
+
         return strftime($formato);
     }
+
     public function cabecera()
     {
         return '<!DOCTYPE html>
@@ -527,32 +558,31 @@ class Instalar {
                     </head>
                     <body>';
     }
-    
+
     public function panelError()
     {
         $mensaje = $this->cabecera();
-        $mensaje .= $this->panelMensaje($this->error_msj, "danger", "&iexcl;ERROR!");
-        $mensaje .= "</body></html>";
+        $mensaje .= $this->panelMensaje($this->error_msj, 'danger', '&iexcl;ERROR!');
+        $mensaje .= '</body></html>';
+
         return $mensaje;
     }
-    
+
     private function resumen()
     {
         $info = '<ul class="list-group">';
         $info .= '<li class="list-group-item list-group-item-info">Paso 1</li>';
-        $info .= $this->retornaElemento($this->retornaLabel(false, ""), "Configuración de PHP");
-        $info .= $this->retornaElemento($this->retornaLabel(false, ""), "Configuración de la aplicación");
+        $info .= $this->retornaElemento($this->retornaLabel(false, ''), 'Configuración de PHP');
+        $info .= $this->retornaElemento($this->retornaLabel(false, ''), 'Configuración de la aplicación');
         $info .= '<li class="list-group-item list-group-item-info">Paso 2</li>';
-        $info .= $this->retornaElemento($this->retornaLabel(false, ""), "Configuración de la base de datos");
+        $info .= $this->retornaElemento($this->retornaLabel(false, ''), 'Configuración de la base de datos');
         $info .= '<li class="list-group-item list-group-item-info">Paso 3</li>';
-        $info .= $this->retornaElemento($this->retornaLabel(false, ""), "Creación de Base de datos");
-        $info .= $this->retornaElemento($this->retornaLabel(false, ""), "Creación del usuario administrador"); 
+        $info .= $this->retornaElemento($this->retornaLabel(false, ''), 'Creación de Base de datos');
+        $info .= $this->retornaElemento($this->retornaLabel(false, ''), 'Creación del usuario administrador');
         $info .= '</ul>';
-        $info .= $this->retornaBoton(false, "index.php", true);
+        $info .= $this->retornaBoton(false, 'index.php', true);
         $panel = $this->panelMensaje($info, 'success', 'Instalación finalizada.');
+
         return $panel;
-        
     }
 }
-
-?>

@@ -1,12 +1,13 @@
 <?php
 
 /**
- * genera un documento PDF a partir de una descripción dada en un archivo XML
+ * genera un documento PDF a partir de una descripción dada en un archivo XML.
+ *
  * @author Ricardo Montañana <rmontanana@gmail.com>
+ *
  * @version 1.0
- * @package Inventario
+ *
  * @copyright Copyright (c) 2008, Ricardo Montañana
- * @package Inventario
  * @copyright Copyright (c) 2008, Ricardo Montañana Gómez
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
  * This file is part of Inventario.
@@ -14,20 +15,18 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Inventario is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Inventario.  If not, see <http://www.gnu.org/licenses/>.
- *  
  */
-class InformePDF {
-
+class InformePDF
+{
     /**
-     * 
      * @var basedatos Controlador de la base de datos
      */
     private $bdd;
@@ -36,14 +35,17 @@ class InformePDF {
     private $def;
 
     /**
-     * El constructor recibe como argumento el nombre del archivo XML con la definición, encargándose de recuperarla y guardar toda la información localmente
-     * @param basedatos $bdd manejador de la base de datos
-     * @param string $definicion fichero con la definición del informe en XML
-     * @param boolean $registrado usuario registrado si/no
+     * El constructor recibe como argumento el nombre del archivo XML con la definición, encargándose de recuperarla y guardar toda la información localmente.
+     *
+     * @param basedatos $bdd        manejador de la base de datos
+     * @param string    $definicion fichero con la definición del informe en XML
+     * @param bool      $registrado usuario registrado si/no
+     *
      * @return ficheroPDF
-     * todo: cambiar este comentario
+     *                    todo: cambiar este comentario
      */
-    public function __construct($bdd, $definicion, $registrado) {
+    public function __construct($bdd, $definicion, $registrado)
+    {
         if (!$registrado) {
             return 'Debe registrarse para acceder a este apartado';
         }
@@ -53,15 +55,16 @@ class InformePDF {
         $this->pdf = new Pdf_mysql_table($this->bdd->obtieneManejador(), (string) $this->def->Pagina['Orientacion'], (string) $this->def->Pagina['Formato'], (string) utf8_decode($this->def->Titulo['Texto']), (string) $this->def->Pagina->Cabecera);
         //echo $def->Titulo.$def->Cabecera;
         $this->pdf->Open();
-        $this->pdf->setAuthor(AUTOR,true);
-        $creador = CENTRO . " " . PROGRAMA . " v" . VERSION;
-        $this->pdf->setCreator(html_entity_decode($creador),true);
-        $this->pdf->setSubject($this->def->Titulo,true);
+        $this->pdf->setAuthor(AUTOR, true);
+        $creador = CENTRO.' '.PROGRAMA.' v'.VERSION;
+        $this->pdf->setCreator(html_entity_decode($creador), true);
+        $this->pdf->setSubject($this->def->Titulo, true);
         $this->pdf->setAutoPageBreak(true, 10);
     }
 
-    public function crea($definicion) {
-        
+    public function crea($definicion)
+    {
+
         //print_r($def);echo $bdd;die();
         // Iniciamos la creación del documento
         $this->def = simplexml_load_file($definicion);
@@ -74,50 +77,55 @@ class InformePDF {
         foreach ($this->def->Pagina->Cuerpo->Col as $columna) {
             $this->pdf->AddCol((string) $columna['Nombre'], (string) $columna['Ancho'], (string) $columna['Titulo'], (string) $columna['Ajuste'], (string) $columna['Total']);
         }
-        $prop = array('HeaderColor' => array(255, 150, 100),
-            'color1' => array(210, 245, 255),
-            'color2' => array(255, 255, 210),
-            'padding' => 2);
+        $prop = ['HeaderColor' => [255, 150, 100],
+            'color1'           => [210, 245, 255],
+            'color2'           => [255, 255, 210],
+            'padding'          => 2];
         $this->pdf->Table($this->def->Datos->Consulta, $prop);
     }
 
-    public function cierraPDF() {
+    public function cierraPDF()
+    {
         $this->pdf->Close();
         $this->docu = $this->pdf->Output('', 'S');
     }
 
-    public function getContenido() {
+    public function getContenido()
+    {
         return $this->docu;
     }
 
-    public function getCabecera() {
-        $cabecera = "Content-type: application/pdf";
-        $cabecera = $cabecera . "Content-length: " . strlen($this->docu);
-        $cabecera = $cabecera . "Content-Disposition: inline; filename=".TMP."/Informe.pdf";
+    public function getCabecera()
+    {
+        $cabecera = 'Content-type: application/pdf';
+        $cabecera = $cabecera.'Content-length: '.strlen($this->docu);
+        $cabecera = $cabecera.'Content-Disposition: inline; filename='.TMP.'/Informe.pdf';
+
         return $cabecera;
     }
 
-    public function guardaArchivo($nombre) {
-        if (!isset($nombre))
-            $nombre = TMP . "/Informe.pdf";
-        $fichero = fopen($nombre, "w");
+    public function guardaArchivo($nombre)
+    {
+        if (!isset($nombre)) {
+            $nombre = TMP.'/Informe.pdf';
+        }
+        $fichero = fopen($nombre, 'w');
         fwrite($fichero, $this->getCabecera());
         fwrite($fichero, $this->getContenido(), strlen($this->getContenido()));
         fclose($fichero);
     }
 
-    public function enviaCabecera() {
-        header("Content-type: application/pdf");
+    public function enviaCabecera()
+    {
+        header('Content-type: application/pdf');
         $longitud = strlen($this->docu);
         header("Content-length: $longitud");
-        header("Content-Disposition: inline; filename=".TMP."/Informe.pdf");
+        header('Content-Disposition: inline; filename='.TMP.'/Informe.pdf');
     }
 
-    public function imprimeInforme() {
+    public function imprimeInforme()
+    {
         $this->enviaCabecera();
         echo $this->docu;
     }
-
 }
-
-?>

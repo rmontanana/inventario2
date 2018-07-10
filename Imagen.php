@@ -1,6 +1,5 @@
 <?php
 /**
- * @package Inventario
  * @copyright Copyright (c) 2014, Ricardo Montañana Gómez
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
  * This file is part of Inventario.
@@ -16,29 +15,29 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Inventario.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 //Para comprimir las imágenes
-require_once('Zebra_Image.php');
-define("HAYQUEGRABAR", 1);
-define("HAYQUEBORRAR", 2);
-define("NOHACERNADA", 3);
+require_once 'Zebra_Image.php';
+define('HAYQUEGRABAR', 1);
+define('HAYQUEBORRAR', 2);
+define('NOHACERNADA', 3);
 
-class Imagen {
+class Imagen
+{
     private $archivoSubido;
     public $archivoComprimido;
     private $extension;
     private $dirData;
     public $archivoCopiado;
-    
+
     public function __construct()
     {
         $this->dirData = IMAGEDATA;
     }
-    
+
     public function determinaAccion($campo)
     {
-        if (isset($_POST[$campo]) && $_POST[$campo] == "") {
+        if (isset($_POST[$campo]) && $_POST[$campo] == '') {
             return HAYQUEBORRAR; //Hay que borrar el archivo de imagen
         } elseif (isset($_FILES[$campo]['error']) && $_FILES[$campo]['error'] == 0) {
             return HAYQUEGRABAR; //Hay que guardar el archivo de imagen enviado
@@ -46,7 +45,7 @@ class Imagen {
             return NOHACERNADA; //No hay que hacer nada
         }
     }
-    
+
     public function procesaEnvio($campo, &$mensaje)
     {
         try {
@@ -77,11 +76,11 @@ class Imagen {
             $finfo = new finfo(FILEINFO_MIME_TYPE);
             if (false === $ext = array_search(
                 $finfo->file($_FILES[$campo]['tmp_name']),
-                array(
+                [
                     'jpg' => 'image/jpeg',
                     'png' => 'image/png',
                     'gif' => 'image/gif',
-                ),
+                ],
                 true
             )) {
                 throw new RuntimeException('Formato de imagen inválido, no es {jpg, png, gif}');
@@ -98,47 +97,51 @@ class Imagen {
             return true;
         } catch (RuntimeException $e) {
             $mensaje = $e->getMessage();
+
             return false;
         }
     }
-    
+
     public static function borraImagenId($tabla, $id)
     {
-        $extensiones = array ("png", "gif", "jpg");
+        $extensiones = ['png', 'gif', 'jpg'];
         foreach ($extensiones as $extension) {
-            $archivo = IMAGEDATA . "/" . $tabla . "_" . $id . "." . $extension;
+            $archivo = IMAGEDATA.'/'.$tabla.'_'.$id.'.'.$extension;
             if (file_exists($archivo)) {
-                unlink ($archivo);
+                unlink($archivo);
             }
         }
     }
+
     public function copiaImagenId($valorImagen, $tabla, $id, &$mensaje)
     {
-        $extension = strrchr($valorImagen, ".");
-        $nombre = $this->dirData . "/" . $tabla . "_" . $id . $extension;
+        $extension = strrchr($valorImagen, '.');
+        $nombre = $this->dirData.'/'.$tabla.'_'.$id.$extension;
         if (!@copy($valorImagen, $nombre)) {
-            $errors= error_get_last();
-            $mensaje = "No pudo copiar el archivo "  . $valorImagen . " en " . $nombre . " Error = [" . $errors['message'] . "]";
+            $errors = error_get_last();
+            $mensaje = 'No pudo copiar el archivo '.$valorImagen.' en '.$nombre.' Error = ['.$errors['message'].']';
+
             return false;
         }
         $this->archivoCopiado = $nombre;
+
         return true;
     }
-    
+
     public function mueveImagenId($tabla, $id, &$mensaje)
     {
-        if (!$this->comprimeArchivo($tabla . "_" . $id, $mensaje)) {
+        if (!$this->comprimeArchivo($tabla.'_'.$id, $mensaje)) {
             return false;
         } else {
             return true;
-        }       
+        }
     }
-    
-    private function comprimeArchivo($id, &$mensaje) 
+
+    private function comprimeArchivo($id, &$mensaje)
     {
         $zebra = new Zebra_Image();
         $zebra->source_path = $this->archivoSubido;
-        $this->archivoComprimido = $this->dirData . "/" . $id . "." . $this->extension;
+        $this->archivoComprimido = $this->dirData.'/'.$id.'.'.$this->extension;
         $zebra->target_path = $this->archivoComprimido;
         $zebra->jpeg_quality = 100;
 
@@ -156,28 +159,28 @@ class Imagen {
             switch ($zebra->error) {
                 case 1: $mensaje = 'El fichero origen no se ha encontrado!';
                     break;
-                case 2: $mensaje = 'No se puede leer el archivo origen ' . $this->archivoSubido;
+                case 2: $mensaje = 'No se puede leer el archivo origen '.$this->archivoSubido;
                     break;
-                case 3: $mensaje = 'No se pudo escribir el archivo destino ' . $this->archivoComprimido;
+                case 3: $mensaje = 'No se pudo escribir el archivo destino '.$this->archivoComprimido;
                     break;
-                case 4: $mensaje = 'Formato de fichero origen no soportado ' . $this->archivoSubido;
+                case 4: $mensaje = 'Formato de fichero origen no soportado '.$this->archivoSubido;
                     break;
-                case 5: $mensaje = 'Formato de fichero destino no soportado ' . $this->archivoComprimido;
+                case 5: $mensaje = 'Formato de fichero destino no soportado '.$this->archivoComprimido;
                     break;
-                case 6: $mensaje = 'La versión de la biblioteca GD no soporta el formato de destino ' . $this->archivoComprimido;
+                case 6: $mensaje = 'La versión de la biblioteca GD no soporta el formato de destino '.$this->archivoComprimido;
                     break;
                 case 7: $mensaje = 'La biblioteca GD no está instalada';
                     break;
                 case 8: $mensaje = 'el comando "chmod" está deshabilitado por configuración';
                     break;
             }
+
             return false;
         } else {
             //Borra el archivo subido
             unlink($this->archivoSubido);
+
             return true;
         }
-    } 
+    }
 }
-
-?>

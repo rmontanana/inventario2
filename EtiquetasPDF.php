@@ -1,12 +1,13 @@
 <?php
 
 /**
- * genera un documento PDF a partir de una descripción dada en un archivo XML
+ * genera un documento PDF a partir de una descripción dada en un archivo XML.
+ *
  * @author Ricardo Montañana <rmontanana@gmail.com>
+ *
  * @version 1.0
- * @package Inventario
+ *
  * @copyright Copyright (c) 2008, Ricardo Montañana
- * @package Inventario
  * @copyright Copyright (c) 2008, Ricardo Montañana Gómez
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
  * This file is part of Inventario.
@@ -14,22 +15,20 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Inventario is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Inventario.  If not, see <http://www.gnu.org/licenses/>.
- *  
  */
 require_once 'phpqrcode.php';
 
-class EtiquetasPDF {
-
+class EtiquetasPDF
+{
     /**
-     * 
      * @var basedatos Controlador de la base de datos
      */
     private $bdd;
@@ -39,19 +38,21 @@ class EtiquetasPDF {
     private $nombreFichero;
 
     /**
-     * El constructor recibe como argumento el nombre del archivo XML con la definición, encargándose de recuperarla y guardar toda la información localmente
-     * @param basedatos $bdd manejador de la base de datos
-     * @param string $definicion fichero con la definición del informe en XML
-     * @param boolean $registrado usuario registrado si/no
+     * El constructor recibe como argumento el nombre del archivo XML con la definición, encargándose de recuperarla y guardar toda la información localmente.
+     *
+     * @param basedatos $bdd        manejador de la base de datos
+     * @param string    $definicion fichero con la definición del informe en XML
+     * @param bool      $registrado usuario registrado si/no
+     *
      * @return ficheroPDF
-     * todo: cambiar este comentario
+     *                    todo: cambiar este comentario
      */
     public function __construct($bdd, $definicion, $registrado)
     {
         if (!$registrado) {
             return 'Debe registrarse para acceder a este apartado';
         }
-        $this->nombreFichero = TMP."/informeEtiquetas.pdf";
+        $this->nombreFichero = TMP.'/informeEtiquetas.pdf';
         // Recuperamos la definición del informe
         $this->def = simplexml_load_file($definicion);
         $this->bdd = $bdd;
@@ -61,7 +62,7 @@ class EtiquetasPDF {
         $this->pdf->setAutoPageBreak(false);
         //echo $def->Titulo.$def->Cabecera;
         $this->pdf->setAuthor(AUTOR, true);
-        $creador = CENTRO . " " . PROGRAMA . VERSION;
+        $creador = CENTRO.' '.PROGRAMA.VERSION;
         $this->pdf->setCreator(html_entity_decode($creador), true);
         $this->pdf->setSubject($this->def->Titulo, true);
         //$this->pdf->setAutoPageBreak(true, 10);
@@ -78,12 +79,13 @@ class EtiquetasPDF {
         $this->pdf->AddPage();
         $tamLinea = 5;
         $fila = -1;
-        $primero = true; $i = 0;
-        $url = explode("/", $_SERVER['SCRIPT_NAME']);
+        $primero = true;
+        $i = 0;
+        $url = explode('/', $_SERVER['SCRIPT_NAME']);
         $aplicacion = $url[1];
-        $protocolo = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443 ? "https://" : "http://";
-        $enlace = $protocolo . $_SERVER['SERVER_NAME'] . "/" . $aplicacion . "/index.php?elementos&opc=editar&id=";
-        while($tupla = $this->bdd->procesaResultado()) {
+        $protocolo = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443 ? 'https://' : 'http://';
+        $enlace = $protocolo.$_SERVER['SERVER_NAME'].'/'.$aplicacion.'/index.php?elementos&opc=editar&id=';
+        while ($tupla = $this->bdd->procesaResultado()) {
             for ($j = 0; $j < $tupla['cantidad']; $j++) {
                 //Hay que generar tantas etiquetas como ponga la cantidad de cada elemento
                 if ($i % 2) {
@@ -104,31 +106,31 @@ class EtiquetasPDF {
                     $primero = false;
                 }
                 $py = 6 + 41 * $fila;
-                $enlace2=$enlace.$tupla['idEl'];
-                $fichero = TMP."/etiq".rand(1000,9999).".png";
+                $enlace2 = $enlace.$tupla['idEl'];
+                $fichero = TMP.'/etiq'.rand(1000, 9999).'.png';
                 QRcode::png($enlace2, $fichero);
                 $this->pdf->image($fichero, $etiq2, $py, 30, 30);
                 unlink($fichero);
                 $this->pdf->setxy($etiq1, $py);
                 $this->pdf->Cell(30, 10, utf8_decode($tupla['articulo']));
-                $py+=$tamLinea;
+                $py += $tamLinea;
                 $this->pdf->setxy($etiq1, $py);
                 $this->pdf->Cell(30, 10, utf8_decode($tupla['marca']));
-                $py+=$tamLinea;
+                $py += $tamLinea;
                 $this->pdf->setxy($etiq1, $py);
                 $this->pdf->Cell(30, 10, utf8_decode($tupla['modelo']));
-                $py+=$tamLinea;
+                $py += $tamLinea;
                 $this->pdf->setxy($etiq1, $py);
                 $this->pdf->Cell(30, 10, utf8_decode($tupla['numserie']));
-                $py+=$tamLinea;
+                $py += $tamLinea;
                 $this->pdf->setxy($etiq1, $py);
                 $this->pdf->Cell(30, 10, $tupla['fechaCompra']);
-                $py+=$tamLinea-1;
+                $py += $tamLinea - 1;
                 $this->pdf->setxy($etiq2, $py);
                 $this->pdf->Cell(30, 10, utf8_decode($tupla['ubicacion']));
-                $py+=$tamLinea-1;
+                $py += $tamLinea - 1;
                 $this->pdf->setxy($etiq2, $py);
-                $cadena = "idElemento=" . $tupla['idEl'] . " / idArticulo=" . $tupla['idArt'] . " / idUbicacion=" . $tupla['idUbic'];           
+                $cadena = 'idElemento='.$tupla['idEl'].' / idArticulo='.$tupla['idArt'].' / idUbicacion='.$tupla['idUbic'];
                 $this->pdf->Cell(30, 10, $cadena);
                 $i++;
             }
@@ -149,15 +151,16 @@ class EtiquetasPDF {
 
     public function getCabecera()
     {
-        $cabecera = "Content-type: application/pdf";
-        $cabecera = $cabecera . "Content-length: " . strlen($this->docu);
-        $cabecera = $cabecera . "Content-Disposition: inline; filename=" . $this->nombreFichero;
+        $cabecera = 'Content-type: application/pdf';
+        $cabecera = $cabecera.'Content-length: '.strlen($this->docu);
+        $cabecera = $cabecera.'Content-Disposition: inline; filename='.$this->nombreFichero;
+
         return $cabecera;
     }
 
     public function guardaArchivo($nombre)
     {
-        $fichero = fopen($nombre, "w");
+        $fichero = fopen($nombre, 'w');
         fwrite($fichero, $this->getCabecera());
         fwrite($fichero, $this->getContenido(), strlen($this->getContenido()));
         $this->nombreFichero = $nombre;
@@ -166,10 +169,10 @@ class EtiquetasPDF {
 
     public function enviaCabecera()
     {
-        header("Content-type: application/pdf");
+        header('Content-type: application/pdf');
         $longitud = strlen($this->docu);
         header("Content-length: $longitud");
-        header("Content-Disposition: inline; filename=" . $this->nombreFichero);
+        header('Content-Disposition: inline; filename='.$this->nombreFichero);
     }
 
     public function imprimeInforme()
@@ -178,5 +181,3 @@ class EtiquetasPDF {
         echo $this->docu;
     }
 }
-
-?>

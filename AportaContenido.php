@@ -1,6 +1,5 @@
 <?php
 /**
- * @package Inventario
  * @copyright Copyright (c) 2008, Ricardo Montañana Gómez
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
  * This file is part of Inventario.
@@ -8,22 +7,21 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Inventario is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Inventario.  If not, see <http://www.gnu.org/licenses/>.
- *  
  */
-define('PIE', '<center><a target="_blank" href="http://www.gnu.org/licenses/gpl-3.0-standalone.html"><img src="img/gplv3.png" alt="GPL v3"/></a>' .
-        '<a target="_blank" href="http://www.apache.org"><img src="img/apache.gif" alt="Sitio web creado con Apache" /></a>' .
-        '<a target="_blank" href="http://www.mysql.org"><img src="img/mysql.png" width=125 height=47 alt="Gestor de bases de datos mySQL" /></a>' .
+define('PIE', '<center><a target="_blank" href="http://www.gnu.org/licenses/gpl-3.0-standalone.html"><img src="img/gplv3.png" alt="GPL v3"/></a>'.
+        '<a target="_blank" href="http://www.apache.org"><img src="img/apache.gif" alt="Sitio web creado con Apache" /></a>'.
+        '<a target="_blank" href="http://www.mysql.org"><img src="img/mysql.png" width=125 height=47 alt="Gestor de bases de datos mySQL" /></a>'.
         '<a target="_blank" href="http://www.php.net"><img src="img/php.gif" alt="PHP Language" /></a> </center>');
-define('FORMULARIO_ACCESO', '<form name="formulario_acceso" action="index.php?registrarse" method="POST">' .
-        'Usuario<br><input type="text" name="usuario" value="" size="8" /><br><br>Clave<br><input type="password" name="clave" value="" size="8" />' .
+define('FORMULARIO_ACCESO', '<form name="formulario_acceso" action="index.php?registrarse" method="POST">'.
+        'Usuario<br><input type="text" name="usuario" value="" size="8" /><br><br>Clave<br><input type="password" name="clave" value="" size="8" />'.
         '<br><br><button type="submit" name="iniciar" class="btn btn-primary">Iniciar <span class="glyphicon glyphicon-log-in"></span></button></form>');
 define('MENSAJE_DEMO', 'Puede Iniciar sesi&oacute;n con<br>usuario <i><b>demo</b></i><br>contrase&ntilde;a <i>demo</i><br>');
 define('USUARIO_INCORRECTO', '<label class="bg-danger">Usuario y clave incorrectos!</label><br><br>');
@@ -40,7 +38,7 @@ define('CREDITOS_CABECERA', '<div class="modal fade" tabindex="-1" id="creditos"
                                     <h1>Inventario2</h1>
                                     <p> Aplicación para controlar el inventario de un centro educativo.</p>
                                     <p>En la aplicación se hace uso de los siguientes módulos y/o bibliotecas</p>');
-                                    
+
 define('CREDITOS_PIE', '                <p><h5>Copyright &copy; 2008-2014 Ricardo Montañana Gómez</h5>
                                     <h5><small>Esta aplicación se distribuye con licencia <a target="_blank" href="http://www.gnu.org/licenses/gpl-3.0.html">GPLv3 </a></small></h5></p>
                                 </div>
@@ -50,18 +48,17 @@ define('CREDITOS_PIE', '                <p><h5>Copyright &copy; 2008-2014 Ricard
                     </div>');
 
 // Esta clase aportará el contenido a la plantilla
-class AportaContenido {
-
+class AportaContenido
+{
     /**
-     * 
-     * @var boolean Aporta información sobre si el usuario está registrado o no.
+     * @var bool Aporta información sobre si el usuario está registrado o no.
      */
     private $registrado;
 
     /**
      * @var string Nombre del usuario
      */
-    private $usuario = NULL;
+    private $usuario = null;
 
     /**
      * @var Menu Menú de la página.
@@ -79,7 +76,7 @@ class AportaContenido {
     private $opcionActual;
 
     /**
-     * @var boolean Usuario y clave incorrectos?
+     * @var bool Usuario y clave incorrectos?
      */
     private $usuario_inc = false;
 
@@ -89,19 +86,20 @@ class AportaContenido {
     private $perfil;
 
     /**
-     *
      * @var array Datos pasados en la URL
      */
-    private $datosURL = array();
+    private $datosURL = [];
 
     // El constructor necesita saber cuál es la opción actual
+
     /**
-     * Constructor de la clase. 
-     * @param BaseDatos $baseDatos Manejador de la base de datos
-     * @param boolean $registrado usuario registrado si/no
-     * @param String $usuario Nombre del usuario
-     * @param array $perfil Permisos de acceso del usuario
-     * @param String $opcion Opción elegida por el usuario
+     * Constructor de la clase.
+     *
+     * @param BaseDatos $baseDatos  Manejador de la base de datos
+     * @param bool      $registrado usuario registrado si/no
+     * @param string    $usuario    Nombre del usuario
+     * @param array     $perfil     Permisos de acceso del usuario
+     * @param string    $opcion     Opción elegida por el usuario
      */
     public function __construct($baseDatos, $registrado, $usuario, $perfil, $opcion)
     {
@@ -112,52 +110,56 @@ class AportaContenido {
         $this->perfil = $perfil;
         $this->opcionActual = $opcion;
     }
-    
+
     /**
      * Devuelve una tabla HTML con el contenido de las bibliotecas/módulos utilizadas en la aplicación
-     * Si el perfil del usuario es de Configuración devuelve también las versiones de las bibliotecas
-     * @return string 
+     * Si el perfil del usuario es de Configuración devuelve también las versiones de las bibliotecas.
+     *
+     * @return string
      */
     public function creaTablaAcercaDe()
     {
-
         $poner = $this->perfil['Config'];
         $tabla = '<table class="table table-condensed">';
-        $tabla .='<thead><tr><th>Biblioteca/Módulo</th>'.($poner?'<th>Versión</th>':'').'<th>Licencia</th></tr></thead>';
-        $tabla .='<tbody>';
-        $tabla .='<tr><td><a href="http://jquery.com/" target="_blank">jquery</a></td>'.($poner?'<td>2.1.0</td>':'').'<td><a target="_blank" href="https://jquery.org/license/">MIT</a></td>';
-        $tabla .='<tr><td><a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a></td>'.($poner?'<td>3.1.1</td>':'').'<td><a target="_blank" href="https://github.com/twbs/bootstrap/blob/master/LICENSE">MIT</a></td>';
-        $tabla .='<tr><td><a href="http://www.fpdf.org/" target="_blank">FPDF</a></td>'.($poner?'<td>1.7</td>':'').'<td>Libre</td>';
-        $tabla .='<tr><td><a href="http://phpqrcode.sourceforge.net/" target="_blank">PHP QR Code Enconder</a></td>'.($poner?'<td>1.1.4</td>':'').'<td><a target="_blank" href="http://www.gnu.org/licenses/lgpl-3.0.txt">LGPL</a></td>';
-        $tabla .='<tr><td><a href="http://stefangabos.ro/php-libraries/zebra-image/" target="_blank">Zebra_Image</a></td>'.($poner?'<td>2.2.3</td>':'').'<td><a target="_blank" href="http://www.gnu.org/licenses/lgpl-3.0.txt">LGPL</a></td>';
-        $tabla .='<tr><td><a href="http://jasny.github.io/bootstrap/" target="_blank">Jasny Bootstrap</a></td>'.($poner?'<td>3.1.0</td>':'').'<td><a target="_blank" href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></td>';
-        $tabla .='<tr><td><a href="http://1000hz.github.io/bootstrap-validator/" target="_blank">Bootstrap Validator</a></td>'.($poner?'<td>0.2.1</td>':'').'<td><a target="_blank" href="https://github.com/1000hz/bootstrap-validator/blob/master/LICENSE">MIT</a></td>';
-        $tabla .='<tr><td><a href="https://github.com/tkrotoff/jquery-simplecolorpicker" target="_blank">jquery-simplecolorpicker</a></td>'.($poner?'<td>0.3.0</td>':'').'<td><a target="_blank" href="https://github.com/tkrotoff/jquery-simplecolorpicker/blob/master/LICENSE.txt">MIT</a></td>';
-        $tabla .='<tr><td><a href="http://eonasdan.github.io/bootstrap-datetimepicker/" target="_blank">Bootstrap datetimepicker</a></td>'.($poner?'<td>2.1.32</td>':'').'<td><a target="_blank" href="https://github.com/Eonasdan/bootstrap-datetimepicker/blob/master/src/js/bootstrap-datetimepicker.js">MIT</a></td>';
-        $tabla .='<tr><td><a href="http://silviomoreto.github.io/bootstrap-select/" target="_blank">Bootstrap-select</a></td>'.($poner?'<td>1.5.4</td>':'').'<td><a target="_blank" href="https://github.com/silviomoreto/bootstrap-select">MIT</a></td>';
-        $tabla .='<tr><td><a href="https://github.com/vitalets/x-editable" target="_blank">X-editable</a></td>'.($poner?'<td>1.5.1</td>':'').'<td><a target="_blank" href="https://github.com/vitalets/x-editable/blob/master/LICENSE-MIT">MIT</a></td>';
-        $tabla .='<tr><td><a href="http://momentjs.com/" target="_blank">Moment.js</a></td>'.($poner?'<td>2.5.1</td>':'').'<td><a target="_blank" href="https://github.com/moment/moment/blob/develop/LICENSE">MIT</a></td>';
-        $tabla .='</tbody>';
-        $tabla .='</table>';
+        $tabla .= '<thead><tr><th>Biblioteca/Módulo</th>'.($poner ? '<th>Versión</th>' : '').'<th>Licencia</th></tr></thead>';
+        $tabla .= '<tbody>';
+        $tabla .= '<tr><td><a href="http://jquery.com/" target="_blank">jquery</a></td>'.($poner ? '<td>2.1.0</td>' : '').'<td><a target="_blank" href="https://jquery.org/license/">MIT</a></td>';
+        $tabla .= '<tr><td><a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a></td>'.($poner ? '<td>3.1.1</td>' : '').'<td><a target="_blank" href="https://github.com/twbs/bootstrap/blob/master/LICENSE">MIT</a></td>';
+        $tabla .= '<tr><td><a href="http://www.fpdf.org/" target="_blank">FPDF</a></td>'.($poner ? '<td>1.7</td>' : '').'<td>Libre</td>';
+        $tabla .= '<tr><td><a href="http://phpqrcode.sourceforge.net/" target="_blank">PHP QR Code Enconder</a></td>'.($poner ? '<td>1.1.4</td>' : '').'<td><a target="_blank" href="http://www.gnu.org/licenses/lgpl-3.0.txt">LGPL</a></td>';
+        $tabla .= '<tr><td><a href="http://stefangabos.ro/php-libraries/zebra-image/" target="_blank">Zebra_Image</a></td>'.($poner ? '<td>2.2.3</td>' : '').'<td><a target="_blank" href="http://www.gnu.org/licenses/lgpl-3.0.txt">LGPL</a></td>';
+        $tabla .= '<tr><td><a href="http://jasny.github.io/bootstrap/" target="_blank">Jasny Bootstrap</a></td>'.($poner ? '<td>3.1.0</td>' : '').'<td><a target="_blank" href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a></td>';
+        $tabla .= '<tr><td><a href="http://1000hz.github.io/bootstrap-validator/" target="_blank">Bootstrap Validator</a></td>'.($poner ? '<td>0.2.1</td>' : '').'<td><a target="_blank" href="https://github.com/1000hz/bootstrap-validator/blob/master/LICENSE">MIT</a></td>';
+        $tabla .= '<tr><td><a href="https://github.com/tkrotoff/jquery-simplecolorpicker" target="_blank">jquery-simplecolorpicker</a></td>'.($poner ? '<td>0.3.0</td>' : '').'<td><a target="_blank" href="https://github.com/tkrotoff/jquery-simplecolorpicker/blob/master/LICENSE.txt">MIT</a></td>';
+        $tabla .= '<tr><td><a href="http://eonasdan.github.io/bootstrap-datetimepicker/" target="_blank">Bootstrap datetimepicker</a></td>'.($poner ? '<td>2.1.32</td>' : '').'<td><a target="_blank" href="https://github.com/Eonasdan/bootstrap-datetimepicker/blob/master/src/js/bootstrap-datetimepicker.js">MIT</a></td>';
+        $tabla .= '<tr><td><a href="http://silviomoreto.github.io/bootstrap-select/" target="_blank">Bootstrap-select</a></td>'.($poner ? '<td>1.5.4</td>' : '').'<td><a target="_blank" href="https://github.com/silviomoreto/bootstrap-select">MIT</a></td>';
+        $tabla .= '<tr><td><a href="https://github.com/vitalets/x-editable" target="_blank">X-editable</a></td>'.($poner ? '<td>1.5.1</td>' : '').'<td><a target="_blank" href="https://github.com/vitalets/x-editable/blob/master/LICENSE-MIT">MIT</a></td>';
+        $tabla .= '<tr><td><a href="http://momentjs.com/" target="_blank">Moment.js</a></td>'.($poner ? '<td>2.5.1</td>' : '').'<td><a target="_blank" href="https://github.com/moment/moment/blob/develop/LICENSE">MIT</a></td>';
+        $tabla .= '</tbody>';
+        $tabla .= '</table>';
+
         return $tabla;
     }
 
     /**
-     * Devuelve la fecha actual
+     * Devuelve la fecha actual.
+     *
      * @param string $formato formato de devolución de la fecha
-     * @param string $idioma idioma para formatear la fecha, p.ej. es_ES
+     * @param string $idioma  idioma para formatear la fecha, p.ej. es_ES
+     *
      * @return string
      */
     public function fechaActual($formato = '', $idioma = 'es_ES')
     {
-        if ($formato == '')
-            $formato = "%d-%b-%y";
+        if ($formato == '') {
+            $formato = '%d-%b-%y';
+        }
         setlocale(LC_TIME, $idioma);
+
         return strftime($formato);
     }
 
     /**
-     * 
      * @return string Mensaje el usuario debe registrarse.
      */
     private function mensajeRegistro()
@@ -167,78 +169,87 @@ class AportaContenido {
 
     // Procesaremos todas las invocaciones a métodos en
     // la función __call()
+
     /**
      * Procesa las peticiones de contenido de la plantilla.
-     * @param string $metodo Método a ejecutar
+     *
+     * @param string $metodo     Método a ejecutar
      * @param string $parametros Parámetros del método
+     *
      * @return string Contenido devuelto por el método
      */
     public function __call($metodo, $parametros)
     {
         switch ($metodo) { // Dependiendo del método invocado
             case 'usuario':
-                if ($this->registrado)
+                if ($this->registrado) {
                     return "Usuario=$this->usuario";
-                else
+                } else {
                     return '';
+                }
             case 'fecha':
                 $script = '<script type="text/javascript">
                                 $(function () {
-                                    $(' . "'#fechaCabecera'" . ").datetimepicker({
+                                    $('."'#fechaCabecera'".").datetimepicker({
                                         pick12HourFormat: false,
                                         language: 'es',
                                         pickTime: false
                                         });
                                 });
                                 </script>";
-                $campo = '<input type="hidden" name="fechaCabecera" id="fechaCabecera" value="' . $this->fechaActual("%d/%m/%Y") . '">';
-                $etiqueta = '<label for="fechaCabecera" onClick="$(' . "'#fechaCabecera'" . ").data('DateTimePicker').show();" . '">' . $this->fechaActual() . '</label>';
-                return $etiqueta . $campo . $script;
-            case 'aplicacion': 
-                $nombre = explode(" ", PROGRAMA);
+                $campo = '<input type="hidden" name="fechaCabecera" id="fechaCabecera" value="'.$this->fechaActual('%d/%m/%Y').'">';
+                $etiqueta = '<label for="fechaCabecera" onClick="$('."'#fechaCabecera'".").data('DateTimePicker').show();".'">'.$this->fechaActual().'</label>';
+
+                return $etiqueta.$campo.$script;
+            case 'aplicacion':
+                $nombre = explode(' ', PROGRAMA);
                 $nombre = $nombre[2];
-                return $nombre . " v" . VERSION;
+
+                return $nombre.' v'.VERSION;
             case 'menu': // el menú
                 if ($this->registrado) {
                     return $this->miMenu->insertaMenu();
                 } else {
                     $salida = FORMULARIO_ACCESO;
                     if ($this->usuario_inc) {
-                        $salida.=USUARIO_INCORRECTO;
+                        $salida .= USUARIO_INCORRECTO;
                     }
                     //$salida.=MENSAJE_DEMO;
                     return $salida;
                 }
             case 'opcion':
-                if (strstr($this->opcionActual, "&")) {
-                    list($opcion, $parametro) = explode("&", $this->opcionActual);
+                if (strstr($this->opcionActual, '&')) {
+                    list($opcion, $parametro) = explode('&', $this->opcionActual);
                 } else {
-                    $opcion = $this->opcionActual; $parametro = "";
+                    $opcion = $this->opcionActual;
+                    $parametro = '';
                 }
                 switch ($opcion) {
                     case 'bienvenido':
-                        return "Men&uacute; Principal";
+                        return 'Men&uacute; Principal';
                     case 'principal':
-                        return "Pantalla Inicial";
-                    case 'articulos': $opcion = "art&iacute;culos";
+                        return 'Pantalla Inicial';
+                    case 'articulos': $opcion = 'art&iacute;culos';
                     case 'elementos':
                     case 'ubicaciones':
                     case 'usuarios':
                     case 'test':
-                        return "Mantenimiento " . ucfirst($opcion);
+                        return 'Mantenimiento '.ucfirst($opcion);
                     case 'configuracion':
                         return 'Configuraci&oacute;n y Preferencias';
-                    case 'informeInventario':return "Informe de Inventario";
+                    case 'informeInventario':return 'Informe de Inventario';
                     case 'descuadres':return 'Informe de descuadres';
                     case 'importacion': return 'Importaci&oacute;n de datos';
                     case 'copiaseg': return 'Copia de seguridad de datos';
                 }
+
                 return '';
             case 'control':
-                if ($this->registrado)
+                if ($this->registrado) {
                     return '<a href="index.php?cerrarSesion">Cerrar Sesi&oacute;n <span class="glyphicon glyphicon-log-out"></span></a>';
-                else
+                } else {
                     return '';
+                }
             // Para incluir el contenido central de la página
             case 'contenido':
                 // tendremos en cuenta cuál es la opción actual
@@ -248,52 +259,56 @@ class AportaContenido {
 //                if (!$this->registrado) {
 //                    return $this->mensajeRegistro();
 //                }
-                if (strstr($this->opcionActual, "&")) {
-                    list($opcion, $parametro) = explode("&", $this->opcionActual);
+                if (strstr($this->opcionActual, '&')) {
+                    list($opcion, $parametro) = explode('&', $this->opcionActual);
                 } else {
-                    $opcion = $this->opcionActual; $parametro = "";
+                    $opcion = $this->opcionActual;
+                    $parametro = '';
                 }
                 switch ($opcion) {
                     case 'bienvenido':
                         $mensaje = '<div class="alert alert-success">';
-                        $mensaje .= 'Bienvenid@ ' . $this->usuario . '</div>';
+                        $mensaje .= 'Bienvenid@ '.$this->usuario.'</div>';
                     case 'principal': // contenido inicial
-                        $mensaje = "";
+                        $mensaje = '';
                         $creditos = "$('#creditos').modal({keyboard: false});";
-                        $centro = '<div class="well well-sm">' . CENTRO . '</div>';
+                        $centro = '<div class="well well-sm">'.CENTRO.'</div>';
                         $tabla = $this->creaTablaAcercaDe();
                         $rama_texto = trim(substr(file_get_contents('.git/HEAD'), 16));
-                        $rama = ($rama_texto != 'master' ? '<br><button class="btn btn-warning btn-xs" type="button"onClick="' . $creditos . '"><span class="glyphicon glyphicon-cog"></span> '.$rama_texto.'</button></center>':'');
-                        return $mensaje . '<br><br><center><img src="img/qrlogo.png" alt="' . PROGRAMA . '" onClick="' . $creditos . '" >' .
-                                '<br><br><label onClick="' . $creditos . '">' . $centro . '</label>' . $rama . '</center>' . CREDITOS_CABECERA . $tabla . CREDITOS_PIE;
+                        $rama = ($rama_texto != 'master' ? '<br><button class="btn btn-warning btn-xs" type="button"onClick="'.$creditos.'"><span class="glyphicon glyphicon-cog"></span> '.$rama_texto.'</button></center>' : '');
+
+                        return $mensaje.'<br><br><center><img src="img/qrlogo.png" alt="'.PROGRAMA.'" onClick="'.$creditos.'" >'.
+                                '<br><br><label onClick="'.$creditos.'">'.$centro.'</label>'.$rama.'</center>'.CREDITOS_CABECERA.$tabla.CREDITOS_PIE;
                     case 'articulos':
                     case 'ubicaciones':
                     case 'test':
                     case 'elementos':
                         $this->cargaDatosURL();
-                        if ($this->datosURL['opc'] == "informe") {
+                        if ($this->datosURL['opc'] == 'informe') {
                             if ($this->perfil['Informe']) {
                                 $this->procesaURL();
-                                $fichero = 'xml/informe' . ucfirst($opcion) . '.xml';
-                                $salida = TMP.'/informe' . ucfirst($opcion) . '.xml';
+                                $fichero = 'xml/informe'.ucfirst($opcion).'.xml';
+                                $salida = TMP.'/informe'.ucfirst($opcion).'.xml';
                                 //Establece los posibles parámetros del listado.
                                 $orden = $this->datosURL['orden'];
-                                $sentido = $this->datosURL['sentido'] == "asc" ? ' ' : ' desc ';
+                                $sentido = $this->datosURL['sentido'] == 'asc' ? ' ' : ' desc ';
                                 $filtro = isset($this->datosURL['buscar']) ? $this->bdd->filtra($this->datosURL['buscar']) : '';
-                                $plantilla = file_get_contents($fichero) or die('Fallo en la apertura de la plantilla ' . $fichero);
-                                $plantilla = str_replace("{filtro}", $filtro, $plantilla);
-                                $plantilla = str_replace("{orden}", $orden . $sentido, $plantilla);
-                                file_put_contents($salida, $plantilla) or die('Fallo en la escritura de la plantilla ' . $salida);
+                                $plantilla = file_get_contents($fichero) or die('Fallo en la apertura de la plantilla '.$fichero);
+                                $plantilla = str_replace('{filtro}', $filtro, $plantilla);
+                                $plantilla = str_replace('{orden}', $orden.$sentido, $plantilla);
+                                file_put_contents($salida, $plantilla) or die('Fallo en la escritura de la plantilla '.$salida);
                                 $informe = new InformePDF($this->bdd, $salida, $this->registrado);
                                 $informe->crea($salida);
                                 $informe->cierraPDF();
+
                                 return $this->devuelveInforme($informe);
                             } else {
-                                return $this->mensajePermisos("Informes");
+                                return $this->mensajePermisos('Informes');
                             }
                         }
                         if ($this->perfil['Consulta']) {
                             $ele = new Mantenimiento($this->bdd, $this->perfil, $opcion);
+
                             return $ele->ejecuta();
                         } else {
                             return $this->mensajePermisos(ucfirst($opcion));
@@ -301,28 +316,30 @@ class AportaContenido {
                     case 'usuarios':
                         if ($this->perfil['Usuarios']) {
                             $this->cargaDatosURL();
-                            if ($this->datosURL['opc'] == "informe") {
+                            if ($this->datosURL['opc'] == 'informe') {
                                 if (!$this->pefil['Informe']) {
                                     $this->procesaURL();
-                                    $fichero = 'xml/informe' . ucfirst($opcion) . '.xml';
-                                    $salida = TMP.'/informe' . ucfirst($opcion) . '.xml';
+                                    $fichero = 'xml/informe'.ucfirst($opcion).'.xml';
+                                    $salida = TMP.'/informe'.ucfirst($opcion).'.xml';
                                     //Establece los posibles parámetros del listado.
                                     $orden = $this->datosURL['orden'];
-                                    $sentido = $this->datosURL['sentido'] == "asc" ? ' ' : ' desc ';
+                                    $sentido = $this->datosURL['sentido'] == 'asc' ? ' ' : ' desc ';
                                     $filtro = isset($this->datosURL['buscar']) ? $this->bdd->filtra($this->datosURL['buscar']) : '';
-                                    $plantilla = file_get_contents($fichero) or die('Fallo en la apertura de la plantilla ' . $fichero);
-                                    $plantilla = str_replace("{filtro}", $filtro, $plantilla);
-                                    $plantilla = str_replace("{orden}", $orden . $sentido, $plantilla);
-                                    file_put_contents($salida, $plantilla) or die('Fallo en la escritura de la plantilla ' . $salida);
+                                    $plantilla = file_get_contents($fichero) or die('Fallo en la apertura de la plantilla '.$fichero);
+                                    $plantilla = str_replace('{filtro}', $filtro, $plantilla);
+                                    $plantilla = str_replace('{orden}', $orden.$sentido, $plantilla);
+                                    file_put_contents($salida, $plantilla) or die('Fallo en la escritura de la plantilla '.$salida);
                                     $informe = new InformePDF($this->bdd, $salida, $this->registrado);
                                     $informe->crea($salida);
                                     $informe->cierraPDF();
+
                                     return $this->devuelveInforme($informe);
                                 } else {
-                                    return $this->mensajePermisos("Informes");
+                                    return $this->mensajePermisos('Informes');
                                 }
                             }
                             $ele = new Mantenimiento($this->bdd, $this->perfil, $opcion);
+
                             return $ele->ejecuta();
                         } else {
                             return $this->mensajePermisos('Usuarios');
@@ -330,6 +347,7 @@ class AportaContenido {
                     case 'configuracion':
                         if ($this->perfil['Config']) {
                             $conf = new Configuracion();
+
                             return $conf->ejecuta();
                         } else {
                             return $this->mensajePermisos('Configuraci&oacute;n');
@@ -337,6 +355,7 @@ class AportaContenido {
                     case 'informeInventario':
                         if ($this->perfil['Informe']) {
                             $info = new InformeInventario($this->bdd);
+
                             return $info->ejecuta();
                         } else {
                             return $this->mensajePermisos('Informes');
@@ -344,36 +363,39 @@ class AportaContenido {
                     case 'importacion':
                         if ($this->perfil['Modificacion'] && $this->perfil['Borrado']) {
                             $import = new Importacion($this->bdd, $this->registrado);
+
                             return $import->ejecuta();
                         } else {
-                            return $this->mensajePermisos("Actualizaci&oacute;n, creaci&oacute;n y borrado de elementos");
+                            return $this->mensajePermisos('Actualizaci&oacute;n, creaci&oacute;n y borrado de elementos');
                         }
                     case 'copiaseg':
                         if ($this->perfil['Config']) {
                             $copia = new CopiaSeguridad();
-                            if (isset($_GET['confirmado']) && $_GET['confirmado'] == "1") {
+                            if (isset($_GET['confirmado']) && $_GET['confirmado'] == '1') {
                                 if (!$copia->creaCopia()) {
-                                    $tipo = "danger";
-                                    $cabecera = "ERROR";
+                                    $tipo = 'danger';
+                                    $cabecera = 'ERROR';
                                 } else {
-                                    $tipo = "info";
-                                    $cabecera = "INFORMACIÓN";
+                                    $tipo = 'info';
+                                    $cabecera = 'INFORMACIÓN';
                                 }
+
                                 return $this->panel($cabecera, $copia->mensaje(), $tipo);
                             } else {
                                 return $copia->dialogo();
                             }
                         } else {
-                            return $this->mensajePermisos("Copias de seguridad");
+                            return $this->mensajePermisos('Copias de seguridad');
                         }
                 } // Fin del contenido
             case 'usuario_incorrecto':
                 $this->usuario_inc = true;
+
                 return;
             case 'registro': // Si está registrado mostrar bienvenida
                 // si no, un enlace
                 if ($this->bEstaRegistrado) {
-                    return "Bienvenid@ <b>$this->sUsuario</b><hr />" .
+                    return "Bienvenid@ <b>$this->sUsuario</b><hr />".
                             '<a href="index.php?cerrarSesion">Cerrar sesi&oacute;n</a>';
                 } else {
                     return '';
@@ -394,35 +416,36 @@ class AportaContenido {
     }
 
     /**
-     *
      * @param string $tipo
+     *
      * @return string
      */
     public function mensajePermisos($tipo)
     {
-        return $this->panel("ERROR", "No tiene permiso para acceder a $tipo", "danger");
+        return $this->panel('ERROR', "No tiene permiso para acceder a $tipo", 'danger');
     }
-    
+
     private function devuelveInforme($informe)
     {
-        $letras = "abcefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-        $nombre = TMP."/informe" . substr(str_shuffle($letras), 0, 10) . ".pdf";
+        $letras = 'abcefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+        $nombre = TMP.'/informe'.substr(str_shuffle($letras), 0, 10).'.pdf';
         $informe->guardaArchivo($nombre);
+
         return '<div class="container">
-                    <!--<a href="' . $nombre . '" target="_blank"><span class="glyphicon glyphicon-cloud-download" style="font-size:1.5em;"></span>Descargar Informe</a>--> 
-                    <object data="' . $nombre . '" type="application/pdf" width="100%" height="700" style="float:left;">
+                    <!--<a href="'.$nombre.'" target="_blank"><span class="glyphicon glyphicon-cloud-download" style="font-size:1.5em;"></span>Descargar Informe</a>--> 
+                    <object data="'.$nombre.'" type="application/pdf" width="100%" height="700" style="float:left;">
                     </object>
                 </div>';
     }
-    
+
     public function panel($cabecera, $mensaje, $tipo)
     {
-        $panel = '<div class="panel panel-' . $tipo . '"><div class="panel-heading">';
-        $panel .= '<h3 class="panel-title">' . $cabecera . '</h3></div>';
+        $panel = '<div class="panel panel-'.$tipo.'"><div class="panel-heading">';
+        $panel .= '<h3 class="panel-title">'.$cabecera.'</h3></div>';
         $panel .= '<div class="panel-body">';
         $panel .= $mensaje;
         $panel .= '</div>';
+
         return $panel;
     }
 }
-?>

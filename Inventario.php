@@ -2,9 +2,11 @@
 
 /**
  * Clase Inventario que controla la ejecución principal del programa.
+ *
  * @author Ricardo Montañana Gómez <rmontanana@gmail.com>
+ *
  * @version 1.0
- * @package Inventario
+ *
  * @copyright Copyright (c) 2008, Ricardo Montañana Gómez
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
  * This file is part of Inventario.
@@ -12,23 +14,22 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Inventario is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Inventario.  If not, see <http://www.gnu.org/licenses/>.
- *  
  */
 // Clase del objeto principal de la aplicación
-class Inventario {
-
+class Inventario
+{
     // Declaración de miembros
     private $bdd; // Enlace con el SGBD
     private $registrado; // Usuario registrado s/n
-    private $usuario = NULL; // Nombre del usuario
+    private $usuario = null; // Nombre del usuario
     private $clave; //contraseña del usuario
     private $opcActual; // Opción elegida por el usuario
     private $perfil; //Permisos del usuario.
@@ -36,13 +37,15 @@ class Inventario {
     private $plant;
 
     // Constructor
-    public function __construct() {
+    public function __construct()
+    {
         // Analizamos la cadena de solicitud para saber
         // qué opción es la actual
         $this->opcActual = $_SERVER['QUERY_STRING'] == '' ? 'principal' : $_SERVER['QUERY_STRING'];
         //Si el programa no está instalado, llama al instalador.
-        if (INSTALADO == "no") {
+        if (INSTALADO == 'no') {
             header('location: Instalar.php');
+
             return;
         }
         // Iniciamos una sesión
@@ -50,25 +53,25 @@ class Inventario {
         //Conexión con la base de datos.
         $this->bdd = new Sql(SERVIDOR, USUARIO, CLAVE, BASEDATOS);
         if ($this->bdd->error()) {
-            
             echo '<h1>Fallo al conectar con el servidor MySQL.</h1>';
-            echo "Servidor [ " . SERVIDOR . " ] base de datos [" . BASEDATOS . "]";
+            echo 'Servidor [ '.SERVIDOR.' ] base de datos ['.BASEDATOS.']';
             $this->estado = false;
+
             return;
         } else {
             $this->estado = true;
         }
         //Selecciona la plantilla a utilizar
-        $this->plant='plant/';
-        $this->plant.=PLANTILLA;
-        $this->plant.='.html';
+        $this->plant = 'plant/';
+        $this->plant .= PLANTILLA;
+        $this->plant .= '.html';
         // Comprobamos si el usuario ya está registrado en esta sesión
         $this->registrado = isset($_SESSION['Registrado']);
         if ($this->registrado) {// si está...
             // recuperamos el nombre del usuario
             $this->usuario = $_SESSION['Usuario'];
             $this->perfil = $_SESSION['Perfil'];
-            // en caso contrario comprobamos si tiene la cookie que le identifica como usuario
+        // en caso contrario comprobamos si tiene la cookie que le identifica como usuario
         } elseif (isset($_COOKIE['InventarioId'])) {
             // y usamos el Id para recuperar el nombre de la base de ddtos
             $this->recuperaNombreConId($_COOKIE['InventarioId']);
@@ -77,14 +80,16 @@ class Inventario {
         }
     }
 
-    public function estado() {
+    public function estado()
+    {
         return $this->estado;
     }
 
 //     Esta función pondrá en marcha la aplicación ocupándose
 //     de las acciones que no generan contenido, esto es
 //     iniciar sesión, cerrarla, etc.
-    public function Ejecuta() {
+    public function Ejecuta()
+    {
         // Dependiendo de la opción a procesar
         switch ($this->opcActual) {
             // El usuario quiere cerrar la sesión actual
@@ -118,7 +123,7 @@ class Inventario {
                 header('location:index.php?usuario_incorrecto');
                 exit;
             case 'usuario_incorrecto':
-                $this->opcActual = "principal";
+                $this->opcActual = 'principal';
                 $contenido = $this->creaContenido();
                 $contenido->usuario_incorrecto();
                 $salida = new Distribucion($this->plant, $contenido);
@@ -132,18 +137,20 @@ class Inventario {
                 $salida = new Distribucion($this->plant, $this->creaContenido());
                 echo $salida->procesaPlantilla();
                 break;
-                
+
         }
     }
 
-    private function creaContenido() {
+    private function creaContenido()
+    {
         return new AportaContenido($this->bdd, $this->registrado, $this->usuario, $this->perfil, $this->opcActual);
     }
 
     // Esta función comprueba si el usuario está o no registrado,
     // devolviendo su IdSesion en caso afirmativo o false
     // en caso contrario
-    private function usuarioRegistrado() {
+    private function usuarioRegistrado()
+    {
         $this->usuario = $_POST['usuario'];
         $this->clave = $_POST['clave'];
         // ejecuta la consulta para buscar el usuario
@@ -167,10 +174,11 @@ class Inventario {
         return false;
     }
 
-    private function creaPerfil($fila) {
-        return array("Consulta" => $fila['consulta'], "Modificacion" => $fila['modificacion'],
-            "Alta" => $fila['alta'], "Borrado" => $fila['borrado'], "Informe" => $fila['informe'],
-            "Usuarios" => $fila['usuarios'], "Config" => $fila['config']);
+    private function creaPerfil($fila)
+    {
+        return ['Consulta' => $fila['consulta'], 'Modificacion' => $fila['modificacion'],
+            'Alta'         => $fila['alta'], 'Borrado' => $fila['borrado'], 'Informe' => $fila['informe'],
+            'Usuarios'     => $fila['usuarios'], 'Config' => $fila['config']];
     }
 
     // Esta función intenta recuperar el nombre del usuario
@@ -178,7 +186,8 @@ class Inventario {
     // dejando las variables Registrado y Usuario con
     // los valores apropiados
     // @param String Identificador de sesión del usuario actual
-    private function recuperaNombreConId($idSesion) {
+    private function recuperaNombreConId($idSesion)
+    {
         // para ejecutar la consulta para buscar el Id de sesión
         $res = $this->bdd->ejecuta("SELECT * FROM Usuarios WHERE idSesion='$idSesion'");
         // Si no hemos encontrado el ID
@@ -204,5 +213,3 @@ class Inventario {
         }
     }
 }
-
-?>
