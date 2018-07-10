@@ -1,7 +1,6 @@
 <?php
 
 /**
- * @package Inventario
  * @copyright Copyright (c) 2008, Ricardo Montañana Gómez
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
  * This file is part of Inventario.
@@ -17,20 +16,21 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Inventario.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
-class Importacion {
-
+class Importacion
+{
     private $bdd;
 
-    public function __construct($baseDatos, $registrado) {
-         if (!$registrado) {
+    public function __construct($baseDatos, $registrado)
+    {
+        if (!$registrado) {
             return 'Debe registrarse para acceder a este apartado';
         }
         $this->bdd = $baseDatos;
     }
 
-    public function ejecuta() {
+    public function ejecuta()
+    {
         $opc = '';
         if (isset($_GET['opc'])) {
             $opc = $_GET['opc'];
@@ -39,26 +39,29 @@ class Importacion {
             case 'form':return $this->formulario();
             case 'importar':return $this->importarFichero();
             case 'ejecutar':return $this->ejecutaFichero();
-            default: return "Importacion: No entiendo qué me has pedido.";
+            default: return 'Importacion: No entiendo qué me has pedido.';
         }
     }
 
-    private function importarFichero() {
-        $uploadfile = TMP."/" . basename($_FILES['fichero']['name']);
+    private function importarFichero()
+    {
+        $uploadfile = TMP.'/'.basename($_FILES['fichero']['name']);
         if (!move_uploaded_file($_FILES['fichero']['tmp_name'], $uploadfile)) {
-            die('No se pudo subir el fichero ' . $_FILES['userfile']['tmp_name']);
+            die('No se pudo subir el fichero '.$_FILES['userfile']['tmp_name']);
         }
         $csv = new Csv($this->bdd);
         $csv->cargaCSV($uploadfile);
+
         return $csv->resumen();
     }
 
-    private function formulario() {
-        $accion = "index.php?importacion&opc=importar";
-        $salida = "";
+    private function formulario()
+    {
+        $accion = 'index.php?importacion&opc=importar';
+        $salida = '';
         //$salida .= '<script type="text/javascript" src="css/bootstrap-filestyle.min.js"> </script>';
-        $salida .='<div class="col-sm-6 col-md-6">';
-        $salida .= '<form  enctype="multipart/form-data" name="importacion.form" method="post" action="' . $accion . '">' . "\n";
+        $salida .= '<div class="col-sm-6 col-md-6">';
+        $salida .= '<form  enctype="multipart/form-data" name="importacion.form" method="post" action="'.$accion.'">'."\n";
         $salida .= "<fieldset style=\"width: 96%;\"><p><legend style=\"color: red;\"><b>Elige Archivo</b></legend></p>\n";
         //$salida .= '<input type="file" name="fichero" id="fichero" onChange="seleccionFichero(this);" class="filestyle" data-classButton="btn btn-primary">';
         //$salida .= '<input type="file" name="fichero" id="fichero" onChange="seleccionFichero(this);">';
@@ -76,7 +79,7 @@ class Importacion {
                             <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Eliminar</a>
                         </div>
                     </div></fieldset>';
-        $salida .= '<p align="center"><button class="btn btn-primary" type=submit><span class="glyphicon glyphicon-cloud-upload"></span> Aceptar</button></p><br>' . "\n";
+        $salida .= '<p align="center"><button class="btn btn-primary" type=submit><span class="glyphicon glyphicon-cloud-upload"></span> Aceptar</button></p><br>'."\n";
         $salida .= '</div>';
         $mensaje = 'Sólo se permiten archivos con extensión CSV';
         $salida .= "<script type='text/javascript'>"."
@@ -90,14 +93,16 @@ class Importacion {
                     location.reload();
                 }}
            </script>";
+
         return $salida;
     }
-    private function ejecutaFichero() {
+
+    private function ejecutaFichero()
+    {
         $archivo = $_POST['ficheroCSV'];
         $csv = new Csv($this->bdd);
         $csv->cargaCSV($archivo);
+
         return $csv->ejecutaFichero();
     }
 }
-
-?>

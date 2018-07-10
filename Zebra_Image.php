@@ -37,14 +37,14 @@ ini_set('gd.jpeg_ignore_warning', true);
  *  For more resources visit {@link http://stefangabos.ro/}
  *
  *  @author     Stefan Gabos <contact@stefangabos.ro>
+ *
  *  @version    2.2.3 (last revision: July 14, 2013)
+ *
  *  @copyright  (c) 2006 - 2013 Stefan Gabos
  *  @license    http://www.gnu.org/licenses/lgpl-3.0.txt GNU LESSER GENERAL PUBLIC LICENSE
- *  @package    Zebra_Image
  */
 class Zebra_Image
 {
-
     /**
      *  Indicates the file system permissions to be set for newly created images.
      *
@@ -64,9 +64,9 @@ class Zebra_Image
      *
      *  Default is 0755
      *
-     *  @var integer
+     *  @var int
      */
-    var $chmod_value;
+    public $chmod_value;
 
     /**
      *  If set to FALSE, images having both width and height smaller than the required width and height, will be left
@@ -76,9 +76,9 @@ class Zebra_Image
      *
      *  Default is TRUE
      *
-     *  @var boolean
+     *  @var bool
      */
-    var $enlarge_smaller_images;
+    public $enlarge_smaller_images;
 
     /**
      *  In case of an error read this property's value to see the error's code.
@@ -96,9 +96,9 @@ class Zebra_Image
      *
      *  Default is 0 (no error).
      *
-     *  @var integer
+     *  @var int
      */
-    var $error;
+    public $error;
 
     /**
      *  Indicates the quality of the output image (better quality means bigger file size).
@@ -109,9 +109,9 @@ class Zebra_Image
      *
      *  Default is 85
      *
-     *  @var integer
+     *  @var int
      */
-    var $jpeg_quality;
+    public $jpeg_quality;
 
     /**
      *  Indicates the compression level of the output image (lower compression means bigger file size).
@@ -125,9 +125,9 @@ class Zebra_Image
      *
      *  @since 2.2
      *
-     *  @var integer
+     *  @var int
      */
-    var $png_compression;
+    public $png_compression;
 
     /**
      *  Specifies whether, upon resizing, images should preserve their aspect ratio.
@@ -136,9 +136,9 @@ class Zebra_Image
      *
      *  Default is TRUE
      *
-     *  @var boolean
+     *  @var bool
      */
-    var $preserve_aspect_ratio;
+    public $preserve_aspect_ratio;
 
     /**
      *  Indicates whether a target files should preserve the source file's date/time.
@@ -147,9 +147,9 @@ class Zebra_Image
      *
      *  @since 1.0.4
      *
-     *  @var boolean
+     *  @var bool
      */
-    var $preserve_time;
+    public $preserve_time;
 
     /**
      *  Indicates whether the target image should have a "sharpen" filter applied to it.
@@ -163,9 +163,9 @@ class Zebra_Image
      *
      *  @since 2.2
      *
-     *  @var boolean
+     *  @var bool
      */
-    var $sharpen_images;
+    public $sharpen_images;
 
     /**
      *  Path to an image file to apply the transformations to.
@@ -174,7 +174,7 @@ class Zebra_Image
      *
      *  @var    string
      */
-    var $source_path;
+    public $source_path;
 
     /**
      *  Path (including file name) to where to save the transformed image.
@@ -184,7 +184,7 @@ class Zebra_Image
      *
      *  @var    string
      */
-    var $target_path;
+    public $target_path;
 
     /**
      *  Constructor of the class.
@@ -193,7 +193,7 @@ class Zebra_Image
      *
      *  @return void
      */
-    function Zebra_Image()
+    public function Zebra_Image()
     {
 
         // set default values for properties
@@ -210,7 +210,6 @@ class Zebra_Image
         $this->sharpen_images = false;
 
         $this->source_path = $this->target_path = '';
-
     }
 
     /**
@@ -292,21 +291,17 @@ class Zebra_Image
      *                                                              others weight of 1.0. the result is normalized by dividing
      *                                                              the sum with <b>arg1</b> + 8.0 (sum of the matrix).
      *                                                              any float is accepted;
-     *
      *  @param  mixed   $arg1       Used by the following filters:
      *                              -   <b>brightness</b>       -   sets the brightness level (-255 to 255)
      *                              -   <b>contrast</b>         -   sets the contrast level (-100 to 100)
      *                              -   <b>colorize</b>         -   sets the value of the red component (-255 to 255)
      *                              -   <b>smooth</b>           -   sets the smoothness level
      *                              -   <b>pixelate</b>         -   sets the block size, in pixels
-     *
      *  @param  mixed   $arg2       Used by the following filters:
      *                              -   <b>colorize</b>         -   sets the value of the green component (-255 to 255)
      *                              -   <b>pixelate</b>         -   whether to use advanced pixelation effect or not (defaults to FALSE).
-     *
      *  @param  mixed   $arg3       Used by the following filters:
      *                              -   <b>colorize</b>         -   sets the value of the blue component (-255 to 255)
-     *
      *  @param  mixed   $arg4       Used by the following filters:
      *                              -   <b>colorize</b>         -   alpha channel; a value between 0 and 127. 0 indicates
      *                                                              completely opaque while 127 indicates completely
@@ -314,7 +309,7 @@ class Zebra_Image
      *
      *  @since 2.2.2
      *
-     *  @return boolean             Returns TRUE on success or FALSE on error.
+     *  @return bool             Returns TRUE on success or FALSE on error.
      *
      *                              If {@link http://php.net/manual/en/function.imagefilter.php imagefilter} is not
      *                              available the method will return FALSE without setting an {@link error} code.
@@ -326,11 +321,11 @@ class Zebra_Image
      *                              {@link http://php.net/manual/en/function.imagefilter.php imagefilter} exists and that
      *                              the requested filter is valid, check the {@link error} property to see the error code.
      */
-    function apply_filter($filter, $arg1 = '', $arg2 = '', $arg3 = '', $arg4 = '')
+    public function apply_filter($filter, $arg1 = '', $arg2 = '', $arg3 = '', $arg4 = '')
     {
 
         // if "imagefilter" function exists and the requested filter exists
-        if (function_exists('imagefilter'))
+        if (function_exists('imagefilter')) {
 
             // if image resource was successfully created
             if ($this->_create_from_source()) {
@@ -358,45 +353,51 @@ class Zebra_Image
                 if (is_array($filter)) {
 
                     // iterate through the filters
-                    foreach ($filter as $arguments)
+                    foreach ($filter as $arguments) {
 
                         // if filter exists
-                        if (defined('IMG_FILTER_' . strtoupper($arguments[0]))) {
+                        if (defined('IMG_FILTER_'.strtoupper($arguments[0]))) {
 
                             // try to apply the filter...
-                            if (!@call_user_func_array('imagefilter', array_merge(array($target_identifier, constant('IMG_FILTER_' . strtoupper($arguments[0]))), array_slice($arguments, 1))))
+                            if (!@call_user_func_array('imagefilter', array_merge([$target_identifier, constant('IMG_FILTER_'.strtoupper($arguments[0]))], array_slice($arguments, 1)))) {
 
                                 // ...and trigger an error if the filter could not be applied
-                                trigger_error('Invalid arguments used for "' . strtoupper($arguments[0]) . '" filter', E_USER_WARNING);
+                                trigger_error('Invalid arguments used for "'.strtoupper($arguments[0]).'" filter', E_USER_WARNING);
+                            }
 
-                        // if filter doesn't exists, trigger an error
-                        } else trigger_error('Filter "' . strtoupper($arguments[0]) . '" is not available', E_USER_WARNING);
+                            // if filter doesn't exists, trigger an error
+                        } else {
+                            trigger_error('Filter "'.strtoupper($arguments[0]).'" is not available', E_USER_WARNING);
+                        }
+                    }
 
-                // if a single filter is to be applied and it is available
-                } elseif (defined('IMG_FILTER_' . strtoupper($filter))) {
+                    // if a single filter is to be applied and it is available
+                } elseif (defined('IMG_FILTER_'.strtoupper($filter))) {
 
                     // get all the arguments passed to the method
                     $arguments = func_get_args();
 
                     // try to apply the filter...
-                    if (!@call_user_func_array('imagefilter', array_merge(array($target_identifier, constant('IMG_FILTER_' . strtoupper($filter))), array_slice($arguments, 1))))
+                    if (!@call_user_func_array('imagefilter', array_merge([$target_identifier, constant('IMG_FILTER_'.strtoupper($filter))], array_slice($arguments, 1)))) {
 
                         // ...and trigger an error if the filter could not be applied
-                        trigger_error('Invalid arguments used for "' . strtoupper($arguments[0]) . '" filter', E_USER_WARNING);
+                        trigger_error('Invalid arguments used for "'.strtoupper($arguments[0]).'" filter', E_USER_WARNING);
+                    }
 
-                // if filter doesn't exists, trigger an error
-                } else trigger_error('Filter "' . strtoupper($arguments[0]) . '" is not available', E_USER_WARNING);
+                    // if filter doesn't exists, trigger an error
+                } else {
+                    trigger_error('Filter "'.strtoupper($arguments[0]).'" is not available', E_USER_WARNING);
+                }
 
                 // write image
                 return $this->_write_image($target_identifier);
-
             }
+        }
 
         // if script gets this far, return false
         // note that we do not set the error level as it has been already set
         // by the _create_from_source() method earlier, if the case
         return false;
-
     }
 
     /**
@@ -421,21 +422,18 @@ class Zebra_Image
      *  $img->crop(0, 0, 100, 100);
      *  </code>
      *
-     *  @param  integer     $start_x    x coordinate to start cropping from
-     *
-     *  @param  integer     $start_y    y coordinate to start cropping from
-     *
-     *  @param  integer     $end_x      x coordinate where to end the cropping
-     *
-     *  @param  integer     $end_y      y coordinate where to end the cropping
+     *  @param  int     $start_x    x coordinate to start cropping from
+     *  @param  int     $start_y    y coordinate to start cropping from
+     *  @param  int     $end_x      x coordinate where to end the cropping
+     *  @param  int     $end_y      y coordinate where to end the cropping
      *
      *  @since  1.0.4
      *
-     *  @return boolean     Returns TRUE on success or FALSE on error.
+     *  @return bool     Returns TRUE on success or FALSE on error.
      *
      *                      If FALSE is returned, check the {@link error} property to see the error code.
      */
-    function crop($start_x, $start_y, $end_x, $end_y)
+    public function crop($start_x, $start_y, $end_x, $end_y)
     {
 
         // this method might be also called internally
@@ -453,7 +451,9 @@ class Zebra_Image
 
         // if method is called as usually
         // try to create an image resource from source path
-        } else $result = $this->_create_from_source();
+        } else {
+            $result = $this->_create_from_source();
+        }
 
         // if image resource was successfully created
         if ($result !== false) {
@@ -479,19 +479,17 @@ class Zebra_Image
 
             // write image
             return $this->_write_image($target_identifier);
-
         }
 
         // if script gets this far, return false
         // note that we do not set the error level as it has been already set
         // by the _create_from_source() method earlier
         return false;
-
     }
 
     /**
      *  Flips both horizontally and vertically the image given as {@link source_path} and outputs the resulted image as
-     *  {@link target_path}
+     *  {@link target_path}.
      *
      *  <code>
      *  // include the Zebra_Image library
@@ -514,19 +512,17 @@ class Zebra_Image
      *
      *  @since 2.1
      *
-     *  @return boolean     Returns TRUE on success or FALSE on error.
+     *  @return bool     Returns TRUE on success or FALSE on error.
      *
      *                      If FALSE is returned, check the {@link error} property to see the error code.
      */
-    function flip_both()
+    public function flip_both()
     {
-
         return $this->_flip('both');
-
     }
 
     /**
-     *  Flips horizontally the image given as {@link source_path} and outputs the resulted image as {@link target_path}
+     *  Flips horizontally the image given as {@link source_path} and outputs the resulted image as {@link target_path}.
      *
      *  <code>
      *  // include the Zebra_Image library
@@ -547,19 +543,17 @@ class Zebra_Image
      *  $img->flip_horizontal();
      *  </code>
      *
-     *  @return boolean     Returns TRUE on success or FALSE on error.
+     *  @return bool     Returns TRUE on success or FALSE on error.
      *
      *                      If FALSE is returned, check the {@link error} property to see the error code.
      */
-    function flip_horizontal()
+    public function flip_horizontal()
     {
-
         return $this->_flip('horizontal');
-
     }
 
     /**
-     *  Flips vertically the image given as {@link source_path} and outputs the resulted image as {@link target_path}
+     *  Flips vertically the image given as {@link source_path} and outputs the resulted image as {@link target_path}.
      *
      *  <code>
      *  // include the Zebra_Image library
@@ -580,15 +574,13 @@ class Zebra_Image
      *  $img->flip_vertical();
      *  </code>
      *
-     *  @return boolean     Returns TRUE on success or FALSE on error.
+     *  @return bool     Returns TRUE on success or FALSE on error.
      *
      *                      If FALSE is returned, check the {@link error} property to see the error code.
      */
-    function flip_vertical()
+    public function flip_vertical()
     {
-
         return $this->_flip('vertical');
-
     }
 
     /**
@@ -616,7 +608,7 @@ class Zebra_Image
      *  $img->resize(150, 150, ZEBRA_IMAGE_CROP_CENTER);
      *  </code>
      *
-     *  @param  integer     $width              The width to resize the image to.
+     *  @param  int     $width              The width to resize the image to.
      *
      *                                          If set to <b>0</b>, the width will be automatically adjusted, depending
      *                                          on the value of the <b>height</b> argument so that the image preserves
@@ -638,8 +630,7 @@ class Zebra_Image
      *                                          If either <b>width</b> or <b>height</b> are set to <b>0</b>, the script
      *                                          will consider the value of the {@link preserve_aspect_ratio} to bet set
      *                                          to TRUE regardless of its actual value!
-     *
-     *  @param  integer     $height             The height to resize the image to.
+     *  @param  int     $height             The height to resize the image to.
      *
      *                                          If set to <b>0</b>, the height will be automatically adjusted, depending
      *                                          on the value of the <b>width</b> argument so that the image preserves
@@ -661,7 +652,6 @@ class Zebra_Image
      *                                          If either <b>height</b> or <b>width</b> are set to <b>0</b>, the script
      *                                          will consider the value of the {@link preserve_aspect_ratio} to bet set
      *                                          to TRUE regardless of its actual value!
-     *
      *  @param  int     $method                 (Optional) Method to use when resizing images to exact width and height
      *                                          while preserving aspect ratio.
      *
@@ -698,7 +688,6 @@ class Zebra_Image
      *                                          indicated region of the resulted image.
      *
      *                                          Default is ZEBRA_IMAGE_CROP_CENTER
-     *
      *  @param  hexadecimal $background_color   (Optional) The hexadecimal color (like "#FFFFFF" or "#FFF") of the
      *                                          blank area. See the <b>method</b> argument.
      *
@@ -708,12 +697,12 @@ class Zebra_Image
      *
      *                                          Default is #FFFFFF.
      *
-     *  @return boolean                         Returns TRUE on success or FALSE on error.
+     *  @return bool                         Returns TRUE on success or FALSE on error.
      *
      *                                          If FALSE is returned, check the {@link error} property to see what went
      *                                          wrong
      */
-    function resize($width = 0, $height = 0, $method = ZEBRA_IMAGE_CROP_CENTER, $background_color = '#FFFFFF')
+    public function resize($width = 0, $height = 0, $method = ZEBRA_IMAGE_CROP_CENTER, $background_color = '#FFFFFF')
     {
 
         // if image resource was successfully created
@@ -722,7 +711,9 @@ class Zebra_Image
             // if either width or height is to be adjusted automatically
             // set a flag telling the script that, even if $preserve_aspect_ratio is set to false
             // treat everything as if it was set to true
-            if ($width == 0 || $height == 0) $auto_preserve_aspect_ratio = true;
+            if ($width == 0 || $height == 0) {
+                $auto_preserve_aspect_ratio = true;
+            }
 
             // if aspect ratio needs to be preserved
             if ($this->preserve_aspect_ratio || isset($auto_preserve_aspect_ratio)) {
@@ -775,15 +766,14 @@ class Zebra_Image
 
                         // compute the target image's width so that the image will stay inside the bounding box
                         $target_width = round($vertical_aspect_ratio * $this->source_width);
-
                     }
 
-                // if both width and height are given and image is to be cropped in order to get to the required size
+                    // if both width and height are given and image is to be cropped in order to get to the required size
                 } elseif ($width > 0 && $height > 0 && $method > 1 && $method < 11) {
 
                     // compute the horizontal and vertical aspect ratios
                     $vertical_aspect_ratio = $this->source_height / $height;
-                    $horizontal_aspect_ratio = $this->source_width /  $width;
+                    $horizontal_aspect_ratio = $this->source_width / $width;
 
                     // we'll use one of the two
                     $aspect_ratio =
@@ -806,10 +796,9 @@ class Zebra_Image
                     // we will create a copy of the source image
                     $target_width = $this->source_width;
                     $target_height = $this->source_height;
-
                 }
 
-            // if aspect ratio does not need to be preserved
+                // if aspect ratio does not need to be preserved
             } else {
 
                 // compute the target image's width
@@ -817,7 +806,6 @@ class Zebra_Image
 
                 // compute the target image's height
                 $target_height = ($height > 0 ? $height : $this->source_height);
-
             }
 
             // if
@@ -1013,7 +1001,7 @@ class Zebra_Image
 
                     }
 
-                // if aspect ratio doesn't need to be preserved or
+                    // if aspect ratio doesn't need to be preserved or
                 // it needs to be preserved and method is ZEBRA_IMAGE_BOXED or ZEBRA_IMAGE_NOT_BOXED
                 } else {
 
@@ -1041,21 +1029,20 @@ class Zebra_Image
 
                     // if script gets this far, write the image to disk
                     return $this->_write_image($target_identifier);
-
                 }
 
-            // if we get here it means that
+                // if we get here it means that
             // smaller images than the given width/height are to be left untouched
             // therefore, we save the image as it is
-            } else return $this->_write_image($this->source_identifier);
-
+            } else {
+                return $this->_write_image($this->source_identifier);
+            }
         }
 
         // if script gets this far return false
         // note that we do not set the error level as it has been already set
         // by the _create_from_source() method earlier
         return false;
-
     }
 
     /**
@@ -1080,10 +1067,9 @@ class Zebra_Image
      *  $img->rotate(45);
      *  </code>
      *
-     *  @param  double  $angle                  Angle by which to rotate the image clockwise.
+     *  @param  float  $angle                  Angle by which to rotate the image clockwise.
      *
      *                                          Between 0 and 360.
-     *
      *  @param  mixed   $background_color       (Optional) The hexadecimal color (like "#FFFFFF" or "#FFF") of the
      *                                          uncovered zone after the rotation.
      *
@@ -1093,12 +1079,12 @@ class Zebra_Image
      *
      *                                          Default is -1.
      *
-     *  @return boolean                         Returns TRUE on success or FALSE on error.
+     *  @return bool                         Returns TRUE on success or FALSE on error.
      *
      *                                          If FALSE is returned, check the {@link error} property to see the error
      *                                          code.
      */
-    function rotate($angle, $background_color = -1)
+    public function rotate($angle, $background_color = -1)
     {
 
         // if image resource was successfully created
@@ -1119,10 +1105,9 @@ class Zebra_Image
 
                     // rotate the image
                     $target_identifier = imagerotate($this->source_identifier, $angle, $background_color);
-
                 }
 
-            // if source image is a transparent GIF
+                // if source image is a transparent GIF
             } elseif ($this->source_type == IMAGETYPE_GIF && $this->source_transparent_color_index >= 0) {
 
                 // convert the background color to RGB values
@@ -1172,28 +1157,23 @@ class Zebra_Image
 
                 // rotate the image
                 $target_identifier = imagerotate($this->source_identifier, $angle, $background_color);
-
             }
 
             // write image
             $this->_write_image($target_identifier);
-
         }
 
         // if script gets this far return false
         // note that we do not set the error level as it has been already set
         // by the _create_from_source() method earlier
-       return false;
-
+        return false;
     }
 
     /**
      *  Returns an array containing the image identifier representing the image obtained from {@link $source_path}, the
-     *  image's width and height and the image's type
-     *
-     *  @access private
+     *  image's width and height and the image's type.
      */
-    function _create_from_source()
+    public function _create_from_source()
     {
 
         // perform some error checking first
@@ -1255,13 +1235,14 @@ class Zebra_Image
                     $identifier = imagecreatefromgif($this->source_path);
 
                     // get the index of the transparent color (if any)
-                    if (($this->source_transparent_color_index = imagecolortransparent($identifier)) >= 0)
+                    if (($this->source_transparent_color_index = imagecolortransparent($identifier)) >= 0) {
 
                         // get the transparent color's RGB values
                         // we have to mute errors because there are GIF images which *are* transparent and everything
                         // works as expected, but imagecolortransparent() returns a color that is outside the range of
                         // colors in the image's pallette...
                         $this->source_transparent_color = @imagecolorsforindex($identifier, $this->source_transparent_color_index);
+                    }
 
                     break;
 
@@ -1294,18 +1275,18 @@ class Zebra_Image
                     return false;
 
             }
-
         }
 
         // if target file has to have the same timestamp as the source image
         // save it as a global property of the class
-        if ($this->preserve_time) $this->source_image_time = filemtime($this->source_path);
+        if ($this->preserve_time) {
+            $this->source_image_time = filemtime($this->source_path);
+        }
 
         // make available the source image's identifier
         $this->source_identifier = $identifier;
 
         return true;
-
     }
 
     /**
@@ -1314,50 +1295,48 @@ class Zebra_Image
      *  The RGB values will be a value between 0 and 255 each.
      *
      *  @param  string  $color              Hexadecimal representation of a color (i.e. #123456 or #AAA).
-     *
      *  @param  string  $default_on_error   Hexadecimal representation of a color to be used in case $color is not
      *                                      recognized as a hexadecimal color.
      *
      *  @return array                       Returns an associative array with the values of (R)ed, (G)reen and (B)lue
-     *
-     *  @access private
      */
-    function _hex2rgb($color, $default_on_error = '#FFFFFF')
+    public function _hex2rgb($color, $default_on_error = '#FFFFFF')
     {
 
         // if color is not formatted correctly
         // use the default color
-        if (preg_match('/^#?([a-f]|[0-9]){3}(([a-f]|[0-9]){3})?$/i', $color) == 0) $color = $default_on_error;
+        if (preg_match('/^#?([a-f]|[0-9]){3}(([a-f]|[0-9]){3})?$/i', $color) == 0) {
+            $color = $default_on_error;
+        }
 
         // trim off the "#" prefix from $background_color
         $color = ltrim($color, '#');
 
         // if color is given using the shorthand (i.e. "FFF" instead of "FFFFFF")
         if (strlen($color) == 3) {
-
             $tmp = '';
 
             // take each value
             // and duplicate it
-            for ($i = 0; $i < 3; $i++) $tmp .= str_repeat($color[$i], 2);
+            for ($i = 0; $i < 3; $i++) {
+                $tmp .= str_repeat($color[$i], 2);
+            }
 
             // the color in it's full, 6 characters length notation
             $color = $tmp;
-
         }
 
         // decimal representation of the color
         $int = hexdec($color);
 
         // extract and return the RGB values
-        return array(
+        return [
 
-            'r' =>  0xFF & ($int >> 0x10),
-            'g' =>  0xFF & ($int >> 0x8),
-            'b' =>  0xFF & $int
+            'r' => 0xFF & ($int >> 0x10),
+            'g' => 0xFF & ($int >> 0x8),
+            'b' => 0xFF & $int,
 
-        );
-
+        ];
     }
 
     /**
@@ -1365,13 +1344,11 @@ class Zebra_Image
      *
      *  @since 2.1
      *
-     *  @access private
-     *
-     *  @return boolean     Returns TRUE on success or FALSE on error.
+     *  @return bool     Returns TRUE on success or FALSE on error.
      *
      *                      If FALSE is returned, check the {@link error} property to see the error code.
      */
-    function _flip($orientation)
+    public function _flip($orientation)
     {
 
         // if image resource was successfully created
@@ -1444,23 +1421,19 @@ class Zebra_Image
 
             // write image
             return $this->_write_image($target_identifier);
-
         }
 
         // if script gets this far, return false
         // note that we do not set the error level as it has been already set
         // by the _create_from_source() method earlier
         return false;
-
     }
 
     /**
      *  Creates a blank image of given width, height and background color.
      *
-     *  @param  integer     $width              Width of the new image.
-     *
-     *  @param  integer     $height             Height of the new image.
-     *
+     *  @param  int     $width              Width of the new image.
+     *  @param  int     $height             Height of the new image.
      *  @param  string      $background_color   (Optional) The hexadecimal color of the background.
      *
      *                                          Can also be -1 case in which the script will try to create a transparent
@@ -1469,14 +1442,12 @@ class Zebra_Image
      *                                          Default is "#FFFFFF".
      *
      *  @return                                 Returns the identifier of the newly created image.
-     *
-     *  @access private
      */
-    function _prepare_image($width, $height, $background_color = '#FFFFFF')
+    public function _prepare_image($width, $height, $background_color = '#FFFFFF')
     {
 
         // create a blank image
-        $identifier = imagecreatetruecolor((int)$width <= 0 ? 1 : (int)$width, (int)$height <= 0 ? 1 : (int)$height);
+        $identifier = imagecreatetruecolor((int) $width <= 0 ? 1 : (int) $width, (int) $height <= 0 ? 1 : (int) $height);
 
         // if we are creating a PNG image
         if ($this->target_type == 'png' && $background_color == -1) {
@@ -1488,10 +1459,10 @@ class Zebra_Image
             $transparent_color = imagecolorallocatealpha($identifier, 0, 0, 0, 127);
 
             // fill the image with the transparent color
-			imagefill($identifier, 0, 0, $transparent_color);
+            imagefill($identifier, 0, 0, $transparent_color);
 
             //save full alpha channel information
-			imagesavealpha($identifier, true);
+            imagesavealpha($identifier, true);
 
         // if source image is a transparent GIF
         } elseif ($this->target_type == 'gif' && $background_color == -1 && $this->source_transparent_color_index >= 0) {
@@ -1514,7 +1485,9 @@ class Zebra_Image
         } else {
 
             // if transparent background color specified, revert to white
-            if ($background_color == -1) $background_color = '#FFFFFF';
+            if ($background_color == -1) {
+                $background_color = '#FFFFFF';
+            }
 
             // convert hex color to rgb
             $background_color = $this->_hex2rgb($background_color);
@@ -1524,12 +1497,10 @@ class Zebra_Image
 
             // fill the image with the background color
             imagefill($identifier, 0, 0, $background_color);
-
         }
 
         // return the image's identifier
         return $identifier;
-
     }
 
     /**
@@ -1541,10 +1512,8 @@ class Zebra_Image
      *  versions!</i>
      *
      *  @param  $identifier identifier  An image identifier
-     *
-     *  @access private
      */
-    function _sharpen_image($image)
+    public function _sharpen_image($image)
     {
 
         // if the "sharpen_images" is set to true and we're running an appropriate version of PHP
@@ -1552,11 +1521,11 @@ class Zebra_Image
         if ($this->sharpen_images && version_compare(PHP_VERSION, '5.1.0') >= 0) {
 
             // the convolution matrix as an array of three arrays of three floats
-            $matrix = array(
-                array(-1.2, -1, -1.2),
-                array(-1, 20, -1),
-                array(-1.2, -1, -1.2),
-            );
+            $matrix = [
+                [-1.2, -1, -1.2],
+                [-1, 20, -1],
+                [-1.2, -1, -1.2],
+            ];
 
             // the divisor of the matrix
             $divisor = array_sum(array_map('array_sum', $matrix));
@@ -1566,12 +1535,10 @@ class Zebra_Image
 
             // sharpen image
             imageconvolution($image, $matrix, $divisor, $offset);
-
         }
 
         // return the image's identifier
         return $image;
-
     }
 
     /**
@@ -1579,13 +1546,11 @@ class Zebra_Image
      *
      *  @param  $identifier identifier  An image identifier
      *
-     *  @return boolean                 Returns TRUE on success or FALSE on error.
+     *  @return bool                 Returns TRUE on success or FALSE on error.
      *
      *                                  If FALSE is returned, check the {@link error} property to see the error code.
-     *
-     *  @access private
      */
-    function _write_image($identifier)
+    public function _write_image($identifier)
     {
 
         // sharpen image if it's required
@@ -1614,7 +1579,6 @@ class Zebra_Image
                     $this->error = 3;
 
                     return false;
-
                 }
 
                 break;
@@ -1638,7 +1602,6 @@ class Zebra_Image
                     $this->error = 3;
 
                     return false;
-
                 }
 
                 break;
@@ -1664,7 +1627,6 @@ class Zebra_Image
                     $this->error = 3;
 
                     return false;
-
                 }
 
                 break;
@@ -1689,19 +1651,18 @@ class Zebra_Image
             chmod($this->target_path, intval($this->chmod_value, 8));
 
         // save the error level
-        } else $this->error = 8;
+        } else {
+            $this->error = 8;
+        }
 
         // if target file has to have the same timestamp as the source image
         if ($this->preserve_time && isset($this->source_image_time)) {
 
             // touch the newly created file
             @touch($this->target_path, $this->source_image_time);
-
         }
 
         // return true
         return true;
-
     }
-
 }

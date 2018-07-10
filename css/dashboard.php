@@ -1,6 +1,6 @@
 <?php
-include('../inc/configuracion.inc');
-header("Content-type: text/css");
+include '../inc/configuracion.inc';
+header('Content-type: text/css');
 ?>
 /*
 * Base structure

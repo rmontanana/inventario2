@@ -1,7 +1,6 @@
 <?php
 
 /**
- * @package Inventario
  * @copyright Copyright (c) 2008, Ricardo Montañana Gómez
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
  * This file is part of Inventario.
@@ -9,28 +8,26 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Inventario is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Inventario.  If not, see <http://www.gnu.org/licenses/>.
- *  
  */
-class Csv {
-
+class Csv
+{
     /**
-     * 
-     * @var String Nombre del fichero csv
+     * @var string Nombre del fichero csv
      */
     private $nombre;
 
     /**
      * @var FILE manejador del fichero
      */
-    private $fichero = NULL;
+    private $fichero = null;
 
     /**
      * @var xml conulta asociada a este fichero
@@ -43,7 +40,6 @@ class Csv {
     private $bdd;
 
     /**
-     *
      * @var int Número de registros en el fichero csv
      */
     private $numRegistros;
@@ -59,8 +55,7 @@ class Csv {
     private $datosFichero;
 
     /**
-     * Indices a los campos correspondientes
-     * 
+     * Indices a los campos correspondientes.
      */
     private $idElemento;
     private $idArticulo;
@@ -70,11 +65,11 @@ class Csv {
     private $cantidadReal;
     private $nSerie;
 
-
     /**
-      // El constructor necesita saber cuál es la opción actual
-      /**
-     * Constructor de la clase. 
+     * // El constructor necesita saber cuál es la opción actual.
+     * /**
+     * Constructor de la clase.
+     *
      * @param BaseDatos $baseDatos Manejador de la base de datos
      */
     public function __construct($baseDatos)
@@ -83,22 +78,22 @@ class Csv {
     }
 
     /**
-     * Crea un fichero csv con el nombre especificado
-     * @param String $fichero Nombre del fichero
+     * Crea un fichero csv con el nombre especificado.
+     *
+     * @param string $fichero Nombre del fichero
      */
     public function crea($fichero)
     {
         $this->nombre = $fichero;
-        $this->fichero = fopen($this->nombre, "w") or die("No puedo abrir " . $this->nombre . " para escritura.");
+        $this->fichero = fopen($this->nombre, 'w') or die('No puedo abrir '.$this->nombre.' para escritura.');
     }
 
     /**
-     * 
      * @param array $datos escribe la línea en el archivo
      */
     public function escribeLinea($datos)
     {
-        fputcsv($this->fichero, $datos, ',', '"') or die("No puedo escribir en el fichero csv");
+        fputcsv($this->fichero, $datos, ',', '"') or die('No puedo escribir en el fichero csv');
     }
 
     public function __destruct()
@@ -108,18 +103,17 @@ class Csv {
 
     public function cierra()
     {
-        fclose($this->fichero) or die("No puedo cerrar el archivo csv");
+        fclose($this->fichero) or die('No puedo cerrar el archivo csv');
     }
 
     /**
-     * 
-     * @param String $fichero Archivo xml que contiene la definición de la consulta
+     * @param string $fichero Archivo xml que contiene la definición de la consulta
      */
     public function ejecutaConsulta($fichero)
     {
-        $consulta = simplexml_load_file($fichero) or die("No puedo cargar el fichero xml " . $fichero . " al csv");
+        $consulta = simplexml_load_file($fichero) or die('No puedo cargar el fichero xml '.$fichero.' al csv');
         // Escribe la cabecera del fichero
-        $this->escribeLinea(array($consulta->Pagina->Cabecera, $consulta->Titulo['id'], $consulta->Titulo['Texto']));
+        $this->escribeLinea([$consulta->Pagina->Cabecera, $consulta->Titulo['id'], $consulta->Titulo['Texto']]);
         foreach ($consulta->Pagina->Cuerpo->Col as $campo) {
             $campos[] = $campo['Titulo'];
         }
@@ -127,7 +121,7 @@ class Csv {
         // Escribe los datos de los campos
         $this->bdd->ejecuta($consulta->Datos->Consulta);
         while ($fila = $this->bdd->procesaResultado()) {
-            $campos = array();
+            $campos = [];
             foreach ($consulta->Pagina->Cuerpo->Col as $campo) {
                 $campos[] = $fila[(string) $campo['Nombre']];
             }
@@ -136,13 +130,12 @@ class Csv {
     }
 
     /**
-     * 
-     * @param String $ficheroCSV Nombre del archivo csv
+     * @param string $ficheroCSV Nombre del archivo csv
      */
     public function cargaCSV($ficheroCSV)
     {
         $this->nombre = $ficheroCSV;
-        $this->fichero = fopen($this->nombre, "r") or die('No puedo abrir el archivo ' . $this->nombre . " para lectura.");
+        $this->fichero = fopen($this->nombre, 'r') or die('No puedo abrir el archivo '.$this->nombre.' para lectura.');
         list($archivo, $idCabecera, $cabecera) = fgetcsv($this->fichero);
         while ($linea = fgetcsv($this->fichero)) {
             $datosFichero[] = $linea;
@@ -154,70 +147,69 @@ class Csv {
     }
 
     /**
-     * Muestra un resumen de los datos del fichero csv cargado por pantalla
-     * 
+     * Muestra un resumen de los datos del fichero csv cargado por pantalla.
      */
     public function resumen()
     {
         //$mensaje .=
-        $mensaje = "<center><h1>Archivo [inventario" . $this->cabecera[0] . "]</h1>";
-        $mensaje .= "<h2>id=[" . $this->cabecera[1] . "] Descripci&oacute;n=[" . $this->cabecera[2] . "]</h2><br>";
+        $mensaje = '<center><h1>Archivo [inventario'.$this->cabecera[0].']</h1>';
+        $mensaje .= '<h2>id=['.$this->cabecera[1].'] Descripci&oacute;n=['.$this->cabecera[2].']</h2><br>';
         $mensaje .= '<table border=1 class="table table-striped table-bordered table-condensed table-hover"><theader>';
         foreach ($this->datosFichero[0] as $campo) {
             $dato = $campo;
             $mensaje .= "<th><b>$dato</b></th>";
         }
-        $mensaje .= "<th><b>Acci&oacute;n</b></th>";
-        $mensaje .="</theader><tbody>";
+        $mensaje .= '<th><b>Acci&oacute;n</b></th>';
+        $mensaje .= '</theader><tbody>';
         $this->cargaIndices($this->datosFichero[0]);
         //echo "$mensaje contar Datosfichero=[".count($datosFichero)."]";
         for ($i = 1; $i < count($this->datosFichero); $i++) {
-            $mensaje .= "<tr>";
+            $mensaje .= '<tr>';
             $primero = true;
             foreach ($this->datosFichero[$i] as $dato) {
                 if ($primero) {
                     $primero = false;
                     switch ($dato) {
-                        case 'S': $estado = "-Baja-";
-                            $color = "danger";
+                        case 'S': $estado = '-Baja-';
+                            $color = 'danger';
                             break;
-                        case 'Alta': $estado = "-Alta-";
-                            $color = "primary";
+                        case 'Alta': $estado = '-Alta-';
+                            $color = 'primary';
                             break;
-                        case "N" : $estado = $this->compruebaCantidades($i);
+                        case 'N': $estado = $this->compruebaCantidades($i);
                             if ($estado != 0) {
-                                $color = "warning";
+                                $color = 'warning';
                                 if ($estado > 0) {
-                                    $estado = "+" . $estado;
+                                    $estado = '+'.$estado;
                                 }
                             } else {
-                                $estado = "igual";
-                                $color = "info";
+                                $estado = 'igual';
+                                $color = 'info';
                             }
                             break;
                         default: throw new Exception("El archivo csv tiene un formato incorrecto.<br>Bajas=[$dato]");
                     }
                 }
-                $mensaje .= "<td>" . $dato . "</td>";
+                $mensaje .= '<td>'.$dato.'</td>';
             }
-            $mensaje .= '<td align="center"><label class="label label-' . $color . '">' . $estado . '</label></td>';
-            $mensaje .= "</tr>";
+            $mensaje .= '<td align="center"><label class="label label-'.$color.'">'.$estado.'</label></td>';
+            $mensaje .= '</tr>';
         }
-        $mensaje .= "</tbody></table></p><br>";
+        $mensaje .= '</tbody></table></p><br>';
         $mensaje .= $this->panelMensaje('Si se produce cualquier error en el procesamiento del fichero, no se aplicar&aacute; ning&uacute;n cambio en la base de datos.');
 
         $mensaje .= '<form method="post" name="Aceptar" action="index.php?importacion&opc=ejecutar">
-                <button type="button" name="Cancelar" value="Cancelar" onClick="location.href=' . "'index.php'" . '" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+                <button type="button" name="Cancelar" value="Cancelar" onClick="location.href='."'index.php'".'" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
                 <button type="submit" name="Aceptar" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Aceptar</button>
-                <input type="hidden" name="ficheroCSV" value="' . $this->nombre . '">
+                <input type="hidden" name="ficheroCSV" value="'.$this->nombre.'">
                 </form></center>';
 
         return $mensaje;
     }
 
     /**
-     * 
-     * @param $array línea de datos del fichero csv para comprobar las cantidades si se han modificado o no 
+     * @param $array línea de datos del fichero csv para comprobar las cantidades si se han modificado o no
+     *
      * @return string
      */
     private function compruebaCantidades($i)
@@ -226,61 +218,62 @@ class Csv {
         return $this->datosFichero[$i][$this->cantidadReal] - $this->datosFichero[$i][$this->cantidad];
     }
 
-    private function panelMensaje($info, $tipo = "danger", $cabecera = "&iexcl;Atenci&oacute;n!")
+    private function panelMensaje($info, $tipo = 'danger', $cabecera = '&iexcl;Atenci&oacute;n!')
     {
-        $mensaje = '<div class="panel panel-' . $tipo . '"><div class="panel-heading">';
-        $mensaje .= '<h3 class="panel-title">' . $cabecera . '</h3></div>';
+        $mensaje = '<div class="panel panel-'.$tipo.'"><div class="panel-heading">';
+        $mensaje .= '<h3 class="panel-title">'.$cabecera.'</h3></div>';
         $mensaje .= '<div class="panel-body">';
         $mensaje .= $info;
         $mensaje .= '</div>';
         $mensaje .= '</div>';
+
         return $mensaje;
     }
 
     private function escribeLog($comando)
     {
-        $fp = fopen($this->nombre . ".log", "a");
-        $linea = strftime("%Y/%m/%d") . "|" . $this->nombre . "|" . $comando;
-        fputs($fp, $linea . "\n");
+        $fp = fopen($this->nombre.'.log', 'a');
+        $linea = strftime('%Y/%m/%d').'|'.$this->nombre.'|'.$comando;
+        fwrite($fp, $linea."\n");
         fclose($fp);
     }
 
     private function bajaElemento($i)
     {
         $id = $this->datosFichero[$i][$this->idElemento];
-        $comando = 'delete from Elementos where id="' . $id . '";';
+        $comando = 'delete from Elementos where id="'.$id.'";';
         $this->escribeLog($comando);
         if (!$this->bdd->ejecuta($comando)) {
-            throw new Exception("Baja-" . $this->bdd->mensajeError, $this->bdd->error);
+            throw new Exception('Baja-'.$this->bdd->mensajeError, $this->bdd->error);
         }
     }
 
     private function modificaElemento($i)
     {
         $id = $this->datosFichero[$i][$this->idElemento];
-        $comando = 'update Elementos set Cantidad=' . $this->datosFichero[$i][$this->cantidadReal] . ' where id="' . $id . '";';
+        $comando = 'update Elementos set Cantidad='.$this->datosFichero[$i][$this->cantidadReal].' where id="'.$id.'";';
         $this->escribeLog($comando);
         if (!$this->bdd->ejecuta($comando)) {
-            throw new Exception("Modifica-" . $this->bdd->mensajeError, $this->bdd->error);
+            throw new Exception('Modifica-'.$this->bdd->mensajeError, $this->bdd->error);
         }
     }
 
     private function altaElemento($i)
     {
-        if ($this->cabecera[0] == "Articulo") {
+        if ($this->cabecera[0] == 'Articulo') {
             $idUbicacion = $this->datosFichero[$i][$this->idUbicacion];
             $idArticulo = $this->cabecera[1];
-            $comando = 'select id from Ubicaciones where Descripcion="' . $this->datosFichero[$i][$this->desUbicacion] . '";';
+            $comando = 'select id from Ubicaciones where Descripcion="'.$this->datosFichero[$i][$this->desUbicacion].'";';
         } else {
             $idUbicacion = $this->cabecera[1];
             $idArticulo = $this->datosFichero[$i][$this->idArticulo];
         }
         $idArt = $datosFichero[$i];
-        $comando = 'insert into Elementos () values (null,' . $idArticulo . ',' . $idUbicacion . ',"' . $this->datosFichero[$i][$this->nSerie];
-        $comando .= '",' . $this->datosFichero[$i][$this->cantidadReal] . ',"' . $this->datosFichero[$i][$this->fechaCompra] . '");';
+        $comando = 'insert into Elementos () values (null,'.$idArticulo.','.$idUbicacion.',"'.$this->datosFichero[$i][$this->nSerie];
+        $comando .= '",'.$this->datosFichero[$i][$this->cantidadReal].',"'.$this->datosFichero[$i][$this->fechaCompra].'");';
         $this->escribeLog($comando);
         if (!$this->bdd->ejecuta($comando)) {
-            throw new Exception("Alta-" . $this->bdd->mensajeError, $this->bdd->error);
+            throw new Exception('Alta-'.$this->bdd->mensajeError, $this->bdd->error);
         }
     }
 
@@ -288,19 +281,19 @@ class Csv {
     {
         for ($i = 0; $i < count($campos); $i++) {
             switch ($campos[$i]) {
-                case "Cant. Real": $this->cantidadReal = $i;
+                case 'Cant. Real': $this->cantidadReal = $i;
                     break;
-                case "Fecha C.": $this->fechaCompra = $i;
+                case 'Fecha C.': $this->fechaCompra = $i;
                     break;
-                case "idUbic": $this->idUbicacion = $i;
+                case 'idUbic': $this->idUbicacion = $i;
                     break;
-                case "idArt": $this->idArticulo = $i;
+                case 'idArt': $this->idArticulo = $i;
                     break;
-                case "idElem": $this->idElemento = $i;
+                case 'idElem': $this->idElemento = $i;
                     break;
-                case "Cantidad": $this->cantidad = $i;
+                case 'Cantidad': $this->cantidad = $i;
                     break;
-                case "N Serie": $this->nSerie = $i;
+                case 'N Serie': $this->nSerie = $i;
                     break;
             }
         }
@@ -309,7 +302,7 @@ class Csv {
     }
 
     /**
-     * Procesa contra la base de datos todas las acciones del archivo
+     * Procesa contra la base de datos todas las acciones del archivo.
      */
     public function ejecutaFichero()
     {
@@ -334,15 +327,17 @@ class Csv {
                             $acciones++;
                         }
                         break;
-                    default: throw new Exception("Acci&oacute;n no reconocida en la importacion [" . $this->datosFichero[0] . "]");
+                    default: throw new Exception('Acci&oacute;n no reconocida en la importacion ['.$this->datosFichero[0].']');
                 }
             }
             $mensaje = "Se han procesado correctamente $acciones acciones en la Base de Datos.";
             $this->bdd->confirmaTransaccion();
-            return $this->panelMensaje($mensaje, "success", "Informaci&oacute;n");
+
+            return $this->panelMensaje($mensaje, 'success', 'Informaci&oacute;n');
         } catch (Exception $e) {
             $this->bdd->abortaTransaccion();
-            $mensaje = "Se ha producido el error [" . $e->getMessage() . "]<br>NO se ha realizado ning&uacute;n cambio en la Base de Datos.";
+            $mensaje = 'Se ha producido el error ['.$e->getMessage().']<br>NO se ha realizado ning&uacute;n cambio en la Base de Datos.';
+
             return $this->panelMensaje($mensaje);
         }
     }
@@ -353,13 +348,10 @@ class Csv {
         for ($i = 1; $i < 80; $i++) {
             //sleep(1);
             $progreso = $i;
-            echo '<script>actProgreso(' . $progreso . ');</script>';
+            echo '<script>actProgreso('.$progreso.');</script>';
             //echo str_repeat(' ',1024*64);
             flush();
             //echo '$(".bar").css("width", "'.$progreso.'");';
         }
     }
-
 }
-
-?>
